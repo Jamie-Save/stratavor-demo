@@ -1,0 +1,15 @@
+/* Grey out links/buttons that have no functionality or lead to a dead end */
+.disabled,
+a.disabled,
+button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+a.disabled {
+  color: inherit;
+  text-decoration: none;
+}
+a.disabled:hover {
+  text-decoration: none;
+}

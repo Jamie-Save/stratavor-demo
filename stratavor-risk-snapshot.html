@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk Intelligence Snapshot — Acme SaaS Ltd — Q1 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   STRATAVOR — RISK INTELLIGENCE SNAPSHOT
+   Multi-page landscape report for PDF export
+   Matches Management Snapshot / Board Snapshot design system
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  /* Brand palette — extracted from existing snapshots */
+  --teal-950: #0d1f2d;
+  --teal-900: #122a3a;
+  --teal-850: #163447;
+  --teal-800: #1a3f54;
+  --teal-700: #245a73;
+  --teal-600: #2e7694;
+  --teal-500: #3d93b5;
+  --teal-400: #62adc9;
+  --teal-300: #8fc7db;
+  --teal-200: #b5dce9;
+  --teal-100: #dff0f5;
+  --teal-50:  #f2f9fb;
+
+  --gold-600: #b8912e;
+  --gold-500: #d4a853;
+  --gold-400: #e4c17a;
+  --gold-300: #f0d9a0;
+
+  --green-600: #2f855a;
+  --green-500: #38a169;
+  --green-400: #48bb78;
+  --green-bg:  rgba(56,161,105,0.08);
+  --green-border: rgba(56,161,105,0.22);
+
+  --amber-600: #b45309;
+  --amber-500: #d97706;
+  --amber-400: #f59e0b;
+  --amber-bg:  rgba(217,119,6,0.08);
+  --amber-border: rgba(217,119,6,0.22);
+
+  --red-600: #c53030;
+  --red-500: #e53e3e;
+  --red-400: #fc8181;
+  --red-bg:  rgba(229,62,62,0.06);
+  --red-border: rgba(229,62,62,0.18);
+
+  --grey-50:  #f8fafb;
+  --grey-100: #f1f5f7;
+  --grey-200: #e2e8ed;
+  --grey-300: #cbd5de;
+  --grey-400: #97a8b5;
+  --grey-500: #6b7f8e;
+  --grey-600: #4a5f6d;
+  --grey-700: #364a56;
+  --grey-800: #253740;
+  --grey-900: #1a2830;
+
+  --surface-white: #ffffff;
+  --surface-light: #f5f8f9;
+  --border-light: rgba(0,0,0,0.06);
+  --border-medium: rgba(0,0,0,0.10);
+
+  --font-display: 'Source Serif 4', Georgia, serif;
+  --font-body:    'Source Sans 3', 'Segoe UI', sans-serif;
+
+  --page-w: 297mm;
+  --page-h: 210mm;
+  --header-h: 44px;
+  --footer-h: 36px;
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: var(--font-body);
+  color: var(--teal-950);
+  background: #e0e4e8;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.55;
+}
+
+/* ═══════════════════════════════════════════════════
+   PAGE STRUCTURE
+   ═══════════════════════════════════════════════════ */
+.page {
+  width: var(--page-w);
+  height: var(--page-h);
+  background: var(--surface-white);
+  margin: 20px auto;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  page-break-after: always;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── HEADER BAR (every page except cover) ─── */
+.page-header {
+  height: var(--header-h);
+  background: var(--surface-white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  border-bottom: 3px solid var(--teal-800);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.page-header::after {
+  content: '';
+  position: absolute;
+  bottom: -6px; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal-800) 0%, var(--teal-800) 35%, var(--green-500) 35%, var(--green-500) 100%);
+}
+
+.header-left {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--grey-600);
+  letter-spacing: 0.01em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--grey-500);
+  font-weight: 400;
+}
+
+.header-logo {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.header-logo svg {
+  width: 24px; height: 24px;
+}
+
+/* ─── FOOTER (every page except cover) ─── */
+.page-footer {
+  height: var(--footer-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  font-size: 0.7rem;
+  color: var(--grey-400);
+  flex-shrink: 0;
+  border-top: 1px solid var(--grey-200);
+}
+
+/* ─── PAGE BODY ─── */
+.page-body {
+  flex: 1;
+  padding: 28px 40px 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════════════
+   PAGE 1 — COVER
+   ═══════════════════════════════════════════════════ */
+.cover {
+  background: linear-gradient(145deg, var(--teal-950) 0%, var(--teal-850) 40%, var(--teal-800) 70%, var(--teal-700) 100%);
+  position: relative;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  top: -30%; right: -10%;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(212,168,83,0.06) 0%, transparent 65%);
+}
+
+.cover::after {
+  content: '';
+  position: absolute;
+  bottom: -20%; left: 20%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(62,173,209,0.05) 0%, transparent 60%);
+}
+
+.cover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.cover-header-left {
+  font-size: 0.78rem;
+  color: var(--teal-400);
+  font-weight: 400;
+}
+
+.cover-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--teal-400);
+}
+
+.cover-body {
+  flex: 1;
+  display: flex;
+  padding: 0 40px 0 60px;
+  position: relative;
+  z-index: 2;
+}
+
+.cover-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 60px;
+}
+
+.cover-title {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  font-weight: 400;
+  color: var(--surface-white);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.cover-entity {
+  font-size: 1.15rem;
+  color: var(--teal-300);
+  font-weight: 300;
+  margin-bottom: 4px;
+}
+
+.cover-period {
+  font-size: 0.92rem;
+  color: var(--teal-400);
+  font-weight: 400;
+}
+
+.cover-divider {
+  width: 60px; height: 2px;
+  background: var(--gold-500);
+  margin: 24px 0;
+}
+
+.cover-badges {
+  display: flex; gap: 10px;
+  margin-top: 8px;
+}
+
+.cover-badge {
+  padding: 5px 14px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cover-badge-amber {
+  background: rgba(217,119,6,0.15);
+  color: var(--gold-400);
+  border: 1px solid rgba(217,119,6,0.3);
+}
+
+.cover-badge-count {
+  background: rgba(229,62,62,0.12);
+  color: var(--red-400);
+  border: 1px solid rgba(229,62,62,0.25);
+}
+
+.cover-right {
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cover-summary-box {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 28px 30px;
+}
+
+.cover-summary-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold-400);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.cover-summary-text {
+  font-size: 0.88rem;
+  color: var(--teal-200);
+  line-height: 1.7;
+}
+
+.cover-summary-text strong { color: var(--surface-white); font-weight: 600; }
+
+.cover-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.cover-footer-left {
+  font-size: 0.72rem;
+  color: var(--teal-500);
+}
+
+.cover-footer-right {
+  font-size: 0.72rem;
+  color: var(--teal-500);
+}
+
+/* ─── Stratavor data lines (decorative, matching PDF) ─── */
+.cover-lines {
+  position: absolute;
+  top: 20px; right: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  opacity: 0.08;
+  z-index: 1;
+}
+
+.cover-line {
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+}
+
+/* ═══════════════════════════════════════════════════
+   SHARED COMPONENT STYLES
+   ═══════════════════════════════════════════════════ */
+
+/* Section titles */
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: var(--teal-900);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.section-subtitle {
+  font-size: 0.78rem;
+  color: var(--grey-500);
+  font-weight: 400;
+  margin-bottom: 22px;
+}
+
+/* Cards */
+.card {
+  background: var(--surface-white);
+  border: 1px solid var(--grey-200);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+
+/* Status pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pill-green  { background: var(--green-bg);  color: var(--green-600);  border: 1px solid var(--green-border); }
+.pill-amber  { background: var(--amber-bg);  color: var(--amber-600);  border: 1px solid var(--amber-border); }
+.pill-red    { background: var(--red-bg);    color: var(--red-600);    border: 1px solid var(--red-border); }
+.pill-grey   { background: var(--grey-100);  color: var(--grey-600);   border: 1px solid var(--grey-200); }
+.pill-teal   { background: rgba(29,116,153,0.08); color: var(--teal-700); border: 1px solid rgba(29,116,153,0.2); }
+
+/* Effectiveness dots */
+.eff-dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.eff-strong  { background: var(--green-500); }
+.eff-adequate { background: var(--amber-500); }
+.eff-weak    { background: var(--red-500); }
+.eff-untested { background: var(--grey-300); }
+
+/* Tables */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.data-table thead th {
+  text-align: left;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--grey-500);
+  font-weight: 600;
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--grey-200);
+  white-space: nowrap;
+}
+
+.data-table thead th.align-center { text-align: center; }
+.data-table thead th.align-right  { text-align: right; }
+
+.data-table tbody td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+  color: var(--teal-950);
+}
+
+.data-table tbody td.align-center { text-align: center; }
+.data-table tbody td.align-right  { text-align: right; }
+
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: var(--grey-50); }
+
+.data-table .row-header td {
+  background: var(--teal-900);
+  color: var(--surface-white);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  border-bottom: none;
+  padding: 7px 10px;
+}
+
+/* Score badges */
+.score {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: white;
+}
+
+.score-low      { background: var(--green-500); }
+.score-medium   { background: var(--amber-500); }
+.score-high     { background: var(--red-500); }
+.score-critical { background: var(--red-600); }
+
+/* Delta arrows */
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.delta-down { color: var(--green-600); }
+.delta-up   { color: var(--red-500); }
+.delta-flat { color: var(--grey-500); }
+
+/* KPI metric tiles */
+.kpi-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.kpi-grid-5 { grid-template-columns: repeat(5, 1fr); }
+.kpi-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.kpi-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+.kpi {
+  border: 1px solid var(--grey-200);
+  border-radius: 10px;
+  padding: 18px 20px;
+  background: var(--surface-white);
+  position: relative;
+}
+
+.kpi-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--grey-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.kpi-sub {
+  font-size: 0.75rem;
+  color: var(--grey-500);
+  line-height: 1.4;
+}
+
+.kpi-badge {
+  position: absolute;
+  top: 14px; right: 14px;
+}
+
+/* Sparkline (SVG) */
+.spark { width: 100%; height: 32px; margin-top: 8px; }
+
+/* AI insight strip */
+.ai-strip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(212,168,83,0.04), rgba(62,173,209,0.04));
+  border: 1px solid rgba(212,168,83,0.15);
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+
+.ai-icon {
+  width: 26px; height: 26px;
+  background: linear-gradient(135deg, var(--gold-500), var(--gold-300));
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--teal-950);
+  font-weight: 800;
+}
+
+.ai-strip p {
+  font-size: 0.78rem;
+  color: var(--grey-600);
+  line-height: 1.6;
+}
+
+.ai-strip p strong { color: var(--teal-900); }
+
+/* Heatmap */
+.heatmap-wrapper {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}
+
+.heatmap-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heatmap-panel-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--teal-900);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.heatmap {
+  display: grid;
+  grid-template-columns: 24px repeat(5, 56px);
+  grid-template-rows: repeat(5, 44px) 24px;
+  gap: 2px;
+}
+
+.hm-cell {
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  position: relative;
+}
+
+.hm-cell.has-dot {
+  color: transparent;
+}
+
+.hm-g1 { background: #4ade80; }
+.hm-g2 { background: #22c55e; }
+.hm-g3 { background: #16a34a; }
+.hm-y1 { background: #a3e635; }
+.hm-y2 { background: #84cc16; }
+.hm-y3 { background: #eab308; }
+.hm-a1 { background: #f59e0b; }
+.hm-a2 { background: #f97316; }
+.hm-r1 { background: #ef4444; }
+.hm-r2 { background: #dc2626; }
+.hm-r3 { background: #b91c1c; }
+
+.risk-dot {
+  width: 28px; height: 28px;
+  background: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--teal-950);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  position: relative;
+  z-index: 2;
+}
+
+.hm-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--grey-500);
+}
+
+.hm-ylabel {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.hm-axis-title {
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+/* Appetite overlay */
+.appetite-line {
+  position: absolute;
+  border: 2px dashed var(--red-500);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Two-column layout */
+.cols-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.cols-65-35 {
+  display: grid;
+  grid-template-columns: 65fr 35fr;
+  gap: 24px;
+}
+
+.cols-60-40 {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 24px;
+}
+
+/* Summary stat row */
+.stat-row {
+  display: flex;
+  gap: 14px;
+}
+
+.stat-box {
+  flex: 1;
+  text-align: center;
+  padding: 14px 12px;
+  border: 1px solid var(--grey-200);
+  border-radius: 8px;
+  background: var(--surface-white);
+}
+
+.stat-box-value {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.stat-box-label {
+  font-size: 0.68rem;
+  color: var(--grey-500);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Governance timeline */
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.timeline-item:last-child { border-bottom: none; }
+
+.timeline-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.timeline-content {
+  flex: 1;
+}
+
+.timeline-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--teal-900);
+}
+
+.timeline-meta {
+  font-size: 0.7rem;
+  color: var(--grey-400);
+  margin-top: 2px;
+}
+
+/* Colour-bar accents (footer) */
+.color-bar {
+  display: flex;
+  height: 4px;
+}
+
+.color-bar > div { flex: 1; }
+
+/* Contents page */
+.contents-list {
+  list-style: none;
+}
+
+.contents-item {
+  display: flex;
+  align-items: baseline;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--grey-100);
+  font-size: 1.05rem;
+  color: var(--teal-900);
+  font-weight: 400;
+}
+
+.contents-item:last-child { border-bottom: none; }
+
+.contents-dots {
+  flex: 1;
+  border-bottom: 1px dotted var(--grey-300);
+  margin: 0 12px;
+  position: relative;
+  top: -4px;
+}
+
+.contents-page {
+  font-weight: 600;
+  color: var(--teal-700);
+  font-size: 1rem;
+}
+
+/* Commentary boxes (final page) */
+.commentary-col {
+  padding: 24px 26px;
+  border-radius: 10px;
+  height: 100%;
+}
+
+.commentary-col h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.commentary-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.commentary-item:last-child { margin-bottom: 0; }
+
+.commentary-icon {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.commentary-item-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--teal-900);
+  margin-bottom: 2px;
+}
+
+.commentary-item-text {
+  font-size: 0.76rem;
+  color: var(--grey-600);
+  line-height: 1.5;
+}
+
+/* Print styles */
+@media print {
+  body { background: white; }
+  .page {
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+}
+</style>
+<link rel="stylesheet" href="assets/demo.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 1 — COVER
+     ═══════════════════════════════════════════════════ -->
+<div class="page cover">
+  <!-- Decorative data lines (top right, matching existing snapshot) -->
+  <div class="cover-lines">
+    <div class="cover-line" style="width:90px;"></div>
+    <div class="cover-line" style="width:110px;"></div>
+    <div class="cover-line" style="width:75px;"></div>
+    <div class="cover-line" style="width:95px;"></div>
+    <div class="cover-line" style="width:60px;"></div>
+    <div class="cover-line" style="width:110px;"></div>
+    <div class="cover-line" style="width:80px;"></div>
+    <div class="cover-line" style="width:100px;"></div>
+    <div class="cover-line" style="width:65px;"></div>
+    <div class="cover-line" style="width:90px;"></div>
+  </div>
+
+  <div class="cover-header">
+    <div class="cover-header-left">Risk Intelligence Snapshot</div>
+    <div class="cover-header-right">
+      Generated by Stratavor&nbsp;&nbsp;
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L9 5H7L5 7V9L2 12L5 15V17L7 19H9L12 22L15 19H17L19 17V15L22 12L19 9V7L17 5H15L12 2Z" fill="rgba(212,168,83,0.6)"/>
+        <circle cx="12" cy="12" r="3" fill="rgba(255,255,255,0.8)"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="cover-body">
+    <div class="cover-left">
+      <div class="cover-title">Risk Intelligence<br>Snapshot</div>
+      <div class="cover-entity">Acme SaaS Ltd</div>
+      <div class="cover-period">Quarter ending 31 March 2026</div>
+      <div class="cover-divider"></div>
+      <div class="cover-badges">
+        <span class="cover-badge cover-badge-amber">Overall Posture: Amber</span>
+        <span class="cover-badge cover-badge-count">3 Risks Above Appetite</span>
+      </div>
+    </div>
+
+    <div class="cover-right">
+      <div class="cover-summary-box">
+        <div class="cover-summary-label">Executive Summary</div>
+        <div class="cover-summary-text">
+          The entity's risk posture remains <strong>Amber</strong> with 3 of 12 active risks above the appetite threshold of 9. <strong>Cyber risk (RSK-001)</strong> has escalated due to two failed phishing simulations, and <strong>cash flow disruption (RSK-004)</strong> warrants attention as debtor days have increased +7 MoM. Controls coverage has improved this quarter — 78% of controls are now rated Adequate or Strong, up from 64%. Two risks are pending residual risk acceptance approval. The board should review and resolve these before quarter-end.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <div class="cover-footer-left">Figures sourced from Stratavor Risk Register</div>
+    <div class="cover-footer-right">Acme SaaS Ltd &middot; Q1 2026 &middot; Prepared for Board Review — Confidential &middot; 1 of 9</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 2 — CONTENTS
+     ═══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="header-left"><a href="stratavor-risk-intelligence.html" style="color:var(--teal-600); text-decoration:none; font-size:0.85rem; margin-right:12px;">← Back to Risk Intelligence</a> Risk Intelligence Snapshot</div>
+    <div class="header-right">
+      Generated by Stratavor&nbsp;&nbsp;
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L9 5H7L5 7V9L2 12L5 15V17L7 19H9L12 22L15 19H17L19 17V15L22 12L19 9V7L17 5H15L12 2Z" fill="var(--teal-700)"/><circle cx="12" cy="12" r="3" fill="var(--teal-300)"/></svg>
+    </div>
+  </div>
+
+  <div class="page-body" style="display:flex; flex-direction:column; justify-content:center; padding:40px 80px;">
+    <div class="section-title" style="font-size:2.2rem; margin-bottom:36px;">Contents</div>
+    <ul class="contents-list">
+      <li class="contents-item">Risk Posture Summary &amp; Key Metrics <span class="contents-dots"></span> <span class="contents-page">3</span></li>
+      <li class="contents-item">Risk Register <span class="contents-dots"></span> <span class="contents-page">4</span></li>
+      <li class="contents-item">Risk Heatmaps &amp; Ranked List <span class="contents-dots"></span> <span class="contents-page">5</span></li>
+      <li class="contents-item">Controls &amp; Mitigations <span class="contents-dots"></span> <span class="contents-page">6</span></li>
+      <li class="contents-item">Risk Movement &amp; Trend Analysis <span class="contents-dots"></span> <span class="contents-page">7</span></li>
+      <li class="contents-item">Governance, Approvals &amp; Review Status <span class="contents-dots"></span> <span class="contents-page">8</span></li>
+      <li class="contents-item">Insights &amp; Commentary <span class="contents-dots"></span> <span class="contents-page">9</span></li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>Figures sourced from Stratavor Risk Register</span>
+    <span>Acme SaaS Ltd &middot; Q1 2026 &middot; Prepared for Board Review — Confidential &middot; 2 of 9</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 3 — RISK POSTURE SUMMARY
+     ═══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="header-left">Risk Intelligence Snapshot</div>
+    <div class="header-right">
+      Generated by Stratavor&nbsp;&nbsp;
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L9 5H7L5 7V9L2 12L5 15V17L7 19H9L12 22L15 19H17L19 17V15L22 12L19 9V7L17 5H15L12 2Z" fill="var(--teal-700)"/><circle cx="12" cy="12" r="3" fill="var(--teal-300)"/></svg>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="section-title">Risk Posture Summary &amp; Key Metrics</div>
+    <div class="section-subtitle">High-level view of active risks, control effectiveness and review compliance — with trend vs last quarter.</div>
+
+    <div class="kpi-grid kpi-grid-5" style="margin-bottom:18px;">
+      <div class="kpi">
+        <div class="kpi-label">Active Risks</div>
+        <div class="kpi-value" style="color:var(--teal-800);">12</div>
+        <div class="kpi-sub">+2 vs last quarter</div>
+        <div class="kpi-badge"><span class="pill pill-teal">Stable</span></div>
+        <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none"><path d="M0,22 L20,20 L40,18 L60,20 L80,16 L100,14 L120,12" fill="none" stroke="var(--teal-500)" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-label">Above Appetite</div>
+        <div class="kpi-value" style="color:var(--red-500);">3</div>
+        <div class="kpi-sub">Threshold: residual &gt; 9</div>
+        <div class="kpi-badge"><span class="pill pill-red">Action Needed</span></div>
+        <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none"><path d="M0,18 L20,20 L40,22 L60,18 L80,14 L100,16 L120,12" fill="none" stroke="var(--red-500)" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-label">Controls Effective</div>
+        <div class="kpi-value" style="color:var(--green-600);">78%</div>
+        <div class="kpi-sub">Strong or Adequate — up from 64%</div>
+        <div class="kpi-badge"><span class="pill pill-green">Improving</span></div>
+        <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none"><path d="M0,28 L20,24 L40,22 L60,18 L80,14 L100,10 L120,8" fill="none" stroke="var(--green-500)" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-label">Pending Approvals</div>
+        <div class="kpi-value" style="color:var(--amber-600);">2</div>
+        <div class="kpi-sub">Residual risk acceptance</div>
+        <div class="kpi-badge"><span class="pill pill-amber">Awaiting</span></div>
+        <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none"><path d="M0,16 L20,18 L40,16 L60,20 L80,14 L100,12 L120,14" fill="none" stroke="var(--amber-500)" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-label">Review Compliance</div>
+        <div class="kpi-value" style="color:var(--green-600);">92%</div>
+        <div class="kpi-sub">Reviewed on schedule — 1 overdue</div>
+        <div class="kpi-badge"><span class="pill pill-green">Strong</span></div>
+        <svg class="spark" viewBox="0 0 120 32" preserveAspectRatio="none"><path d="M0,20 L20,16 L40,12 L60,10 L80,8 L100,8 L120,6" fill="none" stroke="var(--green-500)" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+
+    <div class="cols-60-40">
+      <div>
+        <div style="font-weight:600; font-size:0.82rem; color:var(--teal-900); margin-bottom:10px;">Risk Distribution by Category</div>
+        <div class="stat-row" style="margin-bottom:14px;">
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--teal-700);">3</div><div class="stat-box-label">Cyber</div></div>
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--teal-700);">2</div><div class="stat-box-label">Financial</div></div>
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--teal-700);">2</div><div class="stat-box-label">Operational</div></div>
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--teal-700);">2</div><div class="stat-box-label">Compliance</div></div>
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--teal-700);">1</div><div class="stat-box-label">Strategic</div></div>
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--teal-700);">1</div><div class="stat-box-label">Reputational</div></div>
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--teal-700);">1</div><div class="stat-box-label">HR</div></div>
+        </div>
+        <div style="font-weight:600; font-size:0.82rem; color:var(--teal-900); margin-bottom:8px;">Risk Score Distribution</div>
+        <div style="display:flex; gap:3px; height:20px; border-radius:100px; overflow:hidden; margin-bottom:6px;">
+          <div style="width:25%; background:var(--green-500);"></div>
+          <div style="width:33%; background:var(--amber-500);"></div>
+          <div style="width:25%; background:var(--red-500);"></div>
+          <div style="width:17%; background:var(--red-600);"></div>
+        </div>
+        <div style="display:flex; gap:16px; font-size:0.68rem; color:var(--grey-500);">
+          <span>■ Low (1–4): 3</span>
+          <span style="color:var(--amber-600);">■ Medium (5–9): 4</span>
+          <span style="color:var(--red-500);">■ High (10–14): 3</span>
+          <span style="color:var(--red-600);">■ Critical (15–25): 2</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-weight:600; font-size:0.82rem; color:var(--teal-900); margin-bottom:10px;">Headline Flags</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--red-bg); border:1px solid var(--red-border); border-radius:8px;">
+            <span class="pill pill-red" style="flex-shrink:0;">Act Now</span>
+            <span style="font-size:0.78rem; color:var(--grey-700);">RSK-001 Cyber: Data breach risk escalated — 2 failed phishing tests</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--amber-bg); border:1px solid var(--amber-border); border-radius:8px;">
+            <span class="pill pill-amber" style="flex-shrink:0;">Monitor</span>
+            <span style="font-size:0.78rem; color:var(--grey-700);">RSK-004 Cash flow: Debtor days +7 MoM — tighten collections</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--green-bg); border:1px solid var(--green-border); border-radius:8px;">
+            <span class="pill pill-green" style="flex-shrink:0;">Strong</span>
+            <span style="font-size:0.78rem; color:var(--grey-700);">Controls effectiveness improved +14pp this quarter to 78%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-strip" style="margin-top:12px;">
+      <div class="ai-icon">✦</div>
+      <p><strong>Overall risk posture is Amber.</strong> Three risks remain above appetite, two requiring formal acceptance. Cyber risk is the priority — the board should confirm whether current mitigations are sufficient or whether additional investment is needed. Controls coverage has materially improved this quarter, which is reducing residual scores across the portfolio.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Figures sourced from Stratavor Risk Register</span>
+    <span>Acme SaaS Ltd &middot; Q1 2026 &middot; Prepared for Board Review — Confidential &middot; 3 of 9</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 4 — RISK REGISTER
+     ═══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="header-left">Risk Intelligence Snapshot</div>
+    <div class="header-right">
+      Generated by Stratavor&nbsp;&nbsp;
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L9 5H7L5 7V9L2 12L5 15V17L7 19H9L12 22L15 19H17L19 17V15L22 12L19 9V7L17 5H15L12 2Z" fill="var(--teal-700)"/><circle cx="12" cy="12" r="3" fill="var(--teal-300)"/></svg>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="section-title">Risk Register</div>
+    <div class="section-subtitle">All active risks as at snapshot date, ranked by residual score descending. Risks above appetite threshold (9) highlighted.</div>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width:60px;">Ref</th>
+          <th style="width:200px;">Risk Title</th>
+          <th>Category</th>
+          <th>Owner</th>
+          <th>Treatment</th>
+          <th class="align-center">Inherent</th>
+          <th class="align-center">Residual</th>
+          <th class="align-center">Target</th>
+          <th class="align-center">Trend</th>
+          <th>Next Review</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:var(--red-bg);">
+          <td style="font-weight:700;">RSK-001</td>
+          <td style="font-weight:600;">Data breach via phishing attack</td>
+          <td>Cyber</td>
+          <td>J. Williams</td>
+          <td>Mitigate</td>
+          <td class="align-center"><span class="score score-critical">20</span></td>
+          <td class="align-center"><span class="score score-critical">16</span></td>
+          <td class="align-center"><span class="score score-medium">8</span></td>
+          <td class="align-center"><span class="delta delta-up">↑</span></td>
+          <td>12 Apr 2026</td>
+          <td><span class="pill pill-red">Pending Approval</span></td>
+        </tr>
+        <tr style="background:var(--red-bg);">
+          <td style="font-weight:700;">RSK-002</td>
+          <td style="font-weight:600;">Key person dependency — CTO</td>
+          <td>HR</td>
+          <td>S. O'Brien</td>
+          <td>Mitigate</td>
+          <td class="align-center"><span class="score score-critical">15</span></td>
+          <td class="align-center"><span class="score score-high">12</span></td>
+          <td class="align-center"><span class="score score-medium">6</span></td>
+          <td class="align-center"><span class="delta delta-flat">→</span></td>
+          <td>05 Apr 2026</td>
+          <td><span class="pill pill-amber">Active</span></td>
+        </tr>
+        <tr style="background:var(--red-bg);">
+          <td style="font-weight:700;">RSK-003</td>
+          <td style="font-weight:600;">Regulatory non-compliance (GDPR Art 30)</td>
+          <td>Compliance</td>
+          <td>M. Kelly</td>
+          <td>Mitigate</td>
+          <td class="align-center"><span class="score score-high">12</span></td>
+          <td class="align-center"><span class="score score-high">10</span></td>
+          <td class="align-center"><span class="score score-low">4</span></td>
+          <td class="align-center"><span class="delta delta-down">↓</span></td>
+          <td>20 Apr 2026</td>
+          <td><span class="pill pill-red">Pending Approval</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">RSK-004</td>
+          <td style="font-weight:600;">Cash flow disruption — debtor concentration</td>
+          <td>Financial</td>
+          <td>R. Murphy</td>
+          <td>Mitigate</td>
+          <td class="align-center"><span class="score score-high">12</span></td>
+          <td class="align-center"><span class="score score-medium">9</span></td>
+          <td class="align-center"><span class="score score-low">4</span></td>
+          <td class="align-center"><span class="delta delta-up">↑</span></td>
+          <td>01 Apr 2026</td>
+          <td><span class="pill pill-amber">Active</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">RSK-005</td>
+          <td style="font-weight:600;">Platform outage — single cloud region</td>
+          <td>Operational</td>
+          <td>J. Williams</td>
+          <td>Mitigate</td>
+          <td class="align-center"><span class="score score-critical">15</span></td>
+          <td class="align-center"><span class="score score-medium">8</span></td>
+          <td class="align-center"><span class="score score-low">4</span></td>
+          <td class="align-center"><span class="delta delta-down">↓</span></td>
+          <td>15 Apr 2026</td>
+          <td><span class="pill pill-green">Active</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">RSK-006</td>
+          <td style="font-weight:600;">Competitor pricing erosion</td>
+          <td>Strategic</td>
+          <td>C. Doyle</td>
+          <td>Accept</td>
+          <td class="align-center"><span class="score score-medium">9</span></td>
+          <td class="align-center"><span class="score score-medium">6</span></td>
+          <td class="align-center"><span class="score score-medium">6</span></td>
+          <td class="align-center"><span class="delta delta-flat">→</span></td>
+          <td>30 Jun 2026</td>
+          <td><span class="pill pill-green">Active</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">RSK-007</td>
+          <td style="font-weight:600;">Supply chain SaaS vendor failure</td>
+          <td>Operational</td>
+          <td>J. Williams</td>
+          <td>Share</td>
+          <td class="align-center"><span class="score score-medium">8</span></td>
+          <td class="align-center"><span class="score score-medium">6</span></td>
+          <td class="align-center"><span class="score score-low">3</span></td>
+          <td class="align-center"><span class="delta delta-down">↓</span></td>
+          <td>15 May 2026</td>
+          <td><span class="pill pill-green">Active</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">RSK-008</td>
+          <td style="font-weight:600;">Ransomware — backup integrity</td>
+          <td>Cyber</td>
+          <td>J. Williams</td>
+          <td>Mitigate</td>
+          <td class="align-center"><span class="score score-high">12</span></td>
+          <td class="align-center"><span class="score score-medium">6</span></td>
+          <td class="align-center"><span class="score score-low">3</span></td>
+          <td class="align-center"><span class="delta delta-down">↓</span></td>
+          <td>10 Apr 2026</td>
+          <td><span class="pill pill-green">Active</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">RSK-009</td>
+          <td style="font-weight:600;">Customer churn — top-10 concentration</td>
+          <td>Reputational</td>
+          <td>C. Doyle</td>
+          <td>Mitigate</td>
+          <td class="align-center"><span class="score score-medium">8</span></td>
+          <td class="align-center"><span class="score score-low">4</span></td>
+          <td class="align-center"><span class="score score-low">4</span></td>
+          <td class="align-center"><span class="delta delta-flat">→</span></td>
+          <td>30 Jun 2026</td>
+          <td><span class="pill pill-green">Active</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">RSK-010</td>
+          <td style="font-weight:600;">Tax reporting error — multi-jurisdiction</td>
+          <td>Compliance</td>
+          <td>R. Murphy</td>
+          <td>Mitigate</td>
+          <td class="align-center"><span class="score score-medium">6</span></td>
+          <td class="align-center"><span class="score score-low">3</span></td>
+          <td class="align-center"><span class="score score-low">2</span></td>
+          <td class="align-center"><span class="delta delta-down">↓</span></td>
+          <td>30 Jun 2026</td>
+          <td><span class="pill pill-green">Active</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">RSK-011</td>
+          <td style="font-weight:600;">API credential leak</td>
+          <td>Cyber</td>
+          <td>J. Williams</td>
+          <td>Mitigate</td>
+          <td class="align-center"><span class="score score-medium">8</span></td>
+          <td class="align-center"><span class="score score-low">3</span></td>
+          <td class="align-center"><span class="score score-low">2</span></td>
+          <td class="align-center"><span class="delta delta-down">↓</span></td>
+          <td>15 May 2026</td>
+          <td><span class="pill pill-green">Active</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">RSK-012</td>
+          <td style="font-weight:600;">FX exposure on EUR/USD contracts</td>
+          <td>Financial</td>
+          <td>R. Murphy</td>
+          <td>Transfer</td>
+          <td class="align-center"><span class="score score-medium">6</span></td>
+          <td class="align-center"><span class="score score-low">2</span></td>
+          <td class="align-center"><span class="score score-low">2</span></td>
+          <td class="align-center"><span class="delta delta-flat">→</span></td>
+          <td>30 Jun 2026</td>
+          <td><span class="pill pill-green">Active</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:8px; display:flex; gap:14px; font-size:0.7rem; color:var(--grey-400);">
+      <span>↑ Residual increased since last assessment</span>
+      <span>↓ Residual decreased (improving)</span>
+      <span>→ No change</span>
+      <span style="margin-left:auto;">Rows highlighted = residual score &gt; appetite threshold (9)</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Figures sourced from Stratavor Risk Register</span>
+    <span>Acme SaaS Ltd &middot; Q1 2026 &middot; Prepared for Board Review — Confidential &middot; 4 of 9</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 5 — RISK HEATMAPS
+     ═══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="header-left">Risk Intelligence Snapshot</div>
+    <div class="header-right">
+      Generated by Stratavor&nbsp;&nbsp;
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L9 5H7L5 7V9L2 12L5 15V17L7 19H9L12 22L15 19H17L19 17V15L22 12L19 9V7L17 5H15L12 2Z" fill="var(--teal-700)"/><circle cx="12" cy="12" r="3" fill="var(--teal-300)"/></svg>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="section-title">Risk Heatmaps &amp; Ranked Risk List</div>
+    <div class="section-subtitle">Current residual risk (left) vs target/to-be position (right). Dashed red border marks the appetite threshold. Every risk migrating toward the green zone is the goal.</div>
+
+    <div class="heatmap-wrapper" style="margin-bottom:18px;">
+      <!-- CURRENT RESIDUAL -->
+      <div class="heatmap-panel">
+        <div class="heatmap-panel-title">Current Residual Risk</div>
+        <div class="heatmap">
+          <div class="hm-label hm-ylabel" style="grid-row:1/6;">LIKELIHOOD</div>
+          <!-- Row 5 (L=5) -->
+          <div class="hm-cell hm-y2">5</div>
+          <div class="hm-cell hm-a1">10</div>
+          <div class="hm-cell hm-r1 has-dot"><div class="risk-dot">R01</div></div>
+          <div class="hm-cell hm-r2">20</div>
+          <div class="hm-cell hm-r3">25</div>
+          <!-- Row 4 (L=4) -->
+          <div class="hm-cell hm-y1">4</div>
+          <div class="hm-cell hm-y3">8</div>
+          <div class="hm-cell hm-a1 has-dot"><div class="risk-dot">R02</div></div>
+          <div class="hm-cell hm-r1 has-dot"><div class="risk-dot">R03</div></div>
+          <div class="hm-cell hm-r2">20</div>
+          <!-- Row 3 (L=3) -->
+          <div class="hm-cell hm-g2">3</div>
+          <div class="hm-cell hm-y1 has-dot"><div class="risk-dot">R06<br>R07</div></div>
+          <div class="hm-cell hm-y3 has-dot"><div class="risk-dot">R04</div></div>
+          <div class="hm-cell hm-a2">12</div>
+          <div class="hm-cell hm-r1">15</div>
+          <!-- Row 2 (L=2) -->
+          <div class="hm-cell hm-g1">2</div>
+          <div class="hm-cell hm-g2 has-dot"><div class="risk-dot">R09<br>R12</div></div>
+          <div class="hm-cell hm-y1 has-dot"><div class="risk-dot">R08<br>R10<br>R11</div></div>
+          <div class="hm-cell hm-y3 has-dot"><div class="risk-dot">R05</div></div>
+          <div class="hm-cell hm-a1">10</div>
+          <!-- Row 1 (L=1) -->
+          <div class="hm-cell hm-g1">1</div>
+          <div class="hm-cell hm-g1">2</div>
+          <div class="hm-cell hm-g2">3</div>
+          <div class="hm-cell hm-y1">4</div>
+          <div class="hm-cell hm-y2">5</div>
+          <!-- X labels -->
+          <div></div>
+          <div class="hm-label">1</div>
+          <div class="hm-label">2</div>
+          <div class="hm-label">3</div>
+          <div class="hm-label">4</div>
+          <div class="hm-label">5</div>
+        </div>
+        <div class="hm-axis-title">Impact</div>
+      </div>
+
+      <!-- TARGET -->
+      <div class="heatmap-panel">
+        <div class="heatmap-panel-title">Target (To-Be) Risk</div>
+        <div class="heatmap">
+          <div class="hm-label hm-ylabel" style="grid-row:1/6;">LIKELIHOOD</div>
+          <!-- Row 5 -->
+          <div class="hm-cell hm-y2">5</div><div class="hm-cell hm-a1">10</div><div class="hm-cell hm-r1">15</div><div class="hm-cell hm-r2">20</div><div class="hm-cell hm-r3">25</div>
+          <!-- Row 4 -->
+          <div class="hm-cell hm-y1">4</div><div class="hm-cell hm-y3">8</div><div class="hm-cell hm-a1">12</div><div class="hm-cell hm-r1">16</div><div class="hm-cell hm-r2">20</div>
+          <!-- Row 3 -->
+          <div class="hm-cell hm-g2">3</div><div class="hm-cell hm-y1">6</div><div class="hm-cell hm-y3">9</div><div class="hm-cell hm-a2">12</div><div class="hm-cell hm-r1">15</div>
+          <!-- Row 2 -->
+          <div class="hm-cell hm-g1">2</div>
+          <div class="hm-cell hm-g2 has-dot"><div class="risk-dot" style="font-size:0.5rem;">R01<br>R05<br>R08</div></div>
+          <div class="hm-cell hm-y1 has-dot"><div class="risk-dot" style="font-size:0.5rem;">R02<br>R03<br>R06<br>R07</div></div>
+          <div class="hm-cell hm-y3 has-dot"><div class="risk-dot" style="font-size:0.5rem;">R04</div></div>
+          <div class="hm-cell hm-a1">10</div>
+          <!-- Row 1 -->
+          <div class="hm-cell hm-g1">1</div>
+          <div class="hm-cell hm-g1 has-dot"><div class="risk-dot" style="font-size:0.5rem;">R10<br>R11<br>R12</div></div>
+          <div class="hm-cell hm-g2 has-dot"><div class="risk-dot" style="font-size:0.5rem;">R09</div></div>
+          <div class="hm-cell hm-y1">4</div>
+          <div class="hm-cell hm-y2">5</div>
+          <!-- X labels -->
+          <div></div><div class="hm-label">1</div><div class="hm-label">2</div><div class="hm-label">3</div><div class="hm-label">4</div><div class="hm-label">5</div>
+        </div>
+        <div class="hm-axis-title">Impact</div>
+      </div>
+    </div>
+
+    <!-- RANKED LIST -->
+    <div style="font-weight:600; font-size:0.82rem; color:var(--teal-900); margin-bottom:8px;">Ranked Risk List (by residual score, descending)</div>
+    <table class="data-table" style="font-size:0.75rem;">
+      <thead>
+        <tr>
+          <th style="width:50px;">Rank</th>
+          <th style="width:60px;">Ref</th>
+          <th>Risk Title</th>
+          <th class="align-center">Residual</th>
+          <th class="align-center">Target</th>
+          <th class="align-center">Gap</th>
+          <th>Owner</th>
+          <th>Controls (Strong/Adequate/Weak/Untested)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td style="font-weight:700;">RSK-001</td><td>Data breach via phishing attack</td><td class="align-center"><span class="score score-critical">16</span></td><td class="align-center"><span class="score score-medium">8</span></td><td class="align-center" style="color:var(--red-500); font-weight:700;">−8</td><td>J. Williams</td><td><span class="eff-dot eff-strong"></span>1 <span class="eff-dot eff-adequate"></span>2 <span class="eff-dot eff-weak"></span>1 <span class="eff-dot eff-untested"></span>0</td></tr>
+        <tr><td>2</td><td style="font-weight:700;">RSK-002</td><td>Key person dependency — CTO</td><td class="align-center"><span class="score score-high">12</span></td><td class="align-center"><span class="score score-medium">6</span></td><td class="align-center" style="color:var(--red-500); font-weight:700;">−6</td><td>S. O'Brien</td><td><span class="eff-dot eff-strong"></span>0 <span class="eff-dot eff-adequate"></span>1 <span class="eff-dot eff-weak"></span>1 <span class="eff-dot eff-untested"></span>1</td></tr>
+        <tr><td>3</td><td style="font-weight:700;">RSK-003</td><td>Regulatory non-compliance (GDPR)</td><td class="align-center"><span class="score score-high">10</span></td><td class="align-center"><span class="score score-low">4</span></td><td class="align-center" style="color:var(--red-500); font-weight:700;">−6</td><td>M. Kelly</td><td><span class="eff-dot eff-strong"></span>1 <span class="eff-dot eff-adequate"></span>1 <span class="eff-dot eff-weak"></span>0 <span class="eff-dot eff-untested"></span>1</td></tr>
+        <tr><td>4</td><td style="font-weight:700;">RSK-004</td><td>Cash flow disruption</td><td class="align-center"><span class="score score-medium">9</span></td><td class="align-center"><span class="score score-low">4</span></td><td class="align-center" style="color:var(--amber-600); font-weight:700;">−5</td><td>R. Murphy</td><td><span class="eff-dot eff-strong"></span>1 <span class="eff-dot eff-adequate"></span>2 <span class="eff-dot eff-weak"></span>0 <span class="eff-dot eff-untested"></span>0</td></tr>
+        <tr><td>5</td><td style="font-weight:700;">RSK-005</td><td>Platform outage</td><td class="align-center"><span class="score score-medium">8</span></td><td class="align-center"><span class="score score-low">4</span></td><td class="align-center" style="color:var(--amber-600); font-weight:700;">−4</td><td>J. Williams</td><td><span class="eff-dot eff-strong"></span>2 <span class="eff-dot eff-adequate"></span>1 <span class="eff-dot eff-weak"></span>0 <span class="eff-dot eff-untested"></span>0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <span>Figures sourced from Stratavor Risk Register</span>
+    <span>Acme SaaS Ltd &middot; Q1 2026 &middot; Prepared for Board Review — Confidential &middot; 5 of 9</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 6 — CONTROLS & MITIGATIONS
+     ═══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="header-left">Risk Intelligence Snapshot</div>
+    <div class="header-right">Generated by Stratavor&nbsp;&nbsp;<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L9 5H7L5 7V9L2 12L5 15V17L7 19H9L12 22L15 19H17L19 17V15L22 12L19 9V7L17 5H15L12 2Z" fill="var(--teal-700)"/><circle cx="12" cy="12" r="3" fill="var(--teal-300)"/></svg></div>
+  </div>
+
+  <div class="page-body">
+    <div class="section-title">Controls &amp; Mitigations</div>
+    <div class="section-subtitle">Control inventory, effectiveness ratings and status. Controls are first-class objects — each has its own owner, status, effectiveness rating and evidence store.</div>
+
+    <div class="cols-60-40" style="margin-bottom:14px;">
+      <div>
+        <div class="stat-row" style="margin-bottom:14px;">
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--teal-700);">28</div><div class="stat-box-label">Total Controls</div></div>
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--green-600);">9</div><div class="stat-box-label">Strong</div></div>
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--amber-600);">13</div><div class="stat-box-label">Adequate</div></div>
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--red-500);">4</div><div class="stat-box-label">Weak</div></div>
+          <div class="stat-box"><div class="stat-box-value" style="color:var(--grey-400);">2</div><div class="stat-box-label">Untested</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:600; font-size:0.78rem; color:var(--teal-900); margin-bottom:6px;">Effectiveness Trend (% Strong + Adequate)</div>
+        <div style="display:flex; gap:3px; height:16px; border-radius:100px; overflow:hidden; margin-bottom:4px;">
+          <div style="width:78%; background:var(--green-500);"></div>
+          <div style="width:22%; background:var(--grey-200);"></div>
+        </div>
+        <div style="font-size:0.72rem; color:var(--grey-500);">78% effective (target: 85%) — <span style="color:var(--green-600); font-weight:600;">+14pp vs last quarter</span></div>
+      </div>
+    </div>
+
+    <table class="data-table" style="font-size:0.75rem;">
+      <thead>
+        <tr>
+          <th>Risk Ref</th>
+          <th style="width:180px;">Control Title</th>
+          <th>Type</th>
+          <th>Owner</th>
+          <th class="align-center">Status</th>
+          <th class="align-center">Effectiveness</th>
+          <th>Last Tested</th>
+          <th>Evidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-header"><td colspan="8">RSK-001 — Data breach via phishing attack</td></tr>
+        <tr><td></td><td>MFA on all admin accounts</td><td>Preventive</td><td>J. Williams</td><td class="align-center"><span class="pill pill-green">Implemented</span></td><td class="align-center"><span class="eff-dot eff-strong"></span>Strong</td><td>15 Mar 2026</td><td>✓ Linked</td></tr>
+        <tr><td></td><td>Quarterly phishing simulation</td><td>Detective</td><td>J. Williams</td><td class="align-center"><span class="pill pill-amber">In Progress</span></td><td class="align-center"><span class="eff-dot eff-adequate"></span>Adequate</td><td>01 Mar 2026</td><td>✓ Linked</td></tr>
+        <tr><td></td><td>Security awareness training</td><td>Directive</td><td>S. O'Brien</td><td class="align-center"><span class="pill pill-green">Implemented</span></td><td class="align-center"><span class="eff-dot eff-adequate"></span>Adequate</td><td>20 Feb 2026</td><td>✓ Linked</td></tr>
+        <tr><td></td><td>Endpoint detection & response</td><td>Detective</td><td>J. Williams</td><td class="align-center"><span class="pill pill-amber">In Progress</span></td><td class="align-center"><span class="eff-dot eff-weak"></span>Weak</td><td>—</td><td>✗ Pending</td></tr>
+
+        <tr class="row-header"><td colspan="8">RSK-002 — Key person dependency — CTO</td></tr>
+        <tr><td></td><td>Succession plan documented</td><td>Corrective</td><td>S. O'Brien</td><td class="align-center"><span class="pill pill-grey">Planned</span></td><td class="align-center"><span class="eff-dot eff-untested"></span>Untested</td><td>—</td><td>✗ Pending</td></tr>
+        <tr><td></td><td>Knowledge transfer sessions</td><td>Directive</td><td>J. Williams</td><td class="align-center"><span class="pill pill-amber">In Progress</span></td><td class="align-center"><span class="eff-dot eff-adequate"></span>Adequate</td><td>10 Mar 2026</td><td>✓ Linked</td></tr>
+        <tr><td></td><td>Shared admin access policy</td><td>Preventive</td><td>J. Williams</td><td class="align-center"><span class="pill pill-green">Implemented</span></td><td class="align-center"><span class="eff-dot eff-weak"></span>Weak</td><td>28 Feb 2026</td><td>✓ Linked</td></tr>
+
+        <tr class="row-header"><td colspan="8">RSK-004 — Cash flow disruption</td></tr>
+        <tr><td></td><td>Automated debtor ageing alerts</td><td>Detective</td><td>R. Murphy</td><td class="align-center"><span class="pill pill-green">Implemented</span></td><td class="align-center"><span class="eff-dot eff-strong"></span>Strong</td><td>20 Mar 2026</td><td>✓ Linked</td></tr>
+        <tr><td></td><td>Customer credit check policy</td><td>Preventive</td><td>R. Murphy</td><td class="align-center"><span class="pill pill-green">Implemented</span></td><td class="align-center"><span class="eff-dot eff-adequate"></span>Adequate</td><td>01 Mar 2026</td><td>✓ Linked</td></tr>
+        <tr><td></td><td>Cash reserve policy (3-month min)</td><td>Corrective</td><td>R. Murphy</td><td class="align-center"><span class="pill pill-green">Implemented</span></td><td class="align-center"><span class="eff-dot eff-adequate"></span>Adequate</td><td>15 Mar 2026</td><td>✓ Linked</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ai-strip" style="margin-top:10px;">
+      <div class="ai-icon">✦</div>
+      <p><strong>RSK-001 has a weak control (EDR) that needs attention</strong> — residual score suggests controls are reducing this risk, but the EDR implementation is incomplete. RSK-002's succession plan remains untested. Recommend prioritising these two gaps before the next review cycle.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Figures sourced from Stratavor Risk Register</span>
+    <span>Acme SaaS Ltd &middot; Q1 2026 &middot; Prepared for Board Review — Confidential &middot; 6 of 9</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 7 — RISK MOVEMENT & TRENDS
+     ═══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="header-left">Risk Intelligence Snapshot</div>
+    <div class="header-right">Generated by Stratavor&nbsp;&nbsp;<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L9 5H7L5 7V9L2 12L5 15V17L7 19H9L12 22L15 19H17L19 17V15L22 12L19 9V7L17 5H15L12 2Z" fill="var(--teal-700)"/><circle cx="12" cy="12" r="3" fill="var(--teal-300)"/></svg></div>
+  </div>
+
+  <div class="page-body">
+    <div class="section-title">Risk Movement &amp; Trend Analysis</div>
+    <div class="section-subtitle">What changed since the last snapshot (Q4 2025). Score deltas, new risks, closed risks and control status changes.</div>
+
+    <div class="cols-2" style="margin-bottom:16px;">
+      <div>
+        <div style="font-weight:600; font-size:0.82rem; color:var(--teal-900); margin-bottom:10px;">Score Movement Since Last Snapshot</div>
+        <table class="data-table" style="font-size:0.75rem;">
+          <thead>
+            <tr><th>Ref</th><th>Risk Title</th><th class="align-center">Q4 Residual</th><th class="align-center">Q1 Residual</th><th class="align-center">Δ</th><th>Comment</th></tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:700;">RSK-001</td><td>Data breach</td><td class="align-center"><span class="score score-high">12</span></td><td class="align-center"><span class="score score-critical">16</span></td><td class="align-center"><span class="delta delta-up">↑ +4</span></td><td style="font-size:0.72rem; color:var(--grey-600);">2 failed phishing sims; likelihood raised</td></tr>
+            <tr><td style="font-weight:700;">RSK-004</td><td>Cash flow</td><td class="align-center"><span class="score score-medium">6</span></td><td class="align-center"><span class="score score-medium">9</span></td><td class="align-center"><span class="delta delta-up">↑ +3</span></td><td style="font-size:0.72rem; color:var(--grey-600);">Debtor days +7; top-3 customer late</td></tr>
+            <tr><td style="font-weight:700;">RSK-005</td><td>Platform outage</td><td class="align-center"><span class="score score-high">12</span></td><td class="align-center"><span class="score score-medium">8</span></td><td class="align-center"><span class="delta delta-down">↓ −4</span></td><td style="font-size:0.72rem; color:var(--grey-600);">Multi-region DR implemented &amp; tested</td></tr>
+            <tr><td style="font-weight:700;">RSK-008</td><td>Ransomware</td><td class="align-center"><span class="score score-medium">9</span></td><td class="align-center"><span class="score score-medium">6</span></td><td class="align-center"><span class="delta delta-down">↓ −3</span></td><td style="font-size:0.72rem; color:var(--grey-600);">Immutable backups deployed</td></tr>
+            <tr><td style="font-weight:700;">RSK-003</td><td>GDPR compliance</td><td class="align-center"><span class="score score-high">12</span></td><td class="align-center"><span class="score score-high">10</span></td><td class="align-center"><span class="delta delta-down">↓ −2</span></td><td style="font-size:0.72rem; color:var(--grey-600);">ROPA completed; audit pending</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <div style="font-weight:600; font-size:0.82rem; color:var(--teal-900); margin-bottom:10px;">New &amp; Closed Risks This Quarter</div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--grey-500); font-weight:600; margin-bottom:6px;">New Risks (2)</div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div style="padding:8px 12px; background:var(--grey-50); border:1px solid var(--grey-200); border-radius:6px; font-size:0.78rem;">
+              <strong>RSK-011</strong> — API credential leak <span class="pill pill-teal" style="margin-left:8px;">Cyber</span>
+              <div style="font-size:0.7rem; color:var(--grey-500); margin-top:2px;">Added 15 Jan 2026 · Owner: J. Williams · Residual: 3</div>
+            </div>
+            <div style="padding:8px 12px; background:var(--grey-50); border:1px solid var(--grey-200); border-radius:6px; font-size:0.78rem;">
+              <strong>RSK-012</strong> — FX exposure on EUR/USD <span class="pill pill-teal" style="margin-left:8px;">Financial</span>
+              <div style="font-size:0.7rem; color:var(--grey-500); margin-top:2px;">Added 01 Feb 2026 · Owner: R. Murphy · Residual: 2</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--grey-500); font-weight:600; margin-bottom:6px;">Closed Risks (1)</div>
+          <div style="padding:8px 12px; background:var(--grey-50); border:1px solid var(--grey-200); border-radius:6px; font-size:0.78rem;">
+            <strong>RSK-007a</strong> — Office lease expiry <span class="pill pill-grey" style="margin-left:8px;">Closed</span>
+            <div style="font-size:0.7rem; color:var(--grey-500); margin-top:2px;">Closed 20 Feb 2026 · Lease renewed for 3 years · Approved by Admin</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--grey-500); font-weight:600; margin-bottom:6px;">Control Changes (Key)</div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div style="padding:8px 12px; background:var(--green-bg); border:1px solid var(--green-border); border-radius:6px; font-size:0.75rem; color:var(--grey-700);">
+              <strong>+4 controls</strong> moved to Implemented status this quarter
+            </div>
+            <div style="padding:8px 12px; background:var(--green-bg); border:1px solid var(--green-border); border-radius:6px; font-size:0.75rem; color:var(--grey-700);">
+              <strong>+3 controls</strong> upgraded from Weak → Adequate
+            </div>
+            <div style="padding:8px 12px; background:var(--amber-bg); border:1px solid var(--amber-border); border-radius:6px; font-size:0.75rem; color:var(--grey-700);">
+              <strong>2 controls</strong> remain Untested — succession plan &amp; EDR rollout
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-strip">
+      <div class="ai-icon">✦</div>
+      <p>Net risk movement is <strong>positive this quarter</strong> — aggregate residual score fell from 98 to 95 despite two new risks being added. The improvement is driven by RSK-005 (platform outage) and RSK-008 (ransomware) where new controls materially reduced residual scores. <strong>Offset by RSK-001 escalation</strong>, which should be the board's primary focus this quarter.</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Figures sourced from Stratavor Risk Register</span>
+    <span>Acme SaaS Ltd &middot; Q1 2026 &middot; Prepared for Board Review — Confidential &middot; 7 of 9</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 8 — GOVERNANCE & APPROVALS
+     ═══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="header-left">Risk Intelligence Snapshot</div>
+    <div class="header-right">Generated by Stratavor&nbsp;&nbsp;<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L9 5H7L5 7V9L2 12L5 15V17L7 19H9L12 22L15 19H17L19 17V15L22 12L19 9V7L17 5H15L12 2Z" fill="var(--teal-700)"/><circle cx="12" cy="12" r="3" fill="var(--teal-300)"/></svg></div>
+  </div>
+
+  <div class="page-body">
+    <div class="section-title">Governance, Approvals &amp; Review Status</div>
+    <div class="section-subtitle">Approval trail, review compliance and overdue items. Every residual risk acceptance above appetite is logged with who approved and when — immutably.</div>
+
+    <div class="cols-2">
+      <div>
+        <div style="font-weight:600; font-size:0.82rem; color:var(--teal-900); margin-bottom:10px;">Pending Approvals</div>
+        <table class="data-table" style="font-size:0.75rem; margin-bottom:16px;">
+          <thead>
+            <tr><th>Type</th><th>Risk</th><th>Requested By</th><th>Date</th><th>Approver</th><th>Expires</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Residual Risk Acceptance</td>
+              <td><strong>RSK-001</strong></td>
+              <td>J. Williams</td>
+              <td>25 Mar 2026</td>
+              <td>S. O'Brien (Admin)</td>
+              <td>28 Mar 2026</td>
+              <td><span class="pill pill-amber">Pending</span></td>
+            </tr>
+            <tr>
+              <td>Residual Risk Acceptance</td>
+              <td><strong>RSK-003</strong></td>
+              <td>M. Kelly</td>
+              <td>22 Mar 2026</td>
+              <td>S. O'Brien (Admin)</td>
+              <td>25 Mar 2026</td>
+              <td><span class="pill pill-red">Expiring</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="font-weight:600; font-size:0.82rem; color:var(--teal-900); margin-bottom:10px;">Review Compliance</div>
+        <table class="data-table" style="font-size:0.75rem;">
+          <thead>
+            <tr><th>Risk</th><th>Cadence</th><th>Last Reviewed</th><th>Next Due</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>RSK-001</strong></td><td>Monthly</td><td>01 Mar 2026</td><td>01 Apr 2026</td><td><span class="pill pill-green">On Schedule</span></td></tr>
+            <tr><td><strong>RSK-002</strong></td><td>Monthly</td><td>28 Feb 2026</td><td>28 Mar 2026</td><td><span class="pill pill-green">On Schedule</span></td></tr>
+            <tr><td><strong>RSK-004</strong></td><td>Monthly</td><td>15 Mar 2026</td><td>15 Apr 2026</td><td><span class="pill pill-green">On Schedule</span></td></tr>
+            <tr><td><strong>RSK-006</strong></td><td>Quarterly</td><td>15 Dec 2025</td><td>15 Mar 2026</td><td><span class="pill pill-red">Overdue 12d</span></td></tr>
+            <tr><td><strong>RSK-009</strong></td><td>Quarterly</td><td>20 Dec 2025</td><td>20 Mar 2026</td><td><span class="pill pill-amber">Due 7d</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <div style="font-weight:600; font-size:0.82rem; color:var(--teal-900); margin-bottom:10px;">Recent Governance Activity</div>
+        <div style="display:flex; flex-direction:column;">
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--green-500);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">RSK-008 — Residual risk acceptance approved</div>
+              <div class="timeline-meta">Approved by S. O'Brien · 18 Mar 2026 · Note: "Immutable backups now verified"</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--green-500);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">RSK-005 — Scoring change approved</div>
+              <div class="timeline-meta">Approved by S. O'Brien · 15 Mar 2026 · Residual: 12 → 8</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--amber-500);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">RSK-001 — Residual risk acceptance submitted</div>
+              <div class="timeline-meta">Submitted by J. Williams · 25 Mar 2026 · Awaiting Admin approval</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--red-500);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">RSK-001 — Scoring change: residual escalated</div>
+              <div class="timeline-meta">J. Williams · 20 Mar 2026 · Residual: 12 → 16 · Note: "Two failed phishing simulations"</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--green-500);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">RSK-007a — Risk closure approved</div>
+              <div class="timeline-meta">Approved by S. O'Brien · 20 Feb 2026 · "Lease renewed — risk eliminated"</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--teal-500);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">RSK-012 — New risk activated</div>
+              <div class="timeline-meta">Created by R. Murphy · Approved by S. O'Brien · 04 Feb 2026</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--teal-500);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">RSK-011 — New risk activated</div>
+              <div class="timeline-meta">Created by J. Williams · Approved by S. O'Brien · 18 Jan 2026</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot" style="background:var(--grey-400);"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Q4 2025 Board Pack snapshot taken</div>
+              <div class="timeline-meta">S. O'Brien · 31 Dec 2025 · "Q4 2025 Board Pack"</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Figures sourced from Stratavor Risk Register</span>
+    <span>Acme SaaS Ltd &middot; Q1 2026 &middot; Prepared for Board Review — Confidential &middot; 8 of 9</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 9 — INSIGHTS & COMMENTARY
+     ═══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="header-left">Risk Intelligence Snapshot</div>
+    <div class="header-right">Generated by Stratavor&nbsp;&nbsp;<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L9 5H7L5 7V9L2 12L5 15V17L7 19H9L12 22L15 19H17L19 17V15L22 12L19 9V7L17 5H15L12 2Z" fill="var(--teal-700)"/><circle cx="12" cy="12" r="3" fill="var(--teal-300)"/></svg></div>
+  </div>
+
+  <div class="page-body" style="background:linear-gradient(160deg, var(--teal-950) 0%, var(--teal-850) 50%, var(--teal-800) 100%); margin:-28px -40px -20px; padding:28px 40px 20px; position:relative;">
+    <!-- Decorative -->
+    <div style="position:absolute; top:0; right:0; bottom:0; width:200px; opacity:0.03; background:repeating-linear-gradient(90deg, white 0px, white 1px, transparent 1px, transparent 8px);"></div>
+
+    <div class="section-title" style="color:var(--surface-white);">Insights &amp; Commentary</div>
+    <div class="section-subtitle" style="color:var(--teal-400);">AI-generated analysis from the risk register — explains what changed, why it matters, and where to focus next.</div>
+
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-bottom:20px;">
+      <!-- HIGHLIGHTS -->
+      <div class="commentary-col" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
+        <h3 style="color:var(--surface-white);">Highlights</h3>
+        <div style="font-size:0.72rem; color:var(--gold-400); text-transform:uppercase; letter-spacing:0.06em; font-weight:600; margin-bottom:14px;">What the AI surfaced this quarter</div>
+        <div class="commentary-item">
+          <div class="commentary-icon" style="background:rgba(229,62,62,0.15); color:var(--red-400);">!</div>
+          <div>
+            <div class="commentary-item-title" style="color:var(--teal-100);">Cyber risk escalation</div>
+            <div class="commentary-item-text" style="color:var(--teal-300);">RSK-001 residual increased from 12 to 16 after two consecutive failed phishing simulations. This is the highest residual score in the register.</div>
+          </div>
+        </div>
+        <div class="commentary-item">
+          <div class="commentary-icon" style="background:rgba(56,161,105,0.15); color:var(--green-400);">✓</div>
+          <div>
+            <div class="commentary-item-title" style="color:var(--teal-100);">Controls improving</div>
+            <div class="commentary-item-text" style="color:var(--teal-300);">Effectiveness rose from 64% to 78% this quarter. Multi-region DR (RSK-005) and immutable backups (RSK-008) were the standout improvements.</div>
+          </div>
+        </div>
+        <div class="commentary-item">
+          <div class="commentary-icon" style="background:rgba(217,119,6,0.15); color:var(--amber-400);">⚠</div>
+          <div>
+            <div class="commentary-item-title" style="color:var(--teal-100);">Cash risk creeping</div>
+            <div class="commentary-item-text" style="color:var(--teal-300);">RSK-004 residual moved from 6 to 9, driven by debtor days increasing +7 MoM. Now at the appetite boundary.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOW IT WORKS -->
+      <div class="commentary-col" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
+        <h3 style="color:var(--surface-white);">How It Works</h3>
+        <div style="font-size:0.72rem; color:var(--gold-400); text-transform:uppercase; letter-spacing:0.06em; font-weight:600; margin-bottom:14px;">When the AI talks — and what it's allowed to say</div>
+        <div class="commentary-item">
+          <div class="commentary-icon" style="background:rgba(255,255,255,0.06); color:var(--teal-300);">⚡</div>
+          <div>
+            <div class="commentary-item-title" style="color:var(--teal-100);">Smart triggers</div>
+            <div class="commentary-item-text" style="color:var(--teal-300);">Insights fire on score changes, threshold breaches, control status shifts, overdue reviews, and risks trending toward or away from appetite.</div>
+          </div>
+        </div>
+        <div class="commentary-item">
+          <div class="commentary-icon" style="background:rgba(255,255,255,0.06); color:var(--teal-300);">💬</div>
+          <div>
+            <div class="commentary-item-title" style="color:var(--teal-100);">Plain-English explanations</div>
+            <div class="commentary-item-text" style="color:var(--teal-300);">Uses simple language and links movements to likely drivers — mirroring how a risk analyst would brief the committee.</div>
+          </div>
+        </div>
+        <div class="commentary-item">
+          <div class="commentary-icon" style="background:rgba(255,255,255,0.06); color:var(--teal-300);">🔒</div>
+          <div>
+            <div class="commentary-item-title" style="color:var(--teal-100);">Human-in-the-loop always</div>
+            <div class="commentary-item-text" style="color:var(--teal-300);">AI can suggest, draft, and score — but nothing becomes live without explicit user approval. This is the core governance guarantee.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECOMMENDED ACTIONS -->
+      <div class="commentary-col" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
+        <h3 style="color:var(--surface-white);">Recommended Actions</h3>
+        <div style="font-size:0.72rem; color:var(--gold-400); text-transform:uppercase; letter-spacing:0.06em; font-weight:600; margin-bottom:14px;">Board actions for this quarter</div>
+        <div class="commentary-item">
+          <div class="commentary-icon" style="background:rgba(229,62,62,0.15); color:var(--red-400);">1</div>
+          <div>
+            <div class="commentary-item-title" style="color:var(--teal-100);">Resolve RSK-001 acceptance</div>
+            <div class="commentary-item-text" style="color:var(--teal-300);">Approve or reject residual acceptance for data breach risk. If rejecting, confirm budget for EDR and enhanced phishing response.</div>
+          </div>
+        </div>
+        <div class="commentary-item">
+          <div class="commentary-icon" style="background:rgba(229,62,62,0.15); color:var(--red-400);">2</div>
+          <div>
+            <div class="commentary-item-title" style="color:var(--teal-100);">Resolve RSK-003 before expiry</div>
+            <div class="commentary-item-text" style="color:var(--teal-300);">GDPR compliance acceptance token expires 25 Mar. Admin action required before then.</div>
+          </div>
+        </div>
+        <div class="commentary-item">
+          <div class="commentary-icon" style="background:rgba(217,119,6,0.15); color:var(--amber-400);">3</div>
+          <div>
+            <div class="commentary-item-title" style="color:var(--teal-100);">Complete overdue review</div>
+            <div class="commentary-item-text" style="color:var(--teal-300);">RSK-006 (competitor pricing) review is 12 days overdue. Owner: C. Doyle. Escalate if not completed this week.</div>
+          </div>
+        </div>
+        <div class="commentary-item">
+          <div class="commentary-icon" style="background:rgba(56,161,105,0.15); color:var(--green-400);">4</div>
+          <div>
+            <div class="commentary-item-title" style="color:var(--teal-100);">Accelerate CTO succession plan</div>
+            <div class="commentary-item-text" style="color:var(--teal-300);">RSK-002's succession plan control is Untested. Set a target date and assign ownership for the next review.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colour bars (matching existing snapshot design) -->
+    <div style="display:flex; justify-content:center; gap:20px; margin-top:8px;">
+      <div style="height:4px; width:80px; border-radius:2px; background:var(--gold-500);"></div>
+      <div style="height:4px; width:80px; border-radius:2px; background:var(--red-500);"></div>
+      <div style="height:4px; width:80px; border-radius:2px; background:var(--green-500);"></div>
+    </div>
+  </div>
+
+  <div class="page-footer" style="background:var(--teal-950); border-top-color:rgba(255,255,255,0.08); color:var(--teal-500);">
+    <span>Figures sourced from Stratavor Risk Register</span>
+    <span>Acme SaaS Ltd &middot; Q1 2026 &middot; Prepared for Board Review — Confidential &middot; 9 of 9</span>
+  </div>
+</div>
+
+<script src="assets/demo.js"></script>
+</body>
+</html>

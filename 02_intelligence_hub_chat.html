@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratavor — Intelligence Hub · Chat</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/nav.css">
+<link rel="stylesheet" href="assets/demo.css">
+<link rel="stylesheet" href="assets/disabled.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { font-size: 15px; scroll-behavior: smooth; }
+
+  :root {
+    --navy: #1A2332;
+    --dark-teal: #0D4F4F;
+    --teal: #14B8A6;
+    --teal-light: #CCFBF1;
+    --bg: #F8FAFB;
+    --white: #FFFFFF;
+    --text-primary: #1A2332;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+    --border: #E2E8F0;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-elevated: 0 4px 12px rgba(0,0,0,0.10);
+    --radius-card: 12px;
+    --radius-btn: 8px;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    display: flex;
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Main ── */
+  .main {
+    margin-left: 260px; flex: 1; min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+
+  /* ── Profile Banner ── */
+  .profile-banner {
+    background: #FFFBEB;
+    border-bottom: 1px solid #FDE68A;
+    padding: 10px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .profile-banner .banner-text {
+    color: #92400E;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .profile-banner .banner-text .icon { font-size: 14px; }
+
+  .profile-banner .banner-link {
+    color: #D97706;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 13px;
+  }
+
+  .profile-banner .banner-link:hover { text-decoration: underline; }
+
+  /* ── Chat Body ── */
+  .chat-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px;
+  }
+
+  .chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* ── Chat Composer (empty / welcome state) ── */
+  .chat-composer {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 0;
+  }
+
+  .main.has-messages .chat-composer {
+    display: none;
+  }
+
+  /* Input bar always visible and sticky at bottom */
+  .chat-input-area {
+    position: sticky;
+    bottom: 0;
+    z-index: 50;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+  }
+
+  .composer-top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+  }
+
+  .new-convo-link {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .new-convo-link:hover {
+    color: var(--dark-teal);
+  }
+
+  .chat-composer .suggested-questions {
+    margin-bottom: 28px;
+  }
+
+  /* ── Suggested Questions ── */
+  .suggested-questions {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .suggested-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .chip {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .chip:hover {
+    border-color: var(--teal);
+    color: var(--dark-teal);
+    background: rgba(20,184,166,0.04);
+  }
+
+  /* ── Messages ── */
+  .message {
+    margin-bottom: 24px;
+  }
+
+  .message.user {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .message.user .msg-bubble {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 14px 14px 4px 14px;
+    padding: 12px 18px;
+    max-width: 600px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .message.assistant {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .message.assistant .ai-avatar {
+    width: 24px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .message.assistant .ai-avatar .ai-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .message.assistant .msg-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--teal);
+    border-radius: 4px 12px 12px 12px;
+    padding: 20px 24px;
+    max-width: 680px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .msg-card h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+  }
+
+  .msg-card p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+
+  .msg-card p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .msg-card strong {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 13px;
+  }
+
+  .msg-card .next-step {
+    background: rgba(13,79,79,0.04);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--dark-teal);
+    line-height: 1.55;
+  }
+
+  .msg-card .next-step .label {
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    color: var(--teal);
+  }
+
+  .msg-card .attribution {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .msg-card .attribution .dot {
+    width: 4px; height: 4px; border-radius: 50%; background: var(--text-muted);
+  }
+
+  .msg-card .data-comparison {
+    background: #F8FAFB;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--text-primary);
+  }
+
+  .data-comparison .row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .data-comparison .row .label {
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .data-comparison .header {
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ── Chat Input ── */
+  .chat-input-area {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    padding: 20px 32px;
+    flex-shrink: 0;
+  }
+
+  .chat-input-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .input-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 6px 6px 6px 18px;
+    transition: border-color 0.15s;
+  }
+
+  .input-row:focus-within {
+    border-color: var(--teal);
+  }
+
+  .input-row textarea {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    resize: none;
+    padding: 10px 0;
+    outline: none;
+  }
+
+  .input-row textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  .send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: var(--dark-teal);
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { background: #0B4242; }
+
+  .input-meta {
+    margin-top: 8px;
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .chat-input-area .input-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .chat-input-area .input-bar-wrap .input-row {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .chat-input-area .new-convo-link-bottom {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+
+  .chat-input-area .new-convo-link-bottom:hover {
+    color: var(--dark-teal);
+  }
+</style>
+</head>
+<body>
+
+<aside id="app-sidebar" class="sidebar"></aside>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- Profile completeness banner -->
+  <div class="profile-banner">
+    <div class="banner-text">
+      <span class="icon">⚠</span>
+      Complete your Strategic Profile to unlock full AI capability
+    </div>
+    <a href="04_strategic_profile.html" class="banner-link">Complete Now →</a>
+  </div>
+
+  <!-- Chat Body -->
+  <div class="chat-body">
+    <div class="chat-container">
+
+      <!-- Composer (welcome / empty state: suggestions + input) -->
+      <div class="chat-composer">
+        <div class="composer-top">
+          <a href="#" class="new-convo-link disabled">New conversation</a>
+        </div>
+        <div class="suggested-questions">
+          <div class="suggested-label">Suggested questions</div>
+          <div class="chips">
+            <div class="chip">Why did my margin drop in October?</div>
+            <div class="chip">How is my cash runway vs my growth plan?</div>
+            <div class="chip">What are my top customers contributing to revenue?</div>
+            <div class="chip">What does my risk appetite mean for hiring?</div>
+            <div class="chip">Summarise my financial position for the board</div>
+            <div class="chip">What should I prioritise this quarter?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 1: User -->
+      <div class="message user">
+        <div class="msg-bubble">Why did my gross margin drop last month?</div>
+      </div>
+
+      <!-- Message 1: AI Response -->
+      <div class="message assistant">
+        <div class="ai-avatar"><img src="assets/chesspiece-avatar.svg" alt="" class="ai-avatar-img"></div>
+        <div class="msg-card">
+          <h4>Gross Margin Decline — October 2025</h4>
+          <p>Your gross margin fell to <strong>34.2%</strong> in October, down from <strong>38.7%</strong> in September. That's a <strong>4.5 percentage point</strong> decline, which translates to approximately <strong>€42,800</strong> in lost margin on broadly similar revenue levels.</p>
+          <p>The primary driver was a <strong>€67,300</strong> increase in cost of goods sold, concentrated in two areas: a supplier price adjustment on your core SaaS hosting infrastructure (effective 1 October) and a one-off professional services cost related to your Q3 client implementation sprint.</p>
+          <p>Given your stated priority of <strong>operational efficiency</strong>, this trend warrants attention. While the one-off implementation cost won't recur, the hosting price adjustment is structural and will compress margins going forward unless renegotiated or absorbed through pricing.</p>
+
+          <div class="next-step">
+            <div class="label">Recommended Next Step</div>
+            Consider reviewing your supplier contracts this quarter — a 5% reduction in COGS would recover approximately <strong>€18,000</strong> in margin. Alternatively, evaluate whether your current pricing absorbs the increased cost base.
+          </div>
+
+          <div class="attribution">
+            Based on your connected data <span class="dot"></span> October 2025 <span class="dot"></span> Xero
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 2: User -->
+      <div class="message user">
+        <div class="msg-bubble">What caused that specifically?</div>
+      </div>
+
+      <!-- Message 2: AI Response (demonstrating conversation history) -->
+      <div class="message assistant">
+        <div class="ai-avatar"><img src="assets/chesspiece-avatar.svg" alt="" class="ai-avatar-img"></div>
+        <div class="msg-card">
+          <h4>Detailed COGS Breakdown</h4>
+          <p>Breaking down the margin decline we just discussed, here are the two specific cost movements between September and October:</p>
+
+          <div class="data-comparison">
+            <div class="header">Sep 2025 → Oct 2025</div>
+            <div class="row"><span class="label">Hosting & Infrastructure</span><span>€38,200 → €52,100 <span style="color: #EF4444;">(+€13,900)</span></span></div>
+            <div class="row"><span class="label">Professional Services</span><span>€12,400 → €39,800 <span style="color: #EF4444;">(+€27,400)</span></span></div>
+            <div class="row"><span class="label">Other COGS</span><span>€84,600 → €85,200 <span style="color: var(--text-muted);">(+€600)</span></span></div>
+          </div>
+
+          <p>The hosting increase is your AWS infrastructure repricing — this is now your new baseline. The professional services spike relates to three contractor invoices for the Apex Financial onboarding that were booked in October. Those won't recur in November.</p>
+          <p>Your other COGS lines remain stable, which is positive — the margin pressure is isolated, not systemic.</p>
+
+          <div class="attribution">
+            Based on your connected data <span class="dot"></span> October 2025 <span class="dot"></span> Xero
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Chat Input (shown when conversation has messages) -->
+  <div class="chat-input-area">
+    <div class="chat-input-container">
+      <div class="input-bar-wrap">
+        <a href="#" class="new-convo-link-bottom disabled">New conversation</a>
+        <div class="input-row">
+          <textarea rows="1" placeholder="Ask about your business..."></textarea>
+          <button class="send-btn">→</button>
+        </div>
+      </div>
+      <div class="input-meta">28 questions remaining today</div>
+    </div>
+  </div>
+
+</main>
+
+<script src="assets/nav.js"></script>
+<script src="assets/demo.js"></script>
+<script>
+(function() {
+  var main = document.querySelector('.main');
+  var hasMessages = document.querySelector('.chat-container .message');
+  if (main && hasMessages) main.classList.add('has-messages');
+})();
+</script>
+</body>
+</html>

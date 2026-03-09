@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratavor — Account Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/nav.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --navy: #1A2332; --dark-teal: #0D4F4F; --teal: #14B8A6; --bg: #F8FAFB;
+    --white: #FFFFFF; --text-primary: #1A2332; --text-secondary: #64748B;
+    --text-muted: #94A3B8; --border: #E2E8F0; --success: #10B981;
+    --warning: #F59E0B; --danger: #EF4444;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --radius-card: 12px; --radius-btn: 8px; --radius-input: 6px;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-primary); display: flex; min-height: 100vh; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+  /* Main */
+  .main { margin-left: 260px; flex: 1; min-height: 100vh; }
+  .topbar { height: 56px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); }
+  .breadcrumb span { color: var(--text-primary); font-weight: 500; }
+  .topbar-actions { display: flex; align-items: center; gap: 16px; }
+  .topbar-actions .notif-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; color: var(--text-secondary); }
+  .topbar-actions .user-circle { width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; font-family: 'DM Sans'; }
+
+  .content { max-width: 760px; margin: 0 auto; padding: 32px; }
+
+  .page-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    margin-bottom: 32px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 20px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .card-save {
+    padding: 7px 16px;
+    border-radius: var(--radius-btn);
+    border: none;
+    background: var(--dark-teal);
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .card-save:hover { background: #0B4242; }
+
+  /* Settings rows */
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .settings-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .settings-field .s-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .settings-field input,
+  .settings-field select {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    color: var(--text-primary);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .settings-field input:focus,
+  .settings-field select:focus { border-color: var(--teal); }
+
+  .settings-field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394A3B8' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  /* Integrations */
+  .integration-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .integration-row:last-child { border-bottom: none; }
+
+  .integration-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .integration-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .integration-icon.xero {
+    background: #13B5EA;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+  }
+
+  .integration-icon.qb {
+    background: #2CA01C;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+  }
+
+  .integration-info .int-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .int-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .int-badge.connected {
+    background: #D1FAE5;
+    color: #065F46;
+  }
+
+  .int-badge.disconnected {
+    background: var(--bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .integration-info .int-detail {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .int-action-btn {
+    padding: 7px 16px;
+    border-radius: var(--radius-btn);
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .int-action-btn.disconnect {
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text-secondary);
+  }
+
+  .int-action-btn.disconnect:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  .int-action-btn.connect {
+    border: 1px solid var(--teal);
+    background: var(--white);
+    color: var(--dark-teal);
+  }
+
+  .int-action-btn.connect:hover {
+    background: rgba(20,184,166,0.06);
+  }
+
+  /* Notification Toggles */
+  .notif-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .notif-row:last-child { border-bottom: none; }
+
+  .notif-label {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .notif-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  /* Toggle switch */
+  .toggle {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .toggle input { opacity: 0; width: 0; height: 0; }
+
+  .toggle .slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: var(--border);
+    border-radius: 24px;
+    transition: all 0.2s;
+  }
+
+  .toggle .slider::before {
+    content: '';
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+
+  .toggle input:checked + .slider {
+    background: var(--teal);
+  }
+
+  .toggle input:checked + .slider::before {
+    transform: translateX(20px);
+  }
+
+  /* Danger Zone */
+  .card.danger {
+    border-color: rgba(239,68,68,0.2);
+  }
+
+  .card.danger .card-title {
+    color: var(--danger);
+  }
+
+  .danger-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  .danger-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    max-width: 460px;
+  }
+
+  .danger-btn {
+    padding: 8px 18px;
+    border-radius: var(--radius-btn);
+    border: 1px solid rgba(239,68,68,0.3);
+    background: var(--white);
+    color: var(--danger);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .danger-btn:hover {
+    background: rgba(239,68,68,0.06);
+    border-color: var(--danger);
+  }
+</style>
+<link rel="stylesheet" href="assets/demo.css">
+<link rel="stylesheet" href="assets/disabled.css">
+</head>
+<body>
+
+<aside id="app-sidebar" class="sidebar"></aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="breadcrumb">Portal › <span>Settings</span></div>
+    <div class="topbar-actions">
+      <button type="button" class="notif-btn disabled">🔔</button>
+      <div class="user-circle">JG</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <h1 class="page-title">Account Settings</h1>
+
+    <!-- Company Information -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Company Information</div>
+        <button type="button" class="card-save disabled">Save Changes</button>
+      </div>
+      <div class="settings-grid">
+        <div class="settings-field">
+          <div class="s-label">Company Name</div>
+          <input type="text" value="Stratavor Ltd" />
+        </div>
+        <div class="settings-field">
+          <div class="s-label">Website</div>
+          <input type="text" value="stratavor.com" />
+        </div>
+        <div class="settings-field">
+          <div class="s-label">Industry</div>
+          <select>
+            <option selected>Technology / SaaS</option>
+            <option>Financial Services</option>
+            <option>Healthcare</option>
+          </select>
+        </div>
+        <div class="settings-field">
+          <div class="s-label">Headcount</div>
+          <input type="number" value="12" />
+        </div>
+        <div class="settings-field">
+          <div class="s-label">Risk Appetite</div>
+          <select>
+            <option>Conservative</option>
+            <option selected>Moderate</option>
+            <option>Aggressive</option>
+          </select>
+        </div>
+        <div class="settings-field">
+          <div class="s-label">Fiscal Year End</div>
+          <select>
+            <option selected>December</option>
+            <option>March</option>
+            <option>June</option>
+            <option>September</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connected Integrations -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom: 8px;">Connected Integrations</div>
+
+      <div class="integration-row">
+        <div class="integration-left">
+          <div class="integration-icon xero">Xero</div>
+          <div class="integration-info">
+            <div class="int-name">Xero <span class="int-badge connected">✓ Connected</span></div>
+            <div class="int-detail">Last synced 2 hours ago · Stratavor Ltd</div>
+          </div>
+        </div>
+        <button type="button" class="int-action-btn disconnect disabled">Disconnect</button>
+      </div>
+
+      <div class="integration-row">
+        <div class="integration-left">
+          <div class="integration-icon qb">QB</div>
+          <div class="integration-info">
+            <div class="int-name">QuickBooks <span class="int-badge disconnected">Not connected</span></div>
+            <div class="int-detail">Connect to import financial data from QuickBooks Online</div>
+          </div>
+        </div>
+        <button type="button" class="int-action-btn connect disabled">Connect</button>
+      </div>
+    </div>
+
+    <!-- Notification Preferences -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom: 8px;">Notification Preferences</div>
+
+      <div class="notif-row">
+        <div class="notif-label">Weekly Digest Email</div>
+        <label class="toggle">
+          <input type="checkbox" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="notif-row">
+        <div class="notif-label">AI Alert Emails</div>
+        <label class="toggle">
+          <input type="checkbox" checked />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="notif-row">
+        <div class="notif-label">Data Refresh Notifications</div>
+        <label class="toggle">
+          <input type="checkbox" />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="notif-hint">Weekly digest sends every Monday at 8:00 AM</div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="card danger">
+      <div class="card-title">Danger Zone</div>
+      <div class="danger-content">
+        <div class="danger-text">Permanently delete your account and all associated data. This action cannot be undone.</div>
+        <button type="button" class="danger-btn disabled">Delete Account</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="assets/nav.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>

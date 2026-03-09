@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratavor — Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/nav.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --navy: #1A2332; --dark-teal: #0D4F4F; --teal: #14B8A6; --bg: #F8FAFB;
+    --white: #FFFFFF; --text-primary: #1A2332; --text-secondary: #64748B;
+    --text-muted: #94A3B8; --border: #E2E8F0; --success: #10B981;
+    --warning: #F59E0B; --danger: #EF4444;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-elevated: 0 4px 24px rgba(0,0,0,0.16);
+    --radius-card: 12px; --radius-btn: 8px; --radius-input: 6px;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-primary); display: flex; min-height: 100vh; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+  /* Main (dimmed behind modal) */
+  .main { margin-left: 260px; flex: 1; min-height: 100vh; position: relative; }
+  .topbar { height: 56px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 32px; opacity: 0.3; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); }
+
+  /* Overlay */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 260px; right: 0; bottom: 0;
+    background: rgba(26, 35, 50, 0.5);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+  }
+
+  /* Onboarding Modal */
+  .onboarding-modal {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow-elevated);
+    width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  /* Modal Header */
+  .modal-header {
+    padding: 28px 32px 0;
+    text-align: center;
+  }
+
+  .modal-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .modal-logo .pawn { font-size: 20px; color: var(--teal); }
+  .modal-logo .logo-text { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 18px; color: var(--text-primary); }
+
+  /* Step Progress */
+  .step-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 28px;
+    padding: 0 32px;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .step.complete .step-dot {
+    background: var(--success);
+    color: #fff;
+  }
+
+  .step.active .step-dot {
+    background: var(--dark-teal);
+    color: #fff;
+  }
+
+  .step.pending .step-dot {
+    background: var(--border);
+    color: var(--text-muted);
+  }
+
+  .step-name {
+    font-size: 12.5px;
+    font-weight: 500;
+  }
+
+  .step.complete .step-name { color: var(--text-muted); }
+  .step.active .step-name { color: var(--text-primary); }
+  .step.pending .step-name { color: var(--text-muted); }
+
+  .step-line {
+    width: 40px;
+    height: 2px;
+    margin: 0 8px;
+    flex-shrink: 0;
+  }
+
+  .step-line.done { background: var(--success); }
+  .step-line.pending { background: var(--border); }
+
+  /* Progress bar */
+  .progress-bar-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 3px;
+    margin: 0 32px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(90deg, var(--success), var(--teal));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  /* Modal Body */
+  .modal-body {
+    padding: 28px 32px;
+  }
+
+  .modal-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .modal-subtitle {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .field input,
+  .field select {
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .field input:focus,
+  .field select:focus {
+    border-color: var(--teal);
+  }
+
+  .field input::placeholder { color: var(--text-muted); }
+
+  .field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394A3B8' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  /* Risk Appetite selector */
+  .risk-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .risk-option {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+  }
+
+  .risk-option:hover {
+    border-color: var(--text-muted);
+  }
+
+  .risk-option.selected {
+    border-color: var(--dark-teal);
+    background: rgba(13,79,79,0.04);
+    color: var(--dark-teal);
+  }
+
+  .risk-option .risk-label { font-size: 13px; }
+  .risk-option .risk-icon { font-size: 18px; margin-bottom: 4px; }
+
+  /* Modal Footer */
+  .modal-footer {
+    padding: 0 32px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .back-btn {
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 4px;
+    transition: color 0.15s;
+  }
+
+  .back-btn:hover { color: var(--text-primary); }
+
+  .continue-btn {
+    padding: 11px 32px;
+    border-radius: var(--radius-btn);
+    border: none;
+    background: var(--dark-teal);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .continue-btn:hover { background: #0B4242; }
+
+  /* Success callout (shown as annotation) */
+  .success-callout {
+    margin: 0 32px 24px;
+    background: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-radius: var(--radius-card);
+    padding: 16px 20px;
+    text-align: center;
+  }
+
+  .success-callout .sc-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #065F46;
+    margin-bottom: 4px;
+  }
+
+  .success-callout .sc-text {
+    font-size: 13px;
+    color: #047857;
+  }
+
+  .success-callout .sc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--dark-teal);
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 8px;
+    font-size: 13px;
+  }
+
+  .success-callout .sc-link:hover { text-decoration: underline; }
+
+  /* Annotation label */
+  .annotation {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+
+  .annotation::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 6px;
+    background: var(--navy);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+</style>
+<link rel="stylesheet" href="assets/demo.css">
+<link rel="stylesheet" href="assets/disabled.css">
+</head>
+<body>
+
+<aside id="app-sidebar" class="sidebar"></aside>
+
+<!-- Dimmed Main -->
+<main class="main">
+  <div class="topbar"><div class="breadcrumb">Portal › Intelligence Hub</div></div>
+
+  <!-- Overlay + Modal -->
+  <div class="modal-overlay">
+    <div class="onboarding-modal">
+
+      <!-- Logo -->
+      <div class="modal-header">
+        <div class="modal-logo">
+          <span class="pawn">♟</span>
+          <span class="logo-text">stratavor</span>
+        </div>
+
+        <!-- Step Progress -->
+        <div class="step-progress">
+          <div class="step complete">
+            <div class="step-dot">✓</div>
+            <span class="step-name">Connect Data</span>
+          </div>
+          <div class="step-line done"></div>
+          <div class="step active">
+            <div class="step-dot">2</div>
+            <span class="step-name">Company Profile</span>
+          </div>
+          <div class="step-line pending"></div>
+          <div class="step pending">
+            <div class="step-dot">3</div>
+            <span class="step-name">Get Started</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill"></div>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <div class="modal-title">Tell us about your company</div>
+        <div class="modal-subtitle">This helps your AI advisor understand your business context</div>
+
+        <div class="form-fields">
+          <div class="form-row">
+            <div class="field">
+              <div class="field-label">Company Name</div>
+              <input type="text" value="Stratavor Ltd" />
+            </div>
+            <div class="field">
+              <div class="field-label">Website</div>
+              <input type="text" placeholder="e.g. yourcompany.com" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <div class="field-label">Industry</div>
+              <select>
+                <option value="" disabled>Select your industry...</option>
+                <option selected>Technology / SaaS</option>
+                <option>Financial Services</option>
+                <option>Healthcare</option>
+                <option>Manufacturing</option>
+                <option>Professional Services</option>
+                <option>Retail / E-commerce</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <div class="field-label">Headcount</div>
+              <input type="number" placeholder="e.g. 25" />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-label">Risk Appetite</div>
+            <div class="risk-selector">
+              <div class="risk-option">
+                <div class="risk-icon">🛡</div>
+                <div class="risk-label">Conservative</div>
+              </div>
+              <div class="risk-option selected">
+                <div class="risk-icon">⚖</div>
+                <div class="risk-label">Moderate</div>
+              </div>
+              <div class="risk-option">
+                <div class="risk-icon">🚀</div>
+                <div class="risk-label">Aggressive</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Success callout (annotation for what comes next) -->
+      <div class="success-callout">
+        <div class="sc-title">Great start!</div>
+        <div class="sc-text">After this step, complete your Strategic Profile to activate your AI advisor.</div>
+        <a href="#" class="sc-link disabled">Complete Strategic Profile →</a>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="back-btn disabled">← Back</button>
+        <button type="button" class="continue-btn disabled">Continue →</button>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="assets/nav.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>

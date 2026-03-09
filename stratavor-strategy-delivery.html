@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratavor — Strategy Delivery</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/nav.css">
+<style>
+:root {
+  --teal-950: #0a1e2a; --teal-900: #0f2d3d; --teal-800: #163d52; --teal-700: #1e526d;
+  --teal-600: #2a6f8f; --teal-500: #3a8fb2; --teal-400: #5aafd0; --teal-300: #8ccde5;
+  --teal-200: #b8e1f0; --teal-100: #e0f3f9; --teal-50: #f0f9fc;
+  --gold-500: #d4a853; --gold-400: #e4c17a; --gold-300: #f0d9a0;
+  --green-600: #2f855a; --green-500: #38a169; --green-400: #48bb78;
+  --green-bg: rgba(56,161,105,0.08); --green-border: rgba(56,161,105,0.2);
+  --amber-600: #b45309; --amber-500: #d97706; --amber-400: #f59e0b;
+  --amber-bg: rgba(217,119,6,0.08); --amber-border: rgba(217,119,6,0.2);
+  --red-600: #c53030; --red-500: #e53e3e; --red-400: #fc8181;
+  --red-bg: rgba(229,62,62,0.06); --red-border: rgba(229,62,62,0.18);
+  --surface-0: #ffffff; --surface-1: #f8fafb; --surface-2: #f0f4f6; --surface-3: #e4ebef;
+  --text-primary: #0f2d3d; --text-secondary: #4a6274; --text-tertiary: #7a9aae; --text-inverse: #ffffff;
+  --border-light: rgba(0,0,0,0.06); --border-medium: rgba(0,0,0,0.1);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04); --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px; --radius-xl: 20px;
+  --font-display: 'Fraunces', serif; --font-body: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--surface-1); color: var(--text-primary); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes ringPulse { 0% { box-shadow: 0 0 0 0 rgba(56,161,105,0.3); } 70% { box-shadow: 0 0 0 8px rgba(56,161,105,0); } 100% { box-shadow: 0 0 0 0 rgba(56,161,105,0); } }
+.main { margin-left: 260px; min-height: 100vh; }
+.topbar { position: sticky; top: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); padding: 0 36px; height: 64px; display: flex; align-items: center; justify-content: space-between; z-index: 50; }
+.topbar-left { display: flex; align-items: center; gap: 20px; }
+.breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-tertiary); }
+.breadcrumb-current { color: var(--text-primary); font-weight: 500; }
+.breadcrumb-sep { opacity: 0.4; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-btn { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--border-medium); background: var(--surface-0); border-radius: var(--radius-sm); font-size: 0.82rem; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; font-family: var(--font-body); font-weight: 500; }
+.topbar-btn:hover { border-color: var(--teal-400); color: var(--teal-700); }
+.topbar-btn-primary { background: var(--teal-800); color: var(--surface-0); border-color: var(--teal-800); }
+.topbar-btn-primary:hover { background: var(--teal-700); border-color: var(--teal-700); color: var(--surface-0); }
+.topbar-btn-gold { background: linear-gradient(135deg, var(--gold-500), #c99a3e); color: var(--teal-950); border: none; font-weight: 600; }
+.topbar-btn-gold:hover { background: linear-gradient(135deg, var(--gold-400), var(--gold-500)); box-shadow: 0 4px 16px rgba(212,168,83,0.3); }
+.content { padding: 32px 36px 80px; max-width: 1440px; }
+.hero { background: linear-gradient(135deg, var(--teal-950) 0%, var(--teal-800) 60%, var(--teal-700) 100%); border-radius: var(--radius-xl); padding: 36px 40px 32px; margin-bottom: 24px; position: relative; overflow: hidden; animation: fadeSlideUp 0.6s ease-out; }
+.hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(212,168,83,0.08) 0%, transparent 70%); pointer-events: none; }
+.hero::after { content: ''; position: absolute; bottom: -40%; left: 30%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(90,175,208,0.06) 0%, transparent 70%); pointer-events: none; }
+.hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; position: relative; z-index: 1; }
+.hero-title { font-family: var(--font-display); font-size: 1.9rem; font-weight: 500; color: var(--surface-0); letter-spacing: -0.03em; line-height: 1.2; }
+.hero-subtitle { color: var(--teal-300); font-size: 0.88rem; margin-top: 6px; font-weight: 400; }
+.status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 100px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.status-green { background: rgba(56,161,105,0.15); color: var(--green-400); border: 1px solid rgba(56,161,105,0.25); }
+.status-amber { background: rgba(217,119,6,0.15); color: var(--gold-400); border: 1px solid rgba(217,119,6,0.25); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse-dot 2s infinite; }
+.hero-summary { position: relative; z-index: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+.ai-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--gold-500), var(--gold-300)); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; color: var(--teal-950); }
+.hero-summary p { color: var(--teal-200); font-size: 0.86rem; line-height: 1.65; }
+.hero-summary strong { color: var(--surface-0); font-weight: 600; }
+.hero-kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; position: relative; z-index: 1; margin-top: 20px; }
+.hero-kpi { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); padding: 16px 18px; transition: background 0.15s; animation: fadeSlideUp 0.5s ease-out both; }
+.hero-kpi:nth-child(1) { animation-delay: 0.05s; } .hero-kpi:nth-child(2) { animation-delay: 0.1s; } .hero-kpi:nth-child(3) { animation-delay: 0.15s; } .hero-kpi:nth-child(4) { animation-delay: 0.2s; } .hero-kpi:nth-child(5) { animation-delay: 0.25s; }
+.hero-kpi:hover { background: rgba(255,255,255,0.1); }
+.hero-kpi-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--teal-400); font-weight: 600; margin-bottom: 6px; }
+.hero-kpi-value { font-family: var(--font-display); font-size: 1.7rem; font-weight: 500; color: var(--surface-0); letter-spacing: -0.03em; line-height: 1.1; }
+.hero-kpi-sub { font-size: 0.72rem; color: var(--teal-400); margin-top: 4px; }
+.tabs { display: flex; align-items: center; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid var(--surface-3); animation: fadeSlideUp 0.6s ease-out 0.1s both; }
+.tab { padding: 12px 20px; font-size: 0.86rem; font-weight: 500; color: var(--text-tertiary); cursor: pointer; border: none; background: none; font-family: var(--font-body); position: relative; transition: color 0.15s; display: flex; align-items: center; gap: 8px; }
+.tab:hover { color: var(--text-primary); }
+.tab.active { color: var(--teal-700); font-weight: 600; }
+.tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--teal-700); border-radius: 1px 1px 0 0; }
+.tab-badge { padding: 2px 7px; border-radius: 10px; font-size: 0.62rem; font-weight: 700; line-height: 1.4; }
+.tab-badge-red { background: var(--red-bg); color: var(--red-500); }
+.tab-badge-amber { background: var(--amber-bg); color: var(--amber-500); }
+.tab-badge-green { background: var(--green-bg); color: var(--green-500); }
+.tab-panel { display: none; animation: fadeIn 0.3s ease; }
+.tab-panel.active { display: block; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 500; letter-spacing: -0.02em; }
+.section-subtitle { font-size: 0.82rem; color: var(--text-tertiary); margin-top: 2px; }
+.grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px; }
+.grid-1-1 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.grid-3-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; margin-bottom: 24px; }
+.card { background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px; transition: box-shadow 0.2s, transform 0.2s; }
+.card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
+.card-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); font-weight: 600; }
+.pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 100px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; white-space: nowrap; }
+.pill-green { background: var(--green-bg); color: var(--green-500); }
+.pill-amber { background: var(--amber-bg); color: var(--amber-500); }
+.pill-red { background: var(--red-bg); color: var(--red-500); }
+.pill-grey { background: var(--surface-2); color: var(--text-tertiary); }
+.pill-teal { background: rgba(42,111,143,0.08); color: var(--teal-600); }
+.pill-gold { background: rgba(212,168,83,0.1); color: var(--gold-500); border: 1px solid rgba(212,168,83,0.2); }
+.btn-sm { padding: 6px 14px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-medium); background: var(--surface-0); color: var(--text-secondary); font-family: var(--font-body); transition: all 0.15s; }
+.btn-sm:hover { border-color: var(--teal-400); color: var(--teal-700); }
+.btn-sm-primary { background: var(--teal-800); color: white; border-color: var(--teal-800); }
+.btn-sm-primary:hover { background: var(--teal-700); border-color: var(--teal-700); }
+.btn-sm-gold { background: linear-gradient(135deg, var(--gold-500), #c99a3e); color: var(--teal-950); border: none; font-weight: 700; }
+.btn-sm-gold:hover { box-shadow: 0 4px 12px rgba(212,168,83,0.3); }
+.progress-bar { height: 6px; background: var(--surface-3); border-radius: 100px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 100px; animation: barGrow 1s ease-out; transform-origin: left; }
+.ai-insight { background: linear-gradient(135deg, rgba(212,168,83,0.04), rgba(90,175,208,0.04)); border: 1px solid rgba(212,168,83,0.15); border-radius: var(--radius-md); padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; margin-bottom: 24px; }
+.ai-insight p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.65; }
+.ai-insight strong { color: var(--text-primary); font-weight: 600; }
+.avatar-sm { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.58rem; font-weight: 700; color: white; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.data-table thead th { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); font-weight: 600; padding: 10px 14px; border-bottom: 2px solid var(--surface-3); }
+.data-table thead th.right { text-align: right; }
+.data-table tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border-light); color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.data-table tbody td.right { text-align: right; }
+.data-table tbody td.bold { font-weight: 600; }
+.data-table tbody tr:hover { background: var(--surface-1); }
+.health-ring { position: relative; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.health-ring svg { transform: rotate(-90deg); }
+.health-ring-label { position: absolute; text-align: center; }
+.health-ring-value { font-family: var(--font-display); font-size: 1.6rem; font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
+.health-ring-sub { font-size: 0.65rem; color: var(--text-tertiary); margin-top: 2px; }
+.obj-card { border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 22px 24px; background: var(--surface-0); transition: all 0.2s; margin-bottom: 14px; }
+.obj-card:hover { border-color: var(--teal-400); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.obj-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.obj-title { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); line-height: 1.4; }
+.obj-pillar { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin-bottom: 6px; }
+.kr-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--border-light); }
+.kr-label { flex: 1; font-size: 0.82rem; color: var(--text-secondary); }
+.kr-progress-track { width: 120px; height: 6px; background: var(--surface-3); border-radius: 100px; overflow: hidden; flex-shrink: 0; }
+.kr-progress-fill { height: 100%; border-radius: 100px; transition: width 0.8s ease-out; }
+.kr-value { width: 44px; font-size: 0.78rem; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.tree-pillar { margin-bottom: 32px; }
+.tree-pillar-header { display: flex; align-items: center; gap: 14px; padding: 18px 24px; background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-lg); margin-bottom: 2px; cursor: pointer; transition: all 0.15s; }
+.tree-pillar-header:hover { box-shadow: var(--shadow-md); }
+.tree-pillar-icon { width: 40px; height: 40px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.tree-pillar-name { font-family: var(--font-display); font-size: 1.05rem; font-weight: 500; letter-spacing: -0.02em; }
+.tree-pillar-meta { font-size: 0.72rem; color: var(--text-tertiary); margin-top: 1px; }
+.tree-pillar-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+.tree-obj { margin-left: 28px; border-left: 2px solid var(--surface-3); padding-left: 24px; }
+.tree-obj-item { position: relative; padding: 16px 20px; background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-md); margin-bottom: 8px; margin-top: 8px; transition: all 0.15s; }
+.tree-obj-item:hover { border-color: var(--teal-400); box-shadow: var(--shadow-sm); }
+.tree-obj-item::before { content: ''; position: absolute; left: -25px; top: 50%; width: 24px; height: 2px; background: var(--surface-3); }
+.tree-kr { margin-left: 20px; padding-left: 20px; border-left: 2px dashed var(--surface-3); }
+.tree-kr-item { position: relative; padding: 10px 16px; background: var(--surface-1); border: 1px solid var(--border-light); border-radius: var(--radius-sm); margin: 6px 0; display: flex; align-items: center; gap: 12px; font-size: 0.82rem; transition: all 0.15s; }
+.tree-kr-item:hover { background: var(--surface-0); border-color: var(--teal-300); }
+.tree-kr-item::before { content: ''; position: absolute; left: -21px; top: 50%; width: 20px; height: 2px; background: var(--surface-3); border-top: 2px dashed var(--surface-3); }
+.tree-kpi-item { position: relative; padding: 10px 16px; background: rgba(212,168,83,0.04); border: 2px dashed rgba(212,168,83,0.35); border-radius: var(--radius-sm); margin: 6px 0; display: flex; align-items: center; gap: 12px; font-size: 0.82rem; transition: all 0.15s; }
+.tree-kpi-item:hover { background: rgba(212,168,83,0.08); border-color: var(--gold-500); }
+.tree-kpi-item::before { content: ''; position: absolute; left: -21px; top: 50%; width: 20px; height: 2px; background: var(--surface-3); border-top: 2px dashed var(--surface-3); }
+.tree-init { margin-left: 16px; padding-left: 16px; border-left: 2px dotted var(--surface-3); }
+.tree-init-item { position: relative; padding: 8px 14px; background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-sm); margin: 4px 0; display: flex; align-items: center; gap: 10px; font-size: 0.78rem; color: var(--text-secondary); transition: all 0.15s; }
+.tree-init-item:hover { border-color: var(--teal-300); }
+.tree-init-item::before { content: ''; position: absolute; left: -17px; top: 50%; width: 16px; height: 2px; background: var(--surface-3); border-top: 2px dotted var(--surface-3); }
+.kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.kanban-col { background: var(--surface-2); border-radius: var(--radius-lg); padding: 16px; min-height: 300px; }
+.kanban-col-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--surface-3); }
+.kanban-col-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); }
+.kanban-col-count { font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--surface-0); color: var(--text-tertiary); }
+.kanban-card { background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; }
+.kanban-card:hover { box-shadow: var(--shadow-md); border-color: var(--teal-400); transform: translateY(-1px); }
+.kanban-card-title { font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
+.kanban-card-meta { font-size: 0.72rem; color: var(--text-tertiary); line-height: 1.5; }
+.kanban-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-light); }
+.feed-item { display: flex; gap: 16px; padding: 20px 24px; background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-lg); margin-bottom: 10px; transition: all 0.15s; animation: slideInRight 0.4s ease-out both; }
+.feed-item:nth-child(1) { animation-delay: 0s; } .feed-item:nth-child(2) { animation-delay: 0.05s; } .feed-item:nth-child(3) { animation-delay: 0.1s; }
+.feed-item:hover { border-color: var(--teal-400); box-shadow: var(--shadow-md); }
+.feed-icon { width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+.feed-icon-red { background: var(--red-bg); color: var(--red-500); }
+.feed-icon-amber { background: var(--amber-bg); color: var(--amber-500); }
+.feed-icon-green { background: var(--green-bg); color: var(--green-500); }
+.feed-icon-teal { background: rgba(42,111,143,0.08); color: var(--teal-600); }
+.feed-icon-gold { background: rgba(212,168,83,0.1); color: var(--gold-500); }
+.feed-content { flex: 1; }
+.feed-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; }
+.feed-desc { font-size: 0.78rem; color: var(--text-tertiary); line-height: 1.6; }
+.feed-actions { display: flex; gap: 8px; margin-top: 10px; }
+.feed-time { font-size: 0.68rem; color: var(--text-tertiary); flex-shrink: 0; }
+.commit-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border-light); }
+.commit-row:last-child { border-bottom: none; }
+.commit-day { width: 56px; flex-shrink: 0; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); font-weight: 600; }
+.commit-day-today { color: var(--teal-600); font-weight: 700; }
+.commit-items { flex: 1; display: flex; flex-wrap: wrap; gap: 6px; }
+.commit-chip { padding: 4px 12px; border-radius: 100px; font-size: 0.72rem; font-weight: 500; border: 1px solid var(--border-light); background: var(--surface-0); color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+.commit-chip-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.impact-card { background: linear-gradient(135deg, var(--teal-950) 0%, var(--teal-800) 100%); border-radius: var(--radius-lg); padding: 28px; border: none; color: white; }
+.impact-card:hover { transform: translateY(-1px); box-shadow: 0 12px 40px rgba(10,30,42,0.3); }
+.stale-banner { background: rgba(217,119,6,0.06); border: 1px solid var(--amber-border); border-left: 4px solid var(--amber-500); border-radius: var(--radius-md); padding: 14px 20px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: 0.82rem; color: var(--text-secondary); }
+.recency { font-size: 0.65rem; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.recency-ok { color: var(--green-500); }
+.recency-warn { color: var(--amber-500); }
+.recency-stale { color: var(--red-500); }
+.confidence-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 100px; font-size: 0.62rem; font-weight: 700; }
+.timeline-view { background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 20px 24px; }
+.timeline-header-row { display: grid; grid-template-columns: 200px 1fr 70px; gap: 12px; padding: 10px 0; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); border-bottom: 2px solid var(--surface-3); }
+.timeline-row { display: grid; grid-template-columns: 200px 1fr 70px; gap: 12px; padding: 12px 0; font-size: 0.82rem; border-bottom: 1px solid var(--border-light); align-items: center; }
+.timeline-row:last-child { border-bottom: none; }
+.timeline-bar-track { height: 12px; background: var(--surface-2); border-radius: 100px; position: relative; overflow: visible; }
+.timeline-bar-fill { height: 100%; border-radius: 100px; position: absolute; left: 0; top: 0; }
+.copilot-fab { position: fixed; bottom: 28px; right: 28px; z-index: 200; display: flex; align-items: center; gap: 10px; padding: 14px 22px; background: var(--teal-900); color: var(--surface-0); border-radius: 100px; cursor: pointer; box-shadow: 0 8px 32px rgba(10,30,42,0.3); font-size: 0.86rem; font-weight: 500; font-family: var(--font-body); border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; }
+.copilot-fab:hover { background: var(--teal-800); box-shadow: 0 12px 40px rgba(10,30,42,0.4); transform: translateY(-2px); }
+.copilot-fab-icon { width: 28px; height: 28px; background: linear-gradient(135deg, var(--gold-500), var(--gold-300)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--teal-950); }
+.page-footer { text-align: center; padding: 40px 36px 30px; font-size: 0.72rem; color: var(--text-tertiary); border-top: 1px solid var(--border-light); }
+@media (max-width: 1200px) {
+  .hero-kpis { grid-template-columns: repeat(3, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .kanban { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .main { margin-left: 0; }
+  .hero-kpis { grid-template-columns: repeat(2, 1fr); }
+  .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
+  .kanban { grid-template-columns: 1fr; }
+  .grid-2-1, .grid-1-1, .grid-3-2 { grid-template-columns: 1fr; }
+  .topbar { padding: 0 16px; }
+  .content { padding: 20px 16px 60px; }
+}
+</style>
+<link rel="stylesheet" href="assets/demo.css">
+<link rel="stylesheet" href="assets/disabled.css">
+</head>
+<body>
+
+<aside id="app-sidebar" class="sidebar"></aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="breadcrumb">
+        <span>Acme SaaS Ltd</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">Strategy Delivery</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Export PDF
+      </button>
+      <button class="topbar-btn topbar-btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
+        Take Snapshot
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="hero-title">Strategy Delivery</div>
+          <div class="hero-subtitle">Acme SaaS Ltd · 2026 Growth Plan · Q1 Progress (Week 9 of 13)</div>
+        </div>
+        <div class="status-badge status-amber">
+          <span class="status-dot"></span>
+          Amber — 2 objectives at risk
+        </div>
+      </div>
+      <div class="hero-summary">
+        <div class="ai-icon">✦</div>
+        <div>
+          <p><strong>Plan health is Amber at 64%.</strong> Three of five objectives are tracking green, but <strong>“Expand into DACH market”</strong> is blocked by a delayed partner agreement (Risk R-03, 14 days overdue). Check-in compliance dropped to <strong>72% this week</strong> — 3 KR owners have missed their Friday update. The good news: <strong>€41.2k in benefits have been realised</strong> against a €67.5k forecast, and the product launch initiative is 2 days ahead of schedule. <strong>Recommended: unblock the DACH dependency this week and schedule catch-up check-ins for the 3 overdue owners.</strong></p>
+        </div>
+      </div>
+      <div class="hero-kpis">
+        <div class="hero-kpi">
+          <div class="hero-kpi-label">Plan Health</div>
+          <div class="hero-kpi-value" style="color:var(--amber-400);">64%</div>
+          <div class="hero-kpi-sub">Amber · 2 risks capping</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-label">Objectives</div>
+          <div class="hero-kpi-value">5</div>
+          <div class="hero-kpi-sub">3 green · 1 amber · 1 red</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-label">Initiatives</div>
+          <div class="hero-kpi-value">12</div>
+          <div class="hero-kpi-sub">2 blocked · 7 on track · 3 done</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-label">Check-in Rate</div>
+          <div class="hero-kpi-value">72%</div>
+          <div class="hero-kpi-sub">↓ from 88% last week</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-label">Benefits Realised</div>
+          <div class="hero-kpi-value" style="color:var(--green-400);">€41.2k</div>
+          <div class="hero-kpi-sub">61% capture rate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS (4 tabs - no Risks) -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('overview')">Overview</button>
+      <button class="tab" onclick="switchTab('alignment')">Alignment Tree</button>
+      <button class="tab" onclick="switchTab('initiatives')">Initiatives <span class="tab-badge tab-badge-green">12</span></button>
+      <button class="tab" onclick="switchTab('analysis')">Analysis <span class="tab-badge tab-badge-amber">6</span></button>
+    </div>
+
+    <!-- TAB 1: OVERVIEW (Enhanced) -->
+    <div id="tab-overview" class="tab-panel active">
+
+      <!-- STALE DATA GOVERNANCE BANNER -->
+      <div class="stale-banner">
+        <span style="font-size:18px;">⚠️</span>
+        <div style="flex:1;"><strong>Stale data warning:</strong> 3 KR owners have not submitted check-ins in the past 14 days (James Watson, Paul Donovan, Kate Liu). Plan health score may not reflect current reality. <a class="disabled" href="#" style="color:var(--teal-600); font-weight:600; text-decoration:underline;">Send reminders</a></div>
+        <button class="btn-sm" style="flex-shrink:0;">Dismiss</button>
+      </div>
+
+      <!-- WHAT CHANGED / SO WHAT / WHAT NOW -->
+      <div class="ai-insight" style="border-top: 3px solid var(--gold-500);">
+        <div class="ai-icon" style="width:28px; height:28px; font-size:13px;">✦</div>
+        <div>
+          <p style="margin-bottom:8px;"><strong>What changed this week:</strong> KR-04 (DACH pipeline) dropped from 38% to 28% — the partner integration that feeds leads has stalled. Two initiatives moved to “Implemented” (SaaS tier downgrades, early payment discounts), adding €14k in confirmed annual savings. NPS survey results came in at 52, up from 47 last quarter.</p>
+          <p style="margin-bottom:8px;"><strong>So what:</strong> The DACH expansion objective (O-03) is now at risk of missing Q1 targets entirely. If unresolved by Week 10, it will cascade into the H1 revenue target. However, the customer retention pillar is now tracking ahead of plan.</p>
+          <p><strong>What now:</strong> 1) Escalate DACH partner blocker to exec sponsor James Watson by Tuesday. 2) Schedule catch-up check-ins for KR-06, KR-09, KR-11 (the 3 overdue owners). 3) Move the “Implement customer health scoring” initiative to In Progress — it’s approved and ready.</p>
+        </div>
+      </div>
+
+      <!-- OBJECTIVES AT A GLANCE -->
+      <div class="section-header"><div><div class="section-title">Objectives at a Glance</div><div class="section-subtitle">5 objectives across 3 strategic pillars · Q1 2026</div></div></div>
+
+      <div class="grid-1-1" style="margin-bottom:8px;">
+        <!-- LEFT: Objective cards -->
+        <div>
+          <div class="obj-card" style="border-left: 4px solid var(--green-500);">
+            <div class="obj-top">
+              <div>
+                <div class="obj-pillar" style="color:var(--teal-600);">Pillar: Product-Led Growth</div>
+                <div class="obj-title">O-01: Launch v3.0 and achieve 500 active users by end of Q1</div>
+              </div>
+              <span class="pill pill-green">78%</span>
+            </div>
+            <div class="kr-row">
+              <div class="kr-label">KR-01: Ship v3.0 to production</div>
+              <div class="kr-progress-track"><div class="kr-progress-fill" style="width:92%; background:var(--green-500);"></div></div>
+              <div class="kr-value" style="color:var(--green-500);">92%</div>
+            </div>
+            <div class="kr-row">
+              <div class="kr-label">KR-02: 500 active users (currently 412)</div>
+              <div class="kr-progress-track"><div class="kr-progress-fill" style="width:82%; background:var(--green-500);"></div></div>
+              <div class="kr-value" style="color:var(--green-500);">82%</div>
+            </div>
+            <div class="kr-row">
+              <div class="kr-label">KR-03: Activation rate ≥ 60% (currently 54%)</div>
+              <div class="kr-progress-track"><div class="kr-progress-fill" style="width:58%; background:var(--amber-500);"></div></div>
+              <div class="kr-value" style="color:var(--amber-500);">58%</div>
+            </div>
+          </div>
+
+          <div class="obj-card" style="border-left: 4px solid var(--red-500);">
+            <div class="obj-top">
+              <div>
+                <div class="obj-pillar" style="color:var(--teal-600);">Pillar: Market Expansion</div>
+                <div class="obj-title">O-03: Expand into DACH and generate €120k pipeline by Q1</div>
+              </div>
+              <span class="pill pill-red">28%</span>
+            </div>
+            <div class="kr-row">
+              <div class="kr-label">KR-04: €120k qualified pipeline (currently €34k)</div>
+              <div class="kr-progress-track"><div class="kr-progress-fill" style="width:28%; background:var(--red-500);"></div></div>
+              <div class="kr-value" style="color:var(--red-500);">28%</div>
+            </div>
+            <div class="kr-row">
+              <div class="kr-label">KR-05: 3 channel partners signed (currently 1)</div>
+              <div class="kr-progress-track"><div class="kr-progress-fill" style="width:33%; background:var(--red-500);"></div></div>
+              <div class="kr-value" style="color:var(--red-500);">33%</div>
+            </div>
+            <div style="margin-top:10px; display:flex; gap:8px;">
+              <span class="pill pill-red">⚠ Blocked by R-03</span>
+              <span class="pill pill-grey">Owner: James Watson</span>
+            </div>
+          </div>
+
+          <div class="obj-card" style="border-left: 4px solid var(--green-500);">
+            <div class="obj-top">
+              <div>
+                <div class="obj-pillar" style="color:var(--teal-600);">Pillar: Customer Retention</div>
+                <div class="obj-title">O-04: Reduce churn to &lt;3% monthly and increase NPS to 55</div>
+              </div>
+              <span class="pill pill-green">74%</span>
+            </div>
+            <div class="kr-row">
+              <div class="kr-label">KR-07: Monthly churn ≤ 3% (currently 3.2%)</div>
+              <div class="kr-progress-track"><div class="kr-progress-fill" style="width:68%; background:var(--amber-500);"></div></div>
+              <div class="kr-value" style="color:var(--amber-500);">68%</div>
+            </div>
+            <div class="kr-row">
+              <div class="kr-label">KR-08: NPS ≥ 55 (currently 52)</div>
+              <div class="kr-progress-track"><div class="kr-progress-fill" style="width:80%; background:var(--green-500);"></div></div>
+              <div class="kr-value" style="color:var(--green-500);">80%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Health + 7-day commits + risks -->
+        <div>
+          <!-- Plan health ring -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+              <div class="card-title">Plan Health</div>
+              <span class="pill pill-amber">Week 9</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:24px;">
+              <div class="health-ring">
+                <svg viewBox="0 0 120 120" width="120" height="120">
+                  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--surface-3)" stroke-width="10"/>
+                  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--amber-500)" stroke-width="10" stroke-dasharray="209 118" stroke-linecap="round"/>
+                </svg>
+                <div class="health-ring-label">
+                  <div class="health-ring-value" style="color:var(--amber-500);">64%</div>
+                  <div class="health-ring-sub">Amber</div>
+                </div>
+              </div>
+              <div style="flex:1;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:0.78rem;">
+                  <div style="width:10px; height:10px; border-radius:3px; background:var(--green-500);"></div>
+                  <span>Product-Led Growth</span>
+                  <span style="margin-left:auto; font-weight:600; color:var(--green-500);">78%</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:0.78rem;">
+                  <div style="width:10px; height:10px; border-radius:3px; background:var(--amber-500);"></div>
+                  <span>Market Expansion</span>
+                  <span style="margin-left:auto; font-weight:600; color:var(--amber-500);">42%</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
+                  <div style="width:10px; height:10px; border-radius:3px; background:var(--green-500);"></div>
+                  <span>Customer Retention</span>
+                  <span style="margin-left:auto; font-weight:600; color:var(--green-500);">74%</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border-light);">
+              <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-tertiary); margin-bottom:6px;"><span>Week 1</span><span>Week 5</span><span>Week 9</span><span>Week 13</span></div>
+              <div style="display:flex; height:32px; gap:2px;">
+                <div style="flex:1; background:var(--green-500); border-radius:3px 0 0 3px; opacity:0.7;"></div>
+                <div style="flex:1; background:var(--green-500); opacity:0.7;"></div>
+                <div style="flex:1; background:var(--green-500); opacity:0.7;"></div>
+                <div style="flex:1; background:var(--green-500); opacity:0.7;"></div>
+                <div style="flex:1; background:var(--amber-500); opacity:0.8;"></div>
+                <div style="flex:1; background:var(--amber-500); opacity:0.8;"></div>
+                <div style="flex:1; background:var(--amber-500); opacity:0.8;"></div>
+                <div style="flex:1; background:var(--amber-500); opacity:0.9;"></div>
+                <div style="flex:1; background:var(--amber-500); border-radius:0 3px 3px 0; border:2px solid var(--teal-700);"></div>
+                <div style="flex:1; background:var(--surface-3); opacity:0.5;"></div>
+                <div style="flex:1; background:var(--surface-3); opacity:0.5;"></div>
+                <div style="flex:1; background:var(--surface-3); opacity:0.5;"></div>
+                <div style="flex:1; background:var(--surface-3); border-radius:0 3px 3px 0; opacity:0.5;"></div>
+              </div>
+              <div style="font-size:0.68rem; color:var(--text-tertiary); margin-top:6px; text-align:center;">Weekly plan health trend · Q1 2026</div>
+            </div>
+          </div>
+
+          <!-- Next 7 days -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+              <div class="card-title">Next 7 Days</div>
+              <span class="pill pill-teal">8 commitments</span>
+            </div>
+            <div class="commit-row">
+              <div class="commit-day commit-day-today">Today</div>
+              <div class="commit-items">
+                <div class="commit-chip"><div class="commit-chip-dot" style="background:var(--red-500);"></div>Escalate R-03 to JW</div>
+                <div class="commit-chip"><div class="commit-chip-dot" style="background:var(--amber-500);"></div>KR-03 check-in (SC)</div>
+              </div>
+            </div>
+            <div class="commit-row">
+              <div class="commit-day">Mon</div>
+              <div class="commit-items">
+                <div class="commit-chip"><div class="commit-chip-dot" style="background:var(--teal-500);"></div>v3.0 staging deploy</div>
+              </div>
+            </div>
+            <div class="commit-row">
+              <div class="commit-day">Tue</div>
+              <div class="commit-items">
+                <div class="commit-chip"><div class="commit-chip-dot" style="background:var(--amber-500);"></div>DACH partner call</div>
+                <div class="commit-chip"><div class="commit-chip-dot" style="background:var(--green-500);"></div>NPS survey close</div>
+              </div>
+            </div>
+            <div class="commit-row">
+              <div class="commit-day">Fri</div>
+              <div class="commit-items">
+                <div class="commit-chip"><div class="commit-chip-dot" style="background:var(--teal-500);"></div>Weekly check-ins due</div>
+                <div class="commit-chip"><div class="commit-chip-dot" style="background:var(--gold-500);"></div>Sprint 9 review</div>
+                <div class="commit-chip"><div class="commit-chip-dot" style="background:var(--green-500);"></div>Benefits snapshot</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top risks -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Top Risks</div>
+              <span class="pill pill-red">2 SEV-1</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--red-bg); border:1px solid var(--red-border); border-radius:var(--radius-sm);">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--red-500); width:36px;">R-03</span>
+                <span style="font-size:0.82rem; font-weight:600; flex:1;">DACH partner agreement delayed</span>
+                <span class="pill pill-red">High</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--red-bg); border:1px solid var(--red-border); border-radius:var(--radius-sm);">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--red-500); width:36px;">R-01</span>
+                <span style="font-size:0.82rem; font-weight:600; flex:1;">Key engineer departure risk</span>
+                <span class="pill pill-red">High</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--amber-bg); border:1px solid var(--amber-border); border-radius:var(--radius-sm);">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--amber-500); width:36px;">R-05</span>
+                <span style="font-size:0.82rem; font-weight:600; flex:1;">Activation rate below target</span>
+                <span class="pill pill-amber">Medium</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHECK-IN ACTIVITY (NEW) -->
+      <div class="section-header" style="margin-top:8px;"><div><div class="section-title">Recent Check-In Activity</div><div class="section-subtitle">Latest owner updates across all KRs and initiatives</div></div><button class="btn-sm btn-sm-primary">+ Log Check-in</button></div>
+      <div class="card" style="margin-bottom:24px; padding:0; overflow:hidden;">
+        <table class="data-table">
+          <thead><tr><th>Owner</th><th>Item</th><th>Update</th><th>Value</th><th class="right">When</th></tr></thead>
+          <tbody>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar-sm" style="background:var(--teal-500);">SC</div> Sarah Chen</div></td><td class="bold">KR-02: Active users</td><td>Added 18 users this week via referral campaign</td><td style="font-weight:600; color:var(--green-500);">412 → 412</td><td class="right" style="color:var(--text-tertiary);">2 hrs ago</td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar-sm" style="background:var(--green-500);">RM</div> Rachel Murphy</div></td><td class="bold">KR-03: Activation rate</td><td>Onboarding redesign warming up — seeing 2% uplift in cohort</td><td style="font-weight:600; color:var(--amber-500);">52% → 54%</td><td class="right" style="color:var(--text-tertiary);">Yesterday</td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar-sm" style="background:var(--teal-600);">KL</div> Kate Liu</div></td><td class="bold">KR-08: NPS score</td><td>Q1 survey results in — trending above target</td><td style="font-weight:600; color:var(--green-500);">47 → 52</td><td class="right" style="color:var(--text-tertiary);">2 days ago</td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar-sm" style="background:var(--amber-500);">PD</div> Paul Donovan</div></td><td class="bold">KR-01: v3.0 ship</td><td>Security audit 80% done, 2 minor findings to resolve</td><td style="font-weight:600; color:var(--green-500);">88% → 92%</td><td class="right" style="color:var(--red-500);">8 days ago ⚠</td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar-sm" style="background:var(--amber-500);">JW</div> James Watson</div></td><td class="bold">KR-04: DACH pipeline</td><td>Partner legal still reviewing — no movement this week</td><td style="font-weight:600; color:var(--red-500);">€38k → €34k</td><td class="right" style="color:var(--red-500);">14 days ago ⚠</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- EXECUTION HEALTH METRICS (moved from Analysis to Overview) -->
+      <div class="section-header"><div><div class="section-title">Execution Health Metrics</div><div class="section-subtitle">System adoption KPIs · trailing 4 weeks</div></div></div>
+      <div class="grid-5" style="margin-bottom:24px;">
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">Check-in Compliance</div>
+          <div style="font-family:var(--font-display); font-size:1.8rem; font-weight:500; letter-spacing:-0.03em; color:var(--amber-500);">72%</div>
+          <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:4px;">Target: 85% · ↓ from 88%</div>
+          <div style="margin-top:8px;"><span class="pill pill-amber">Below Target</span></div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">Overdue Backlog</div>
+          <div style="font-family:var(--font-display); font-size:1.8rem; font-weight:500; letter-spacing:-0.03em; color:var(--red-500);">4</div>
+          <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:4px;">Tasks · avg age 6 days</div>
+          <div style="margin-top:8px;"><span class="pill pill-red">Needs Attention</span></div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">Avg Cycle Time</div>
+          <div style="font-family:var(--font-display); font-size:1.8rem; font-weight:500; letter-spacing:-0.03em; color:var(--green-500);">18d</div>
+          <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:4px;">Idea → Implemented</div>
+          <div style="margin-top:8px;"><span class="pill pill-green">Improving</span></div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">Risk Closure Rate</div>
+          <div style="font-family:var(--font-display); font-size:1.8rem; font-weight:500; letter-spacing:-0.03em; color:var(--teal-700);">40%</div>
+          <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:4px;">2 of 5 mitigated in Q1</div>
+          <div style="margin-top:8px;"><span class="pill pill-teal">Tracking</span></div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">WIP per Owner</div>
+          <div style="font-family:var(--font-display); font-size:1.8rem; font-weight:500; letter-spacing:-0.03em; color:var(--amber-500);">2.4</div>
+          <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:4px;">Target: ≤2 · JW at 3</div>
+          <div style="margin-top:8px;"><span class="pill pill-amber">Above Limit</span></div>
+        </div>
+      </div>
+
+      <!-- BENEFITS REALISATION -->
+      <div class="section-header"><div><div class="section-title">Benefits Realisation</div><div class="section-subtitle">Tracked from implemented initiatives · connected to Xero</div></div><span class="pill pill-gold">✦ Auto-tracked</span></div>
+      <div class="grid-4" style="margin-bottom:24px;">
+        <div class="impact-card">
+          <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--teal-300); font-weight:600;">Realised Benefits YTD</div>
+          <div style="font-family:var(--font-display); font-size:2.2rem; font-weight:500; letter-spacing:-0.03em; color:var(--green-400); margin:8px 0;">€41,200</div>
+          <div style="font-size:0.78rem; color:var(--teal-300);">61% capture rate · on track</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">Cost Savings</div>
+          <div style="font-family:var(--font-display); font-size:1.8rem; font-weight:500; letter-spacing:-0.03em; color:var(--green-500);">€38.4k</div>
+          <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:4px;">From 5 initiatives</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">Time Saved</div>
+          <div style="font-family:var(--font-display); font-size:1.8rem; font-weight:500; letter-spacing:-0.03em; color:var(--teal-700);">42 hrs</div>
+          <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:4px;">/month · process automation</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">Revenue Attributed</div>
+          <div style="font-family:var(--font-display); font-size:1.8rem; font-weight:500; letter-spacing:-0.03em; color:var(--teal-700);">€2,800</div>
+          <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:4px;">Early-stage · v3.0 upsells</div>
+        </div>
+      </div>
+
+      <!-- SNAPSHOT HISTORY (NEW) -->
+      <div class="section-header"><div><div class="section-title">Snapshot History</div><div class="section-subtitle">Frozen-in-time reporting snapshots for board and stakeholder review</div></div><button class="btn-sm btn-sm-primary">Take New Snapshot</button></div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:24px;">
+        <div class="snapshot-card frozen">
+          <div style="width:44px; height:44px; border-radius:var(--radius-md); background:var(--teal-100); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px;">📸</div>
+          <div style="flex:1;">
+            <div style="font-size:0.88rem; font-weight:600;">Week 9 Board Report</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary);">Frozen 28 Feb 2026 · Sarah Chen · Plan Health: 64% Amber</div>
+          </div>
+          <span class="pill pill-teal">Current</span>
+          <button class="btn-sm">View</button>
+          <button class="btn-sm">Export PDF</button>
+        </div>
+        <div class="snapshot-card frozen">
+          <div style="width:44px; height:44px; border-radius:var(--radius-md); background:var(--surface-2); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px;">📸</div>
+          <div style="flex:1;">
+            <div style="font-size:0.88rem; font-weight:600;">Week 5 Mid-Quarter Review</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary);">Frozen 31 Jan 2026 · Sarah Chen · Plan Health: 71% Green</div>
+          </div>
+          <span class="pill pill-grey">Archived</span>
+          <button class="btn-sm">View</button>
+        </div>
+        <div class="snapshot-card frozen">
+          <div style="width:44px; height:44px; border-radius:var(--radius-md); background:var(--surface-2); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px;">📸</div>
+          <div style="flex:1;">
+            <div style="font-size:0.88rem; font-weight:600;">Q1 Kickoff Baseline</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary);">Frozen 6 Jan 2026 · Sarah Chen · Plan Health: 45% (baseline)</div>
+          </div>
+          <span class="pill pill-grey">Archived</span>
+          <button class="btn-sm">View</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: ALIGNMENT TREE (Enhanced with KPIs, confidence, recency) -->
+    <div id="tab-alignment" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Strategy Alignment Tree</div>
+          <div class="section-subtitle">Pillar → Objective → Key Results → KPIs → Initiatives · line-of-sight tracing</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-sm">Expand All</button>
+          <button class="btn-sm">Collapse All</button>
+        </div>
+      </div>
+
+      <!-- PILLAR 1: PRODUCT-LED GROWTH -->
+      <div class="tree-pillar">
+        <div class="tree-pillar-header">
+          <div class="tree-pillar-icon" style="background:rgba(42,111,143,0.1); color:var(--teal-600);">🚀</div>
+          <div>
+            <div class="tree-pillar-name">Product-Led Growth</div>
+            <div class="tree-pillar-meta">2 objectives · 5 key results · 2 KPIs · 4 initiatives · Weight: 40%</div>
+          </div>
+          <div class="tree-pillar-right">
+            <span class="pill pill-green">78%</span>
+            <span style="font-size:0.72rem; color:var(--text-tertiary);">Owner: Sarah Chen</span>
+          </div>
+        </div>
+        <div class="tree-obj">
+          <div class="tree-obj-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:0.68rem; color:var(--teal-600); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">O-01 · Committed</div>
+                <div style="font-size:0.88rem; font-weight:600; margin-top:2px;">Launch v3.0 and achieve 500 active users by end of Q1</div>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="confidence-badge" style="background:var(--green-bg); color:var(--green-500);">★ 85%</span>
+                <span class="pill pill-green">78%</span>
+                <div class="avatar-sm" style="background:var(--teal-500);">SC</div>
+              </div>
+            </div>
+            <div class="tree-kr">
+              <div class="tree-kr-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--teal-600); width:36px;">KR-01</span>
+                <span style="flex:1;">Ship v3.0 to production</span>
+                <span class="recency recency-stale">⚠ 8d ago</span>
+                <span class="confidence-badge" style="background:var(--green-bg); color:var(--green-500);">90%</span>
+                <div class="kr-progress-track" style="width:80px;"><div class="kr-progress-fill" style="width:92%; background:var(--green-500);"></div></div>
+                <span style="font-size:0.78rem; font-weight:600; color:var(--green-500); width:36px; text-align:right;">92%</span>
+              </div>
+              <div class="tree-init">
+                <div class="tree-init-item">
+                  <span class="pill pill-green" style="font-size:0.6rem; padding:2px 6px;">In Progress</span>
+                  <span style="flex:1;">Final QA + security audit</span>
+                  <div class="avatar-sm" style="background:var(--amber-500); width:18px; height:18px; font-size:0.5rem;">PD</div>
+                </div>
+                <div class="tree-init-item">
+                  <span class="pill pill-green" style="font-size:0.6rem; padding:2px 6px;">Done</span>
+                  <span style="flex:1;">Migration tooling for v2 → v3</span>
+                  <div class="avatar-sm" style="background:var(--teal-500); width:18px; height:18px; font-size:0.5rem;">SC</div>
+                </div>
+              </div>
+              <div class="tree-kr-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--teal-600); width:36px;">KR-02</span>
+                <span style="flex:1;">500 active users (currently 412)</span>
+                <span class="recency recency-ok">✓ 2h ago</span>
+                <span class="confidence-badge" style="background:var(--green-bg); color:var(--green-500);">82%</span>
+                <div class="kr-progress-track" style="width:80px;"><div class="kr-progress-fill" style="width:82%; background:var(--green-500);"></div></div>
+                <span style="font-size:0.78rem; font-weight:600; color:var(--green-500); width:36px; text-align:right;">82%</span>
+              </div>
+              <div class="tree-kr-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--amber-600); width:36px;">KR-03</span>
+                <span style="flex:1;">Activation rate ≥ 60% (currently 54%)</span>
+                <span class="recency recency-ok">✓ 1d ago</span>
+                <span class="confidence-badge" style="background:var(--amber-bg); color:var(--amber-500);">55%</span>
+                <div class="kr-progress-track" style="width:80px;"><div class="kr-progress-fill" style="width:58%; background:var(--amber-500);"></div></div>
+                <span style="font-size:0.78rem; font-weight:600; color:var(--amber-500); width:36px; text-align:right;">58%</span>
+              </div>
+              <div class="tree-init">
+                <div class="tree-init-item">
+                  <span class="pill pill-amber" style="font-size:0.6rem; padding:2px 6px;">In Progress</span>
+                  <span style="flex:1;">Onboarding flow redesign</span>
+                  <div class="avatar-sm" style="background:var(--green-500); width:18px; height:18px; font-size:0.5rem;">RM</div>
+                </div>
+              </div>
+              <!-- KPI: MRR (distinct visual) -->
+              <div class="tree-kpi-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--gold-500); width:36px;">KPI</span>
+                <span style="flex:1; color:var(--gold-500); font-weight:600;">MRR (Monthly Recurring Revenue)</span>
+                <span class="recency recency-ok">✓ live</span>
+                <span style="font-family:var(--font-display); font-size:0.92rem; font-weight:600; color:var(--gold-500);">€38.4k</span>
+                <span style="font-size:0.68rem; color:var(--text-tertiary);">target: €45k</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tree-obj-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:0.68rem; color:var(--teal-600); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">O-02 · Aspirational</div>
+                <div style="font-size:0.88rem; font-weight:600; margin-top:2px;">Achieve €45k MRR by end of Q1</div>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="confidence-badge" style="background:var(--green-bg); color:var(--green-500);">★ 70%</span>
+                <span class="pill pill-green">72%</span>
+                <div class="avatar-sm" style="background:var(--amber-500);">JW</div>
+              </div>
+            </div>
+            <div class="tree-kr">
+              <div class="tree-kr-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--teal-600); width:36px;">KR-06</span>
+                <span style="flex:1;">MRR ≥ €45k (currently €38.4k)</span>
+                <span class="recency recency-stale">⚠ 14d ago</span>
+                <span class="confidence-badge" style="background:var(--amber-bg); color:var(--amber-500);">65%</span>
+                <div class="kr-progress-track" style="width:80px;"><div class="kr-progress-fill" style="width:72%; background:var(--green-500);"></div></div>
+                <span style="font-size:0.78rem; font-weight:600; color:var(--green-500); width:36px; text-align:right;">72%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 2: MARKET EXPANSION -->
+      <div class="tree-pillar">
+        <div class="tree-pillar-header">
+          <div class="tree-pillar-icon" style="background:rgba(217,119,6,0.08); color:var(--amber-500);">🌍</div>
+          <div>
+            <div class="tree-pillar-name">Market Expansion</div>
+            <div class="tree-pillar-meta">1 objective · 2 key results · 3 initiatives · Weight: 30%</div>
+          </div>
+          <div class="tree-pillar-right">
+            <span class="pill pill-red">28%</span>
+            <span style="font-size:0.72rem; color:var(--text-tertiary);">Owner: James Watson</span>
+          </div>
+        </div>
+        <div class="tree-obj">
+          <div class="tree-obj-item" style="border-left:3px solid var(--red-500);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:0.68rem; color:var(--red-500); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">O-03 · Committed · ⚠ At Risk</div>
+                <div style="font-size:0.88rem; font-weight:600; margin-top:2px;">Expand into DACH and generate €120k pipeline by Q1</div>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="confidence-badge" style="background:var(--red-bg); color:var(--red-500);">★ 20%</span>
+                <span class="pill pill-red">28%</span>
+                <div class="avatar-sm" style="background:var(--amber-500);">JW</div>
+              </div>
+            </div>
+            <div class="tree-kr">
+              <div class="tree-kr-item" style="border-color:var(--red-border);">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--red-500); width:36px;">KR-04</span>
+                <span style="flex:1;">€120k qualified pipeline (currently €34k)</span>
+                <span class="recency recency-stale">⚠ 14d ago</span>
+                <span class="confidence-badge" style="background:var(--red-bg); color:var(--red-500);">15%</span>
+                <div class="kr-progress-track" style="width:80px;"><div class="kr-progress-fill" style="width:28%; background:var(--red-500);"></div></div>
+                <span style="font-size:0.78rem; font-weight:600; color:var(--red-500); width:36px; text-align:right;">28%</span>
+              </div>
+              <div class="tree-init">
+                <div class="tree-init-item" style="border-color:var(--red-border);">
+                  <span class="pill pill-red" style="font-size:0.6rem; padding:2px 6px;">Blocked</span>
+                  <span style="flex:1; color:var(--red-500);">Partner integration (R-03)</span>
+                  <div class="avatar-sm" style="background:var(--amber-500); width:18px; height:18px; font-size:0.5rem;">JW</div>
+                </div>
+                <div class="tree-init-item">
+                  <span class="pill pill-amber" style="font-size:0.6rem; padding:2px 6px;">In Progress</span>
+                  <span style="flex:1;">DACH marketing landing pages</span>
+                  <div class="avatar-sm" style="background:var(--green-500); width:18px; height:18px; font-size:0.5rem;">RM</div>
+                </div>
+              </div>
+              <div class="tree-kr-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--red-500); width:36px;">KR-05</span>
+                <span style="flex:1;">3 channel partners signed (currently 1)</span>
+                <span class="recency recency-stale">⚠ 14d ago</span>
+                <span class="confidence-badge" style="background:var(--red-bg); color:var(--red-500);">25%</span>
+                <div class="kr-progress-track" style="width:80px;"><div class="kr-progress-fill" style="width:33%; background:var(--red-500);"></div></div>
+                <span style="font-size:0.78rem; font-weight:600; color:var(--red-500); width:36px; text-align:right;">33%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 3: CUSTOMER RETENTION -->
+      <div class="tree-pillar">
+        <div class="tree-pillar-header">
+          <div class="tree-pillar-icon" style="background:var(--green-bg); color:var(--green-500);">💚</div>
+          <div>
+            <div class="tree-pillar-name">Customer Retention</div>
+            <div class="tree-pillar-meta">2 objectives · 4 key results · 1 KPI · 5 initiatives · Weight: 30%</div>
+          </div>
+          <div class="tree-pillar-right">
+            <span class="pill pill-green">74%</span>
+            <span style="font-size:0.72rem; color:var(--text-tertiary);">Owner: Kate Liu</span>
+          </div>
+        </div>
+        <div class="tree-obj">
+          <div class="tree-obj-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:0.68rem; color:var(--teal-600); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">O-04 · Committed</div>
+                <div style="font-size:0.88rem; font-weight:600; margin-top:2px;">Reduce churn to &lt;3% monthly and increase NPS to 55</div>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="confidence-badge" style="background:var(--green-bg); color:var(--green-500);">★ 78%</span>
+                <span class="pill pill-green">74%</span>
+                <div class="avatar-sm" style="background:var(--teal-600);">KL</div>
+              </div>
+            </div>
+            <div class="tree-kr">
+              <div class="tree-kr-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--amber-600); width:36px;">KR-07</span>
+                <span style="flex:1;">Monthly churn ≤ 3% (currently 3.2%)</span>
+                <span class="recency recency-ok">✓ 3d ago</span>
+                <span class="confidence-badge" style="background:var(--amber-bg); color:var(--amber-500);">60%</span>
+                <div class="kr-progress-track" style="width:80px;"><div class="kr-progress-fill" style="width:68%; background:var(--amber-500);"></div></div>
+                <span style="font-size:0.78rem; font-weight:600; color:var(--amber-500); width:36px; text-align:right;">68%</span>
+              </div>
+              <div class="tree-kr-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--green-600); width:36px;">KR-08</span>
+                <span style="flex:1;">NPS ≥ 55 (currently 52)</span>
+                <span class="recency recency-ok">✓ 2d ago</span>
+                <span class="confidence-badge" style="background:var(--green-bg); color:var(--green-500);">88%</span>
+                <div class="kr-progress-track" style="width:80px;"><div class="kr-progress-fill" style="width:80%; background:var(--green-500);"></div></div>
+                <span style="font-size:0.78rem; font-weight:600; color:var(--green-500); width:36px; text-align:right;">80%</span>
+              </div>
+              <!-- KPI: Customer Churn Rate -->
+              <div class="tree-kpi-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--gold-500); width:36px;">KPI</span>
+                <span style="flex:1; color:var(--gold-500); font-weight:600;">Customer Churn Rate</span>
+                <span class="recency recency-ok">✓ live</span>
+                <span style="font-family:var(--font-display); font-size:0.92rem; font-weight:600; color:var(--amber-500);">3.2%</span>
+                <span style="font-size:0.68rem; color:var(--text-tertiary);">target: &lt;3%</span>
+              </div>
+            </div>
+          </div>
+          <div class="tree-obj-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:0.68rem; color:var(--teal-600); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">O-05 · Aspirational</div>
+                <div style="font-size:0.88rem; font-weight:600; margin-top:2px;">Build customer success function and reduce time-to-value to &lt;7 days</div>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="confidence-badge" style="background:var(--green-bg); color:var(--green-500);">★ 72%</span>
+                <span class="pill pill-green">66%</span>
+                <div class="avatar-sm" style="background:var(--teal-600);">KL</div>
+              </div>
+            </div>
+            <div class="tree-kr">
+              <div class="tree-kr-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--teal-600); width:36px;">KR-09</span>
+                <span style="flex:1;">Time-to-value ≤ 7 days (currently 11 days)</span>
+                <span class="recency recency-warn">⚠ 6d ago</span>
+                <span class="confidence-badge" style="background:var(--amber-bg); color:var(--amber-500);">55%</span>
+                <div class="kr-progress-track" style="width:80px;"><div class="kr-progress-fill" style="width:58%; background:var(--amber-500);"></div></div>
+                <span style="font-size:0.78rem; font-weight:600; color:var(--amber-500); width:36px; text-align:right;">58%</span>
+              </div>
+              <div class="tree-kr-item">
+                <span style="font-size:0.68rem; font-weight:700; color:var(--green-600); width:36px;">KR-10</span>
+                <span style="flex:1;">CS team hired and onboarded (2 of 2)</span>
+                <span class="recency recency-ok">✓ done</span>
+                <span class="confidence-badge" style="background:var(--green-bg); color:var(--green-500);">100%</span>
+                <div class="kr-progress-track" style="width:80px;"><div class="kr-progress-fill" style="width:100%; background:var(--green-500);"></div></div>
+                <span style="font-size:0.78rem; font-weight:600; color:var(--green-500); width:36px; text-align:right;">100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: INITIATIVES (Enhanced with timeline toggle, tasks, benefits, dependencies) -->
+    <div id="tab-initiatives" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Initiative Delivery</div>
+          <div class="section-subtitle">12 initiatives · 3 done · 7 on track · 2 blocked</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-sm" id="btn-kanban" onclick="toggleInitView('kanban')" style="background:var(--teal-800); color:white; border-color:var(--teal-800);">Kanban</button>
+          <button class="btn-sm" id="btn-timeline" onclick="toggleInitView('timeline')">Timeline</button>
+          <button class="btn-sm">Filter</button>
+          <button class="btn-sm btn-sm-primary">+ New Initiative</button>
+        </div>
+      </div>
+
+      <!-- KANBAN VIEW -->
+      <div id="view-kanban">
+        <div class="kanban">
+          <!-- BACKLOG -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <div class="kanban-col-title">Backlog</div>
+              <div class="kanban-col-count">2</div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-title">Implement customer health scoring</div>
+              <div class="kanban-card-meta">O-04 · Customer Retention<br>Approved · Ready to start</div>
+              <div style="margin-top:8px; font-size:0.7rem; color:var(--text-tertiary);">📋 0/5 tasks · 🎯 Benefit: ↓ churn 0.3%</div>
+              <div class="kanban-card-footer">
+                <span class="pill pill-teal" style="font-size:0.6rem;">Approved</span>
+                <div class="avatar-sm" style="background:var(--teal-600);">KL</div>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-title">Build DACH pricing page</div>
+              <div class="kanban-card-meta">O-03 · Market Expansion<br>Waiting on partner agreement</div>
+              <div style="margin-top:8px; font-size:0.7rem; color:var(--text-tertiary);">📋 0/3 tasks · 🔗 Depends on: Partner Integration</div>
+              <div class="kanban-card-footer">
+                <span class="pill pill-red" style="font-size:0.6rem;">Blocked</span>
+                <div class="avatar-sm" style="background:var(--amber-500);">JW</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- IN PROGRESS -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <div class="kanban-col-title">In Progress</div>
+              <div class="kanban-col-count">5</div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-title">Final QA + security audit (v3.0)</div>
+              <div class="kanban-card-meta">O-01 · Product-Led Growth<br><span style="color:var(--green-500);">85% · Due 5 Mar · 2 days ahead</span></div>
+              <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:85%; background:var(--green-500);"></div></div></div>
+              <div style="margin-top:6px; font-size:0.7rem; color:var(--text-tertiary);">📋 6/7 tasks · 🎯 Benefit: €0 · ⏱ 120 hrs saved</div>
+              <div class="kanban-card-footer">
+                <span style="font-size:0.72rem; color:var(--text-tertiary);">Cost: Time saving</span>
+                <div class="avatar-sm" style="background:var(--amber-500);">PD</div>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-title">Onboarding flow redesign</div>
+              <div class="kanban-card-meta">O-01 · Product-Led Growth<br><span style="color:var(--amber-500);">45% · Due 20 Mar</span></div>
+              <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:45%; background:var(--amber-500);"></div></div></div>
+              <div style="margin-top:6px; font-size:0.7rem; color:var(--text-tertiary);">📋 3/8 tasks · 🎯 Benefit: +6% activation rate</div>
+              <div class="kanban-card-footer">
+                <span style="font-size:0.72rem; color:var(--text-tertiary);">Revenue uplift</span>
+                <div class="avatar-sm" style="background:var(--green-500);">RM</div>
+              </div>
+            </div>
+            <div class="kanban-card" style="border-left:3px solid var(--red-500);">
+              <div class="kanban-card-title">DACH partner integration</div>
+              <div class="kanban-card-meta">O-03 · Market Expansion<br><span style="color:var(--red-500);">20% · Due 15 Mar · ⚠ Blocked</span></div>
+              <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:20%; background:var(--red-500);"></div></div></div>
+              <div style="margin-top:6px; font-size:0.7rem; color:var(--text-tertiary);">📋 2/9 tasks · 🎯 €120k pipeline · 🔗 Blocks: DACH Pricing</div>
+              <div class="kanban-card-footer">
+                <span style="font-size:0.72rem; color:var(--red-500);">⚠ R-03 blocker</span>
+                <div class="avatar-sm" style="background:var(--amber-500);">JW</div>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-title">DACH marketing landing pages</div>
+              <div class="kanban-card-meta">O-03 · Market Expansion<br><span style="color:var(--teal-500);">60% · Due 10 Mar</span></div>
+              <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:60%; background:var(--teal-500);"></div></div></div>
+              <div style="margin-top:6px; font-size:0.7rem; color:var(--text-tertiary);">📋 4/7 tasks · 🎯 €120k pipeline support</div>
+              <div class="kanban-card-footer">
+                <span style="font-size:0.72rem; color:var(--text-tertiary);">Revenue enabler</span>
+                <div class="avatar-sm" style="background:var(--green-500);">RM</div>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-title">Customer success playbooks</div>
+              <div class="kanban-card-meta">O-05 · Customer Retention<br><span style="color:var(--green-500);">70% · Due 14 Mar</span></div>
+              <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:70%; background:var(--green-500);"></div></div></div>
+              <div style="margin-top:6px; font-size:0.7rem; color:var(--text-tertiary);">📋 5/7 tasks · 🎯 Benefit: ↓ churn 0.5%</div>
+              <div class="kanban-card-footer">
+                <span style="font-size:0.72rem; color:var(--text-tertiary);">Retention</span>
+                <div class="avatar-sm" style="background:var(--teal-600);">KL</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- REVIEW -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <div class="kanban-col-title">Review</div>
+              <div class="kanban-col-count">2</div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-title">NPS feedback loop automation</div>
+              <div class="kanban-card-meta">O-04 · Customer Retention<br><span style="color:var(--green-500);">95% · Awaiting sign-off</span></div>
+              <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:95%; background:var(--green-500);"></div></div></div>
+              <div style="margin-top:6px; font-size:0.7rem; color:var(--text-tertiary);">📋 9/10 tasks · 🎯 Benefit: +5 NPS points</div>
+              <div class="kanban-card-footer">
+                <span style="font-size:0.72rem; color:var(--text-tertiary);">Satisfaction</span>
+                <div class="avatar-sm" style="background:var(--teal-600);">KL</div>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-title">Annual billing migration (8 tools)</div>
+              <div class="kanban-card-meta">Cost Saving · IT &amp; Software<br><span style="color:var(--green-500);">100% · Benefit validation</span></div>
+              <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:100%; background:var(--green-500);"></div></div></div>
+              <div style="margin-top:6px; font-size:0.7rem; color:var(--text-tertiary);">📋 8/8 tasks · 🎯 €12.6k cost saving</div>
+              <div class="kanban-card-footer">
+                <span style="font-size:0.72rem; color:var(--green-500);">💰 €12.6k saved</span>
+                <div class="avatar-sm" style="background:var(--teal-500);">SC</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DONE -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              <div class="kanban-col-title">Done</div>
+              <div class="kanban-col-count">3</div>
+            </div>
+            <div class="kanban-card" style="border-left:3px solid var(--green-500);">
+              <div class="kanban-card-title">Migration tooling v2 → v3</div>
+              <div class="kanban-card-meta">O-01 · Product-Led Growth<br><span style="color:var(--green-500);">✓ Completed 18 Feb</span></div>
+              <div style="margin-top:6px; font-size:0.7rem; color:var(--text-tertiary);">📋 12/12 tasks · 🎯 ⏱ 42 hrs/mo saved</div>
+              <div class="kanban-card-footer">
+                <span style="font-size:0.72rem; color:var(--green-500);">Time saving</span>
+                <div class="avatar-sm" style="background:var(--teal-500);">SC</div>
+              </div>
+            </div>
+            <div class="kanban-card" style="border-left:3px solid var(--green-500);">
+              <div class="kanban-card-title">Downgrade overkill SaaS tiers</div>
+              <div class="kanban-card-meta">Cost Saving · IT &amp; Software<br><span style="color:var(--green-500);">✓ Completed 15 Jan</span></div>
+              <div class="kanban-card-footer">
+                <span style="font-size:0.72rem; color:var(--green-500);">💰 €8.4k saved</span>
+                <span class="pill pill-green" style="font-size:0.6rem;">Verified</span>
+              </div>
+            </div>
+            <div class="kanban-card" style="border-left:3px solid var(--green-500);">
+              <div class="kanban-card-title">Early payment discounts</div>
+              <div class="kanban-card-meta">Cost Saving · Finance<br><span style="color:var(--green-500);">✓ Completed 1 Dec 2025</span></div>
+              <div class="kanban-card-footer">
+                <span style="font-size:0.72rem; color:var(--green-500);">💰 €5.6k saved</span>
+                <span class="pill pill-green" style="font-size:0.6rem;">Verified</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMELINE / GANTT VIEW (hidden by default) -->
+      <div id="view-timeline" style="display:none;">
+        <div class="timeline-view">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div style="font-size:0.72rem; color:var(--text-tertiary); font-weight:600;">Q1 2026: Jan → Mar</div>
+            <div style="display:flex; gap:12px; font-size:0.68rem;">
+              <span style="display:flex; align-items:center; gap:4px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--green-500);"></span> On Track</span>
+              <span style="display:flex; align-items:center; gap:4px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--amber-500);"></span> At Risk</span>
+              <span style="display:flex; align-items:center; gap:4px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--red-500);"></span> Blocked</span>
+              <span style="display:flex; align-items:center; gap:4px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--surface-3);"></span> Complete</span>
+            </div>
+          </div>
+          <div class="timeline-header-row"><span>Initiative</span><span style="display:flex; justify-content:space-between;"><span>Jan</span><span>Feb</span><span>Mar</span></span><span style="text-align:right;">Status</span></div>
+          <div class="timeline-row">
+            <span style="font-weight:600;">Migration tooling v2→v3</span>
+            <div class="timeline-bar-track"><div class="timeline-bar-fill" style="width:40%; left:0; background:var(--surface-3); border-radius:100px;"></div></div>
+            <span style="text-align:right;"><span class="pill pill-green" style="font-size:0.6rem;">Done</span></span>
+          </div>
+          <div class="timeline-row">
+            <span style="font-weight:600;">SaaS tier downgrades</span>
+            <div class="timeline-bar-track"><div class="timeline-bar-fill" style="width:15%; left:0; background:var(--surface-3); border-radius:100px;"></div></div>
+            <span style="text-align:right;"><span class="pill pill-green" style="font-size:0.6rem;">Done</span></span>
+          </div>
+          <div class="timeline-row">
+            <span style="font-weight:600;">Final QA + security audit</span>
+            <div class="timeline-bar-track"><div class="timeline-bar-fill" style="width:50%; left:25%; background:var(--green-500); border-radius:100px;"></div></div>
+            <span style="text-align:right;"><span class="pill pill-green" style="font-size:0.6rem;">85%</span></span>
+          </div>
+          <div class="timeline-row">
+            <span style="font-weight:600;">Onboarding flow redesign</span>
+            <div class="timeline-bar-track"><div class="timeline-bar-fill" style="width:55%; left:30%; background:var(--amber-500); border-radius:100px;"></div></div>
+            <span style="text-align:right;"><span class="pill pill-amber" style="font-size:0.6rem;">45%</span></span>
+          </div>
+          <div class="timeline-row">
+            <span style="font-weight:600; color:var(--red-500);">DACH partner integration</span>
+            <div class="timeline-bar-track"><div class="timeline-bar-fill" style="width:60%; left:20%; background:var(--red-500); border-radius:100px; opacity:0.6;"></div></div>
+            <span style="text-align:right;"><span class="pill pill-red" style="font-size:0.6rem;">Blocked</span></span>
+          </div>
+          <div class="timeline-row">
+            <span style="font-weight:600;">DACH marketing pages</span>
+            <div class="timeline-bar-track"><div class="timeline-bar-fill" style="width:40%; left:35%; background:var(--teal-500); border-radius:100px;"></div></div>
+            <span style="text-align:right;"><span class="pill pill-teal" style="font-size:0.6rem;">60%</span></span>
+          </div>
+          <div class="timeline-row">
+            <span style="font-weight:600;">CS playbooks</span>
+            <div class="timeline-bar-track"><div class="timeline-bar-fill" style="width:50%; left:30%; background:var(--green-500); border-radius:100px;"></div></div>
+            <span style="text-align:right;"><span class="pill pill-green" style="font-size:0.6rem;">70%</span></span>
+          </div>
+          <div class="timeline-row">
+            <span style="font-weight:600;">NPS feedback loop</span>
+            <div class="timeline-bar-track"><div class="timeline-bar-fill" style="width:65%; left:10%; background:var(--green-500); border-radius:100px;"></div></div>
+            <span style="text-align:right;"><span class="pill pill-green" style="font-size:0.6rem;">95%</span></span>
+          </div>
+          <div class="timeline-row">
+            <span style="font-weight:600;">Annual billing migration</span>
+            <div class="timeline-bar-track"><div class="timeline-bar-fill" style="width:55%; left:15%; background:var(--green-500); border-radius:100px;"></div></div>
+            <span style="text-align:right;"><span class="pill pill-green" style="font-size:0.6rem;">100%</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WIP indicator -->
+      <div class="ai-insight" style="margin-top:24px;">
+        <div class="ai-icon" style="width:28px; height:28px; font-size:13px;">✦</div>
+        <p><strong>WIP alert:</strong> James Watson currently owns 3 in-progress initiatives — above the recommended WIP limit of 2. Consider reassigning the DACH marketing pages to Rachel Murphy to reduce overload and improve flow. Paul Donovan has capacity (1 active initiative) and could support the partner integration if the blocker is resolved.</p>
+      </div>
+    </div>
+
+    <!-- TAB 4: ANALYSIS (Enhanced with AI Draft OKRs, Strategy ROI, more insights) -->
+    <div id="tab-analysis" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Analysis &amp; Insights</div>
+          <div class="section-subtitle">Signals from delivery data, check-ins, and performance metrics</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-sm">All Signals</button>
+          <button class="btn-sm">Blockers</button>
+          <button class="btn-sm">Wins</button>
+        </div>
+      </div>
+
+      <!-- AI Draft OKRs CTA (NEW) -->
+      <div style="background: linear-gradient(135deg, rgba(212,168,83,0.08), rgba(90,175,208,0.06)); border: 2px solid rgba(212,168,83,0.25); border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 24px; display: flex; align-items: center; gap: 24px;">
+        <div style="width:56px; height:56px; background: linear-gradient(135deg, var(--gold-500), var(--gold-300)); border-radius: var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:24px; color:var(--teal-950); flex-shrink:0;">✦</div>
+        <div style="flex:1;">
+          <div style="font-family:var(--font-display); font-size:1.1rem; font-weight:500; margin-bottom:4px;">Auto-draft next quarter’s OKRs</div>
+          <div style="font-size:0.82rem; color:var(--text-tertiary); line-height:1.6;">Based on your Q1 performance data, financial context from Xero, and current strategic pillars, Stratavor can generate a draft set of Q2 OKRs for your review. Includes suggested key results, confidence levels, and benefit forecasts.</div>
+        </div>
+        <button class="btn-sm btn-sm-gold" style="padding:10px 24px; font-size:0.82rem;">Generate Q2 Draft OKRs</button>
+      </div>
+
+      <!-- Strategy ROI Summary (NEW) -->
+      <div class="section-header"><div><div class="section-title">Strategy ROI Summary</div><div class="section-subtitle">Mapping realised benefits back to strategic objectives</div></div></div>
+      <div class="grid-3" style="margin-bottom:24px;">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Product-Led Growth</div><span class="pill pill-green">+€2.8k</span></div>
+          <div style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:12px;">v3.0 upsell revenue attributed to new feature adoption. Migration tooling saved 42 hrs/month in engineering time.</div>
+          <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-tertiary);"><span>Invested: €18k</span><span>Returned: €2.8k + 42h/mo</span></div>
+          <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:35%; background:var(--green-500);"></div></div></div>
+          <div style="font-size:0.68rem; color:var(--text-tertiary); margin-top:4px;">ROI building — payback in Q3</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Market Expansion</div><span class="pill pill-red">€0</span></div>
+          <div style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:12px;">No benefits realised yet due to DACH partner blocker. €120k pipeline at risk if unresolved by Week 10.</div>
+          <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-tertiary);"><span>Invested: €12k</span><span>Returned: €0</span></div>
+          <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:0%; background:var(--red-500);"></div></div></div>
+          <div style="font-size:0.68rem; color:var(--red-500); margin-top:4px;">Blocked — requires R-03 resolution</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Customer Retention</div><span class="pill pill-green">+€38.4k</span></div>
+          <div style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:12px;">Cost savings from SaaS tier optimisation (€8.4k), early payment discounts (€5.6k), billing migration (€12.6k), and process automation (€11.8k).</div>
+          <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-tertiary);"><span>Invested: €8k</span><span>Returned: €38.4k</span></div>
+          <div style="margin-top:8px;"><div class="progress-bar"><div class="progress-fill" style="width:85%; background:var(--green-500);"></div></div></div>
+          <div style="font-size:0.68rem; color:var(--green-500); margin-top:4px;">4.8× ROI — exceeding target</div>
+        </div>
+      </div>
+
+      <!-- Insight Feed -->
+      <div class="section-header"><div><div class="section-title">Insight Feed</div><div class="section-subtitle">Rule-based and AI-generated signals</div></div></div>
+
+      <div class="feed-item">
+        <div class="feed-icon feed-icon-red">⚠</div>
+        <div class="feed-content">
+          <div class="feed-title">KR off-track + due soon + no check-in</div>
+          <div class="feed-desc">KR-04 (DACH pipeline) is at 28% with 4 weeks remaining — requires 3.2× acceleration to hit target. Owner James Watson has not checked in for 8 days. The linked initiative “Partner Integration” is blocked by R-03.</div>
+          <div class="feed-actions">
+            <button class="btn-sm btn-sm-primary">Send Escalation</button>
+            <button class="btn-sm">View KR-04</button>
+          </div>
+        </div>
+        <div class="feed-time">2 hrs ago</div>
+      </div>
+
+      <div class="feed-item">
+        <div class="feed-icon feed-icon-red">🔗</div>
+        <div class="feed-content">
+          <div class="feed-title">Dependency fan-out: R-03 blocking 2 initiatives</div>
+          <div class="feed-desc">The DACH partner agreement delay (R-03) is now blocking both “Partner Integration” and “Build DACH Pricing Page” — affecting 72% of the Market Expansion pipeline.</div>
+          <div class="feed-actions">
+            <button class="btn-sm btn-sm-primary">Escalate to Exec Sponsor</button>
+            <button class="btn-sm">View Dependency Map</button>
+          </div>
+        </div>
+        <div class="feed-time">4 hrs ago</div>
+      </div>
+
+      <div class="feed-item">
+        <div class="feed-icon feed-icon-amber">📉</div>
+        <div class="feed-content">
+          <div class="feed-title">Risk exposure trending upward</div>
+          <div class="feed-desc">Total risk exposure score increased from 48 to 57 over the past 3 weeks. R-03 score climbed from 12 to 16 as likelihood increased. If current trajectory continues, plan health will drop below 60% by Week 11.</div>
+          <div class="feed-actions">
+            <button class="btn-sm">View Risk Trend</button>
+          </div>
+        </div>
+        <div class="feed-time">Yesterday</div>
+      </div>
+
+      <div class="feed-item">
+        <div class="feed-icon feed-icon-amber">📊</div>
+        <div class="feed-content">
+          <div class="feed-title">Benefit capture behind forecast for Market Expansion</div>
+          <div class="feed-desc">€0 of €22k forecasted Q1 benefits have been captured for the Market Expansion pillar. At this stage, benchmark expects at least 30% capture (€6.6k). The blocked DACH pipeline is the primary driver.</div>
+          <div class="feed-actions">
+            <button class="btn-sm">View Benefits Breakdown</button>
+          </div>
+        </div>
+        <div class="feed-time">Yesterday</div>
+      </div>
+
+      <div class="feed-item">
+        <div class="feed-icon feed-icon-green">🎯</div>
+        <div class="feed-content">
+          <div class="feed-title">Benefit capture ahead of benchmark overall</div>
+          <div class="feed-desc">€41.2k realised against €67.5k projected — a 61% capture rate at Week 9. The industry benchmark for this stage is 55%. The SaaS tier downgrade initiative is tracking at 98% of projected savings.</div>
+          <div class="feed-actions">
+            <button class="btn-sm">View Benefits Detail</button>
+          </div>
+        </div>
+        <div class="feed-time">Yesterday</div>
+      </div>
+
+      <div class="feed-item">
+        <div class="feed-icon feed-icon-green">📈</div>
+        <div class="feed-content">
+          <div class="feed-title">NPS improved +5 points — ahead of KR-08 target</div>
+          <div class="feed-desc">Latest NPS survey returned 52, up from 47 last quarter. KR-08 target is 55 — at current trajectory, likely to achieve by end of Q1. The NPS feedback loop automation initiative (95% complete) is contributing to faster response times.</div>
+          <div class="feed-actions">
+            <button class="btn-sm">View KR-08</button>
+          </div>
+        </div>
+        <div class="feed-time">2 days ago</div>
+      </div>
+
+      <div class="feed-item">
+        <div class="feed-icon feed-icon-gold">✦</div>
+        <div class="feed-content">
+          <div class="feed-title" style="color:var(--gold-500);">AI Recommendation: Reduce WIP for James Watson</div>
+          <div class="feed-desc">James Watson owns 3 in-progress initiatives and 1 blocked initiative across 2 pillars. Research shows individual WIP above 2 reduces completion probability by ~35%. Recommend reassigning DACH marketing pages to Rachel Murphy (1 active initiative, same pillar context).</div>
+          <div class="feed-actions">
+            <button class="btn-sm btn-sm-gold">Accept Recommendation</button>
+            <button class="btn-sm">Dismiss</button>
+          </div>
+        </div>
+        <div class="feed-time">2 days ago</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    Generated by Stratavor · Strategy Delivery Module · Acme SaaS Ltd · February 2026 · 2026 Growth Plan — Confidential
+  </div>
+</div>
+
+<!-- ASK STRATAVOR FAB -->
+<div class="copilot-fab disabled" role="button" aria-disabled="true"><div class="copilot-fab-icon">✦</div>Ask Stratavor</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  document.querySelector('.content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleInitView(view) {
+  var kanban = document.getElementById('view-kanban');
+  var timeline = document.getElementById('view-timeline');
+  var btnK = document.getElementById('btn-kanban');
+  var btnT = document.getElementById('btn-timeline');
+  if (view === 'timeline') {
+    kanban.style.display = 'none';
+    timeline.style.display = 'block';
+    btnK.style.background = '';
+    btnK.style.color = '';
+    btnK.style.borderColor = '';
+    btnT.style.background = 'var(--teal-800)';
+    btnT.style.color = 'white';
+    btnT.style.borderColor = 'var(--teal-800)';
+  } else {
+    kanban.style.display = 'block';
+    timeline.style.display = 'none';
+    btnT.style.background = '';
+    btnT.style.color = '';
+    btnT.style.borderColor = '';
+    btnK.style.background = 'var(--teal-800)';
+    btnK.style.color = 'white';
+    btnK.style.borderColor = 'var(--teal-800)';
+  }
+}
+</script>
+<script src="assets/nav.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>

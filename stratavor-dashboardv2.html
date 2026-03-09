@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratavor — Intelligence Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/nav.css">
+<style>
+:root {
+  --teal-950: #395460;
+  --teal-900: #2e4550;
+  --teal-800: #163d52;
+  --teal-700: #1e526d;
+  --teal-600: #2a6f8f;
+  --teal-500: #3a8fb2;
+  --teal-400: #5aafd0;
+  --teal-300: #8ccde5;
+  --teal-200: #b8e1f0;
+  --teal-100: #e0f3f9;
+  --teal-50: #f0f9fc;
+
+  --slate-950: #0c0f14;
+  --slate-900: #151a22;
+  --slate-800: #1e2530;
+  --slate-700: #2d3748;
+  --slate-600: #4a5568;
+  --slate-500: #718096;
+  --slate-400: #a0aec0;
+  --slate-300: #cbd5e0;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+
+  --gold-500: #d4a853;
+  --gold-400: #e4c17a;
+  --gold-300: #f0d9a0;
+
+  --green-500: #38a169;
+  --green-400: #48bb78;
+  --green-300: #68d391;
+  --green-bg: rgba(56, 161, 105, 0.08);
+  --green-border: rgba(56, 161, 105, 0.2);
+
+  --amber-500: #d97706;
+  --amber-400: #f59e0b;
+  --amber-bg: rgba(217, 119, 6, 0.08);
+  --amber-border: rgba(217, 119, 6, 0.2);
+
+  --red-500: #e53e3e;
+  --red-400: #fc8181;
+  --red-bg: rgba(229, 62, 62, 0.06);
+  --red-border: rgba(229, 62, 62, 0.18);
+
+  --critical-500: #c53030;
+
+  --surface-0: #ffffff;
+  --surface-1: #f8fafb;
+  --surface-2: #f0f4f6;
+  --surface-3: #e4ebef;
+
+  --text-primary: #0f2d3d;
+  --text-secondary: #4a6274;
+  --text-tertiary: #7a9aae;
+  --text-inverse: #ffffff;
+
+  --border-light: rgba(0,0,0,0.06);
+  --border-medium: rgba(0,0,0,0.1);
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.1);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  --font-display: 'Fraunces', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 15px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ─── MAIN LAYOUT ─── */
+.main {
+  margin-left: 260px;
+  min-height: 100vh;
+}
+
+/* ─── TOP BAR ─── */
+.topbar {
+  position: sticky; top: 0;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 36px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 50;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+}
+
+.breadcrumb-current {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.breadcrumb-sep { opacity: 0.4; }
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid var(--border-medium);
+  background: var(--surface-0);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font-body);
+}
+
+.topbar-btn:hover {
+  border-color: var(--teal-400);
+  color: var(--teal-700);
+}
+
+.topbar-btn-primary {
+  background: var(--teal-800);
+  color: var(--surface-0);
+  border-color: var(--teal-800);
+}
+
+.topbar-btn-primary:hover {
+  background: var(--teal-700);
+  border-color: var(--teal-700);
+  color: var(--surface-0);
+}
+
+.period-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-2);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.period-opt {
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all 0.15s;
+  border: none; background: none;
+  font-family: var(--font-body);
+}
+
+.period-opt.active {
+  background: var(--surface-0);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ─── CONTENT ─── */
+.content {
+  padding: 32px 36px 60px;
+  max-width: 1440px;
+}
+
+/* ─── HERO HEADER ─── */
+.hero-header {
+  background: var(--surface-0);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: 40px 44px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  animation: fadeSlideUp 0.6s ease-out;
+}
+
+.hero-header::before {
+  display: none;
+}
+
+.hero-header::after {
+  display: none;
+}
+
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: var(--text-tertiary);
+  font-size: 0.9rem;
+  margin-top: 6px;
+  font-weight: 400;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-amber {
+  background: var(--amber-bg);
+  color: var(--amber-500);
+  border: 1px solid var(--amber-border);
+}
+
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero-summary {
+  position: relative;
+  z-index: 1;
+  background: var(--surface-1);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ai-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--gold-500), var(--gold-300));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.hero-summary p {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.hero-summary strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ─── GRID ─── */
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.grid-2-1 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.grid-1-1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+/* ─── CARDS ─── */
+.card {
+  background: var(--surface-0);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+
+.card-label {
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.label-green { background: var(--green-bg); color: var(--green-500); border: 1px solid var(--green-border); }
+.label-amber { background: var(--amber-bg); color: var(--amber-500); border: 1px solid var(--amber-border); }
+.label-red { background: var(--red-bg); color: var(--red-500); border: 1px solid var(--red-border); }
+
+/* ─── KPI TILES ─── */
+.kpi-tile {
+  animation: fadeSlideUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.kpi-tile:nth-child(1) { animation-delay: 0.1s; }
+.kpi-tile:nth-child(2) { animation-delay: 0.18s; }
+.kpi-tile:nth-child(3) { animation-delay: 0.26s; }
+.kpi-tile:nth-child(4) { animation-delay: 0.34s; }
+
+.kpi-value {
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.kpi-deltas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.kpi-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.kpi-delta-label {
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+.delta-up { color: var(--green-500); }
+.delta-down { color: var(--red-500); }
+.delta-flat { color: var(--amber-500); }
+
+.sparkline-container {
+  height: 40px;
+  margin-top: 14px;
+  position: relative;
+}
+
+.sparkline {
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── SECTION HEADERS ─── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.section-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+/* ─── FINANCIAL TABLE ─── */
+.fin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.fin-table thead th {
+  text-align: right;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--surface-3);
+}
+
+.fin-table thead th:first-child { text-align: left; }
+
+.fin-table tbody td {
+  text-align: right;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.fin-table tbody td:first-child {
+  text-align: left;
+  font-weight: 500;
+}
+
+.fin-table tbody tr:hover { background: var(--surface-1); }
+
+.fin-table .row-bold td { font-weight: 600; }
+
+.fin-table .row-bold td:first-child {
+  color: var(--teal-800);
+}
+
+.var-positive { color: var(--green-500); }
+.var-negative { color: var(--red-500); }
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.pill-green { background: var(--green-bg); color: var(--green-500); }
+.pill-amber { background: var(--amber-bg); color: var(--amber-500); }
+.pill-red { background: var(--red-bg); color: var(--red-500); }
+
+/* ─── RISK HEATMAP ─── */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: 30px repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr) 30px;
+  gap: 3px;
+  aspect-ratio: 1.15;
+  margin: 0 auto;
+  max-width: 380px;
+}
+
+.heatmap-cell {
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+  cursor: default;
+  min-height: 48px;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 2;
+}
+
+.heatmap-cell.has-risk {
+  cursor: pointer;
+}
+
+.heat-green { background: #38a169; }
+.heat-lime { background: #68a338; }
+.heat-yellow { background: #b8a830; }
+.heat-amber { background: #d97706; }
+.heat-orange { background: #dd6b20; }
+.heat-red { background: #e53e3e; }
+.heat-darkred { background: #c53030; }
+
+.heatmap-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+
+.heatmap-label-y { writing-mode: vertical-rl; transform: rotate(180deg); }
+
+.risk-dot {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.95);
+  color: var(--teal-950);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.58rem;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ─── LEADING INDICATORS ─── */
+.indicator-card {
+  border-left: 3px solid transparent;
+  padding-left: 20px;
+}
+
+.indicator-card.ind-green { border-color: var(--green-500); }
+.indicator-card.ind-amber { border-color: var(--amber-500); }
+.indicator-card.ind-red { border-color: var(--red-500); }
+
+.indicator-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.indicator-value {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.indicator-note {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+.indicator-owner {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* ─── MACRO RADAR ─── */
+.macro-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.macro-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background: var(--surface-1);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  transition: all 0.15s;
+}
+
+.macro-item:hover {
+  background: var(--surface-0);
+  border-color: var(--border-medium);
+}
+
+.macro-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.macro-icon.bg-risk { background: var(--red-bg); border: 1px solid var(--red-border); }
+.macro-icon.bg-watch { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+.macro-icon.bg-opportunity { background: var(--green-bg); border: 1px solid var(--green-border); }
+
+.macro-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.macro-desc {
+  font-size: 0.76rem;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+/* ─── CUSTOMER TABLE ─── */
+.customer-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 0.8fr 0.8fr 0.8fr 0.6fr;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.82rem;
+}
+
+.customer-row:last-child { border-bottom: none; }
+
+.customer-row-header {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  padding: 8px 0;
+  border-bottom: 2px solid var(--surface-3);
+}
+
+.customer-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.customer-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.trend-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+/* ─── AI INSIGHT BOX ─── */
+.ai-insight {
+  background: linear-gradient(135deg, rgba(212, 168, 83, 0.04), rgba(90, 175, 208, 0.04));
+  border: 1px solid rgba(212, 168, 83, 0.15);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.ai-insight-icon {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, var(--gold-500), var(--gold-300));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 13px;
+}
+
+.ai-insight p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.ai-insight strong {
+  color: var(--text-primary);
+}
+
+/* ─── REVENUE BRIDGE ─── */
+.bridge-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  height: 200px;
+  padding: 0 10px;
+  margin: 20px 0 10px;
+}
+
+.bridge-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.bridge-value {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.bridge-bar {
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  min-height: 10px;
+  transition: height 1s ease-out;
+}
+
+.bridge-bar.positive { background: linear-gradient(180deg, var(--green-400), var(--green-500)); }
+.bridge-bar.negative { background: linear-gradient(180deg, var(--red-400), var(--red-500)); }
+.bridge-bar.total { background: linear-gradient(180deg, var(--teal-600), var(--teal-800)); }
+.bridge-bar.neutral { background: linear-gradient(180deg, var(--amber-400), var(--amber-500)); }
+
+.bridge-label {
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+  text-align: center;
+  line-height: 1.3;
+  max-width: 80px;
+}
+
+/* ─── CONCENTRATION BAR ─── */
+.concentration-bar {
+  display: flex;
+  height: 12px;
+  border-radius: 100px;
+  overflow: hidden;
+  margin: 16px 0 8px;
+}
+
+.conc-seg {
+  transition: width 1s ease-out;
+}
+
+/* ─── FOOTER ─── */
+.page-footer {
+  text-align: center;
+  padding: 40px 36px 30px;
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  border-top: 1px solid var(--border-light);
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: fadeSlideUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+.delay-6 { animation-delay: 0.6s; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--slate-300); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--slate-400); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1200px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-2-1 { grid-template-columns: 1fr; }
+  .grid-1-1 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .content { padding: 20px 16px 40px; }
+  .hero-header { padding: 28px 24px; }
+  .hero-title { font-size: 1.5rem; }
+  .grid-4 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .topbar { padding: 0 16px; }
+}
+
+/* ─── COPILOT BUTTON ─── */
+.copilot-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--teal-800), var(--teal-700));
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(15, 45, 61, 0.3);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  z-index: 200;
+}
+
+.copilot-fab:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 12px 40px rgba(15, 45, 61, 0.4);
+}
+
+.copilot-fab::after {
+  content: 'Ask Stratavor';
+  position: absolute;
+  right: calc(100% + 12px);
+  background: var(--teal-900);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.copilot-fab:hover::after { opacity: 1; }
+</style>
+<link rel="stylesheet" href="assets/demo.css">
+<link rel="stylesheet" href="assets/disabled.css">
+</head>
+<body>
+
+<aside id="app-sidebar" class="sidebar"></aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="breadcrumb">
+        <span>Acme SaaS Ltd</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">Intelligence Hub</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="period-selector">
+        <button type="button" class="period-opt active">YTD</button>
+        <button type="button" class="period-opt disabled">May '25</button>
+        <button type="button" class="period-opt disabled">Q2</button>
+        <button type="button" class="period-opt disabled">12M</button>
+      </div>
+      <button type="button" class="topbar-btn disabled">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/></svg>
+        Export
+      </button>
+      <button type="button" class="topbar-btn topbar-btn-primary disabled">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg>
+        Take Snapshot
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero-header">
+      <div class="hero-top">
+        <div>
+          <div class="hero-title">Intelligence Hub</div>
+          <div class="hero-subtitle">Month ending 31 May 2025 · Data through 31 May, unaudited</div>
+        </div>
+        <div class="status-badge status-amber">
+          <span class="status-dot"></span>
+          Overall: Amber
+        </div>
+      </div>
+      <div class="hero-summary">
+        <div class="ai-icon">✦</div>
+        <p>
+          <strong>Revenue growth is positive YoY but below plan (−2.8% vs budget);</strong> closing the in-quarter gap is the priority. Margin underperformance versus budget is the key issue (−6.7%), driven by COGS pressure and needs corrective action. Customer growth is solid at +10.9% YoY, but profitability per customer is lagging 19.2% behind budget.
+        </p>
+      </div>
+    </div>
+
+    <!-- KPI TILES -->
+    <div class="grid-4">
+      <div class="card kpi-tile">
+        <div class="card-header">
+          <span class="card-title">Revenue</span>
+          <span class="card-label label-red">Behind Plan</span>
+        </div>
+        <div class="kpi-value">€5.2m</div>
+        <div class="kpi-deltas">
+          <span class="kpi-delta delta-down">▾ 2.8% <span class="kpi-delta-label">vs budget</span></span>
+          <span class="kpi-delta delta-up">▴ 12.1% <span class="kpi-delta-label">YoY</span></span>
+          <span class="kpi-delta delta-down">▾ 5.1% <span class="kpi-delta-label">MoM</span></span>
+        </div>
+        <div class="sparkline-container">
+          <svg class="sparkline" viewBox="0 0 200 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sparkGrad1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="var(--teal-500)" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="var(--teal-500)" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,32 L33,28 L66,24 L100,20 L133,15 L166,18 L200,12" fill="none" stroke="var(--teal-600)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M0,32 L33,28 L66,24 L100,20 L133,15 L166,18 L200,12 L200,40 L0,40Z" fill="url(#sparkGrad1)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card kpi-tile">
+        <div class="card-header">
+          <span class="card-title">Gross Profit</span>
+          <span class="card-label label-amber">Margin Pressure</span>
+        </div>
+        <div class="kpi-value">€2.5m</div>
+        <div class="kpi-deltas">
+          <span class="kpi-delta delta-down">▾ 6.7% <span class="kpi-delta-label">vs budget</span></span>
+          <span class="kpi-delta delta-up">▴ 8.2% <span class="kpi-delta-label">YoY</span></span>
+          <span class="kpi-delta delta-down">▾ 3.1% <span class="kpi-delta-label">MoM</span></span>
+        </div>
+        <div class="sparkline-container">
+          <svg class="sparkline" viewBox="0 0 200 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sparkGrad2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="var(--amber-500)" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="var(--amber-500)" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,18 L33,15 L66,20 L100,17 L133,22 L166,25 L200,24" fill="none" stroke="var(--amber-500)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M0,18 L33,15 L66,20 L100,17 L133,22 L166,25 L200,24 L200,40 L0,40Z" fill="url(#sparkGrad2)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card kpi-tile">
+        <div class="card-header">
+          <span class="card-title">Net Profit (EBITDA)</span>
+          <span class="card-label label-green">On Track</span>
+        </div>
+        <div class="kpi-value">€420k</div>
+        <div class="kpi-deltas">
+          <span class="kpi-delta delta-down">▾ 19.2% <span class="kpi-delta-label">vs budget</span></span>
+          <span class="kpi-delta delta-up">▴ 5.0% <span class="kpi-delta-label">YoY</span></span>
+          <span class="kpi-delta delta-flat">● 1.2% <span class="kpi-delta-label">MoM</span></span>
+        </div>
+        <div class="sparkline-container">
+          <svg class="sparkline" viewBox="0 0 200 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sparkGrad3" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="var(--green-500)" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="var(--green-500)" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,30 L33,26 L66,22 L100,25 L133,20 L166,18 L200,16" fill="none" stroke="var(--green-500)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M0,30 L33,26 L66,22 L100,25 L133,20 L166,18 L200,16 L200,40 L0,40Z" fill="url(#sparkGrad3)"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card kpi-tile">
+        <div class="card-header">
+          <span class="card-title">Active Customers</span>
+          <span class="card-label label-green">Growth</span>
+        </div>
+        <div class="kpi-value">1,240</div>
+        <div class="kpi-deltas">
+          <span class="kpi-delta delta-up">▴ 3.1% <span class="kpi-delta-label">vs budget</span></span>
+          <span class="kpi-delta delta-up">▴ 10.9% <span class="kpi-delta-label">YoY</span></span>
+          <span class="kpi-delta delta-up">▴ 2.0% <span class="kpi-delta-label">MoM</span></span>
+        </div>
+        <div class="sparkline-container">
+          <svg class="sparkline" viewBox="0 0 200 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sparkGrad4" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="var(--green-500)" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="var(--green-500)" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,35 L33,30 L66,26 L100,22 L133,18 L166,14 L200,10" fill="none" stroke="var(--green-500)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M0,35 L33,30 L66,26 L100,22 L133,18 L166,14 L200,10 L200,40 L0,40Z" fill="url(#sparkGrad4)"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCIAL PERFORMANCE + REVENUE BRIDGE -->
+    <div class="grid-2-1 animate-in delay-2">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Financial Performance</div>
+            <div style="font-size:0.75rem; color:var(--text-tertiary); margin-top:2px;">MoM vs YoY trends · May 2025</div>
+          </div>
+        </div>
+        <table class="fin-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Actual</th>
+              <th>vs Budget</th>
+              <th>MoM</th>
+              <th>YoY</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Revenue</td>
+              <td>€5.20M</td>
+              <td class="var-negative">−2.8%</td>
+              <td class="var-negative">−5.1%</td>
+              <td class="var-positive">+12.1%</td>
+              <td><span class="status-pill pill-red">Behind Plan</span></td>
+            </tr>
+            <tr>
+              <td>Cost of Sales</td>
+              <td>€2.70M</td>
+              <td class="var-negative">+4.7%</td>
+              <td class="var-negative">+3.4%</td>
+              <td class="var-negative">+7.6%</td>
+              <td><span class="status-pill pill-red">Cost Pressure</span></td>
+            </tr>
+            <tr class="row-bold">
+              <td>Gross Profit</td>
+              <td>€2.50M</td>
+              <td class="var-negative">−6.7%</td>
+              <td class="var-negative">−3.1%</td>
+              <td class="var-positive">+8.2%</td>
+              <td><span class="status-pill pill-amber">Margin Pressure</span></td>
+            </tr>
+            <tr>
+              <td>Gross Margin %</td>
+              <td>48.0%</td>
+              <td class="var-negative">−2.1pp</td>
+              <td class="var-negative">−2.0pp</td>
+              <td class="var-negative">−1.8pp</td>
+              <td><span class="status-pill pill-red">Below Target</span></td>
+            </tr>
+            <tr>
+              <td>Operating Expenses</td>
+              <td>€2.08M</td>
+              <td class="var-negative">+7.2%</td>
+              <td class="var-negative">+9.5%</td>
+              <td class="var-negative">+11.2%</td>
+              <td><span class="status-pill pill-amber">Above Plan</span></td>
+            </tr>
+            <tr class="row-bold">
+              <td>Net Profit (EBITDA)</td>
+              <td>€420k</td>
+              <td class="var-negative">−9.7%</td>
+              <td class="var-negative">−1.2%</td>
+              <td class="var-positive">+5.0%</td>
+              <td><span class="status-pill pill-green">On Track</span></td>
+            </tr>
+            <tr>
+              <td>Cash Balance</td>
+              <td>€1.80M</td>
+              <td class="var-positive">+12.5%</td>
+              <td class="var-positive">+9.1%</td>
+              <td class="var-positive">+9.1%</td>
+              <td><span class="status-pill pill-green">Ahead of Plan</span></td>
+            </tr>
+            <tr>
+              <td>Runway</td>
+              <td>13 months</td>
+              <td class="var-positive">+1 mo</td>
+              <td class="var-positive">+1.5 mo</td>
+              <td class="var-positive">+1.5 mo</td>
+              <td><span class="status-pill pill-green">Above Target</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="ai-insight">
+          <div class="ai-insight-icon">✦</div>
+          <p>Revenue is tracking ahead of last year, but <strong>cost growth is reducing profit conversion</strong>. Immediate focus should be on OpEx control to protect margins. Cash position remains strong at 13 months runway.</p>
+        </div>
+      </div>
+
+      <!-- REVENUE BRIDGE -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Revenue Bridge</div>
+            <div style="font-size:0.75rem; color:var(--text-tertiary); margin-top:2px;">YoY movement analysis</div>
+          </div>
+        </div>
+        <div class="bridge-container">
+          <div class="bridge-bar-wrap">
+            <div class="bridge-value">€4.64m</div>
+            <div class="bridge-bar total" style="height:160px;"></div>
+            <div class="bridge-label">LY Revenue</div>
+          </div>
+          <div class="bridge-bar-wrap">
+            <div class="bridge-value" style="color:var(--red-500);">−€1.15m</div>
+            <div class="bridge-bar negative" style="height:60px;"></div>
+            <div class="bridge-label">Price</div>
+          </div>
+          <div class="bridge-bar-wrap">
+            <div class="bridge-value" style="color:var(--green-500);">+€2.51m</div>
+            <div class="bridge-bar positive" style="height:100px;"></div>
+            <div class="bridge-label">Volume</div>
+          </div>
+          <div class="bridge-bar-wrap">
+            <div class="bridge-value" style="color:var(--green-500);">+€1.00m</div>
+            <div class="bridge-bar positive" style="height:50px;"></div>
+            <div class="bridge-label">New Products</div>
+          </div>
+          <div class="bridge-bar-wrap">
+            <div class="bridge-value" style="color:var(--red-500);">−€2.00m</div>
+            <div class="bridge-bar negative" style="height:80px;"></div>
+            <div class="bridge-label">Discontinued</div>
+          </div>
+          <div class="bridge-bar-wrap">
+            <div class="bridge-value" style="color:var(--green-500);">+€0.20m</div>
+            <div class="bridge-bar neutral" style="height:20px;"></div>
+            <div class="bridge-label">Mix</div>
+          </div>
+          <div class="bridge-bar-wrap">
+            <div class="bridge-value">€5.20m</div>
+            <div class="bridge-bar total" style="height:170px;"></div>
+            <div class="bridge-label">TY Revenue</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RISK HEATMAP + CUSTOMERS -->
+    <div class="section-header animate-in delay-3">
+      <div>
+        <div class="section-title">Risk & Customer Intelligence</div>
+        <div class="section-subtitle">Residual risk heatmap and top customer analysis</div>
+      </div>
+    </div>
+
+    <div class="grid-1-1 animate-in delay-3">
+      <!-- RISK HEATMAP -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Current Residual Risk</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">5×5 likelihood–impact matrix · appetite threshold: 9</div>
+          </div>
+          <span class="card-label label-amber">3 above appetite</span>
+        </div>
+        <div class="heatmap-grid">
+          <!-- Y labels -->
+          <div class="heatmap-label heatmap-label-y" style="grid-row:1/6;">L I K E L I H O O D</div>
+          <!-- Row 5 (Likelihood 5) -->
+          <div class="heatmap-cell heat-yellow">5</div>
+          <div class="heatmap-cell heat-amber">10</div>
+          <div class="heatmap-cell heat-red has-risk"><div class="risk-dot">R02</div></div>
+          <div class="heatmap-cell heat-darkred">20</div>
+          <div class="heatmap-cell heat-darkred">25</div>
+          <!-- Row 4 -->
+          <div class="heatmap-cell heat-lime">4</div>
+          <div class="heatmap-cell heat-yellow">8</div>
+          <div class="heatmap-cell heat-amber has-risk"><div class="risk-dot">R04</div></div>
+          <div class="heatmap-cell heat-red has-risk"><div class="risk-dot">R01</div></div>
+          <div class="heatmap-cell heat-darkred">20</div>
+          <!-- Row 3 -->
+          <div class="heatmap-cell heat-green">3</div>
+          <div class="heatmap-cell heat-lime">6</div>
+          <div class="heatmap-cell heat-yellow has-risk"><div class="risk-dot">R05</div></div>
+          <div class="heatmap-cell heat-amber">12</div>
+          <div class="heatmap-cell heat-red">15</div>
+          <!-- Row 2 -->
+          <div class="heatmap-cell heat-green">2</div>
+          <div class="heatmap-cell heat-green">4</div>
+          <div class="heatmap-cell heat-lime">6</div>
+          <div class="heatmap-cell heat-yellow">8</div>
+          <div class="heatmap-cell heat-amber has-risk"><div class="risk-dot">R03</div></div>
+          <!-- Row 1 -->
+          <div class="heatmap-cell heat-green">1</div>
+          <div class="heatmap-cell heat-green">2</div>
+          <div class="heatmap-cell heat-green">3</div>
+          <div class="heatmap-cell heat-lime">4</div>
+          <div class="heatmap-cell heat-yellow">5</div>
+          <!-- X labels -->
+          <div></div>
+          <div class="heatmap-label">1</div>
+          <div class="heatmap-label">2</div>
+          <div class="heatmap-label">3</div>
+          <div class="heatmap-label">4</div>
+          <div class="heatmap-label">5</div>
+        </div>
+        <div style="text-align:center; margin-top:6px; font-size:0.7rem; color:var(--text-tertiary); letter-spacing:0.12em; text-transform:uppercase; font-weight:600;">Impact</div>
+        <div class="ai-insight" style="margin-top:14px;">
+          <div class="ai-insight-icon">✦</div>
+          <p><strong>R01 (Cyber: Data breach)</strong> and <strong>R02 (Financial: Cash flow disruption)</strong> remain above appetite. Both require approval for residual risk acceptance or control improvement.</p>
+        </div>
+      </div>
+
+      <!-- CUSTOMERS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Top Customers by Revenue</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">Margin quality and concentration risk</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-tertiary); margin-bottom:6px;">
+            <span>Revenue concentration</span>
+            <span>Top 10 = <strong style="color:var(--text-primary);">68%</strong> of revenue</span>
+          </div>
+          <div class="concentration-bar">
+            <div class="conc-seg" style="width:27.5%; background:var(--teal-800);"></div>
+            <div class="conc-seg" style="width:14.4%; background:var(--teal-600);"></div>
+            <div class="conc-seg" style="width:26.1%; background:var(--teal-400);"></div>
+            <div class="conc-seg" style="width:32%; background:var(--surface-3);"></div>
+          </div>
+          <div style="display:flex; gap:16px; font-size:0.68rem; color:var(--text-tertiary);">
+            <span>◼ Top 3: 27.5%</span>
+            <span>◼ Top 5: 41.9%</span>
+            <span>◼ Top 10: 68%</span>
+            <span>◻ Other: 32%</span>
+          </div>
+        </div>
+
+        <div class="customer-row customer-row-header">
+          <div>Customer</div>
+          <div>Revenue</div>
+          <div>Margin</div>
+          <div>YoY</div>
+          <div></div>
+          <div>Status</div>
+        </div>
+        <div class="customer-row">
+          <div class="customer-name"><div class="customer-dot" style="background:var(--green-500);"></div>Acme Retail Ltd</div>
+          <div>€540k</div>
+          <div>52%</div>
+          <div class="trend-arrow delta-up">▴ +15%</div>
+          <div></div>
+          <div><span class="status-pill pill-green">Strong</span></div>
+        </div>
+        <div class="customer-row">
+          <div class="customer-name"><div class="customer-dot" style="background:var(--green-500);"></div>Brightline Media</div>
+          <div>€480k</div>
+          <div>61%</div>
+          <div class="trend-arrow delta-up">▴ +22%</div>
+          <div></div>
+          <div><span class="status-pill pill-green">Strong</span></div>
+        </div>
+        <div class="customer-row">
+          <div class="customer-name"><div class="customer-dot" style="background:var(--amber-500);"></div>Northshore Logistics</div>
+          <div>€410k</div>
+          <div>48%</div>
+          <div class="trend-arrow delta-up">▴ +8%</div>
+          <div></div>
+          <div><span class="status-pill pill-amber">Monitor</span></div>
+        </div>
+        <div class="customer-row">
+          <div class="customer-name"><div class="customer-dot" style="background:var(--amber-500);"></div>Orbit Manufacturing</div>
+          <div>€390k</div>
+          <div>57%</div>
+          <div class="trend-arrow delta-down">▾ −3%</div>
+          <div></div>
+          <div><span class="status-pill pill-amber">Monitor</span></div>
+        </div>
+        <div class="customer-row">
+          <div class="customer-name"><div class="customer-dot" style="background:var(--red-500);"></div>Futura Health</div>
+          <div>€360k</div>
+          <div>43%</div>
+          <div class="trend-arrow delta-down">▾ −5%</div>
+          <div></div>
+          <div><span class="status-pill pill-red">Risk</span></div>
+        </div>
+        <div class="customer-row">
+          <div class="customer-name"><div class="customer-dot" style="background:var(--green-500);"></div>DeltaSoft Solutions</div>
+          <div>€330k</div>
+          <div>65%</div>
+          <div class="trend-arrow delta-up">▴ +4%</div>
+          <div></div>
+          <div><span class="status-pill pill-green">Strong</span></div>
+        </div>
+
+        <div class="ai-insight">
+          <div class="ai-insight-icon">✦</div>
+          <p>Revenue remains concentrated in the top 10 (68%). <strong>Defend high-margin top accounts</strong>, and intervene early on declining customers like Futura Health (−5% YoY, 43% margin).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEADING INDICATORS + MACRO -->
+    <div class="section-header animate-in delay-4">
+      <div>
+        <div class="section-title">Leading Indicators & Macro Outlook</div>
+        <div class="section-subtitle">Early-warning signals predicting performance over the next 90 days</div>
+      </div>
+    </div>
+
+    <div class="grid-2-1 animate-in delay-4">
+      <!-- LEADING INDICATORS -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Leading Indicators</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">Sales · Operations · Finance</div>
+          </div>
+          <div style="display:flex; gap:8px; font-size:0.68rem;">
+            <span style="color:var(--green-500);">● Healthy</span>
+            <span style="color:var(--amber-500);">● Watch</span>
+            <span style="color:var(--red-500);">● Act Now</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+          <div class="indicator-card ind-red">
+            <div class="indicator-title">Referral Asks (30d)</div>
+            <div class="indicator-value" style="color:var(--red-500);">312</div>
+            <div class="indicator-note">Below target of 500. Risk of pipeline softness in 4–6 months.</div>
+            <div class="indicator-owner">Owner: CRO / Sales Lead</div>
+          </div>
+
+          <div class="indicator-card ind-green">
+            <div class="indicator-title">Qualified Meetings</div>
+            <div class="indicator-value" style="color:var(--green-500);">487</div>
+            <div class="indicator-note">Meeting volume is healthy. Protect quality and follow-through.</div>
+            <div class="indicator-owner">Owner: Sales Manager</div>
+          </div>
+
+          <div class="indicator-card ind-amber">
+            <div class="indicator-title">Capacity Cover (6wk)</div>
+            <div class="indicator-value" style="color:var(--amber-500);">78%</div>
+            <div class="indicator-note">Delivery capacity is tight. Expect slip risk unless resourced.</div>
+            <div class="indicator-owner">Owner: COO / Ops Lead</div>
+          </div>
+
+          <div class="indicator-card ind-green">
+            <div class="indicator-title">Cash Runway</div>
+            <div class="indicator-value" style="color:var(--green-500);">13 mo</div>
+            <div class="indicator-note">Strong. Maintain headroom while scaling activity.</div>
+            <div class="indicator-owner">Owner: CFO / Finance</div>
+          </div>
+
+          <div class="indicator-card ind-red">
+            <div class="indicator-title">Receivables Days (DSO)</div>
+            <div class="indicator-value" style="color:var(--red-500);">52 days</div>
+            <div class="indicator-note">+7 vs last month. Tighten invoice discipline and follow-up.</div>
+            <div class="indicator-owner">Owner: Finance Ops</div>
+          </div>
+
+          <div class="indicator-card ind-green">
+            <div class="indicator-title">Repeat Revenue Share</div>
+            <div class="indicator-value" style="color:var(--green-500);">74%</div>
+            <div class="indicator-note">+5pp YoY. Signals strong product-market fit.</div>
+            <div class="indicator-owner">Owner: Head of Product</div>
+          </div>
+        </div>
+
+        <div style="margin-top:18px; padding:14px 18px; background:var(--surface-1); border-radius:var(--radius-md); border:1px solid var(--border-light);">
+          <div style="font-size:0.72rem; font-weight:600; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px;">Board Actions (amber/red only)</div>
+          <div style="font-size:0.82rem; color:var(--text-secondary); line-height:1.7;">
+            <strong>CRO:</strong> Run a 10-day referral ask sprint to restore activity to target.<br>
+            <strong>COO:</strong> Rebalance capacity for the next 6 weeks (critical path only).<br>
+            <strong>CFO:</strong> Accelerate collections on top 20 debtors; enforce payment terms.
+          </div>
+        </div>
+      </div>
+
+      <!-- MACRO RADAR -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Macro Radar</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">PESTLE external scanning</div>
+          </div>
+        </div>
+        <div class="macro-card">
+          <div class="macro-item">
+            <div class="macro-icon bg-risk">🏛</div>
+            <div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="macro-label">Economic</span>
+                <span class="status-pill pill-red" style="font-size:0.62rem;">Risk</span>
+              </div>
+              <div class="macro-desc">Customers tightening budgets and scrutinising ROI. Double-down on value messaging and retention.</div>
+            </div>
+          </div>
+          <div class="macro-item">
+            <div class="macro-icon bg-opportunity">⚡</div>
+            <div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="macro-label">Technology</span>
+                <span class="status-pill pill-green" style="font-size:0.62rem;">Opportunity</span>
+              </div>
+              <div class="macro-desc">61% of peers now embed AI. Continue differentiating on AI-native insights and explainability.</div>
+            </div>
+          </div>
+          <div class="macro-item">
+            <div class="macro-icon bg-watch">⚖</div>
+            <div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="macro-label">Regulatory</span>
+                <span class="status-pill pill-amber" style="font-size:0.62rem;">Watch</span>
+              </div>
+              <div class="macro-desc">New data/privacy law in 6–12 months. Confirm roadmap and hosting options remain compliant.</div>
+            </div>
+          </div>
+          <div class="macro-item">
+            <div class="macro-icon bg-watch">📊</div>
+            <div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="macro-label">Pricing Pressure</span>
+                <span class="status-pill pill-amber" style="font-size:0.62rem;">Watch</span>
+              </div>
+              <div class="macro-desc">47% of CFOs report discounting or delayed deals. Margin and cash risk if unchecked.</div>
+            </div>
+          </div>
+          <div class="macro-item">
+            <div class="macro-icon bg-opportunity">☁</div>
+            <div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span class="macro-label">Cloud Infrastructure</span>
+                <span class="status-pill pill-green" style="font-size:0.62rem;">Opportunity</span>
+              </div>
+              <div class="macro-desc">+34% movement in cloud costs. Chance to optimise architecture and margin.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASH FLOW + WORKING CAPITAL -->
+    <div class="section-header animate-in delay-5">
+      <div>
+        <div class="section-title">Cash Flow & Working Capital</div>
+        <div class="section-subtitle">Monthly cash position and working capital health</div>
+      </div>
+    </div>
+
+    <div class="grid-4 animate-in delay-5">
+      <div class="card" style="text-align:center;">
+        <div class="card-title" style="margin-bottom:14px;">Cash on Hand</div>
+        <div class="kpi-value" style="color:var(--green-500);">€1.8m</div>
+        <div style="font-size:0.75rem; color:var(--text-tertiary); margin-top:4px;">Across operating & savings</div>
+        <div style="margin-top:8px;"><span class="status-pill pill-green">+€150k vs LM</span></div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title" style="margin-bottom:14px;">Net Cash This Month</div>
+        <div class="kpi-value" style="color:var(--green-500);">+€145k</div>
+        <div style="font-size:0.75rem; color:var(--text-tertiary); margin-top:4px;">Operating cash after tax & capex</div>
+        <div style="margin-top:8px;"><span class="status-pill pill-green">Stronger vs 3M avg</span></div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title" style="margin-bottom:14px;">Current Ratio</div>
+        <div class="kpi-value">1.7 : 1</div>
+        <div style="font-size:0.75rem; color:var(--text-tertiary); margin-top:4px;">Short-term assets cover liabilities</div>
+        <div style="margin-top:8px;"><span class="status-pill pill-green">In target (&ge; 1.5×)</span></div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="card-title" style="margin-bottom:14px;">Debtor Days</div>
+        <div class="kpi-value" style="color:var(--red-500);">52 days</div>
+        <div style="font-size:0.75rem; color:var(--text-tertiary); margin-top:4px;">+7 vs last month</div>
+        <div style="margin-top:8px;"><span class="status-pill pill-red">Focus collections</span></div>
+      </div>
+    </div>
+
+    <!-- INSIGHTS & COMMENTARY -->
+    <div class="card animate-in delay-6" style="background:linear-gradient(135deg, var(--teal-950) 0%, var(--teal-800) 100%); border:none; padding:36px 40px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+        <div class="ai-icon" style="width:42px; height:42px; font-size:18px;">✦</div>
+        <div>
+          <div style="font-family:var(--font-display); font-size:1.2rem; color:var(--surface-0); font-weight:500;">Insights & Commentary</div>
+          <div style="font-size:0.78rem; color:#ffffff;">AI-generated analysis from your snapshot data</div>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;">
+        <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-md); padding:20px;">
+          <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold-400); font-weight:600; margin-bottom:10px;">Highlights</div>
+          <div style="font-size:0.82rem; color:var(--teal-200); line-height:1.65;">
+            Short, punchy call-outs under key charts and KPI tiles that spell out the main movement instead of leaving users to interpret the data.
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-md); padding:20px;">
+          <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold-400); font-weight:600; margin-bottom:10px;">How It Works</div>
+          <div style="font-size:0.82rem; color:var(--teal-200); line-height:1.65;">
+            Insights fire on large variances (&gt;&pm;5% MoM or &gt;&pm;10% YoY), status changes, unusual patterns, and key events. Generated only from snapshot data — no free-form guessing.
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-md); padding:20px;">
+          <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold-400); font-weight:600; margin-bottom:10px;">How To Use It</div>
+          <div style="font-size:0.82rem; color:var(--teal-200); line-height:1.65;">
+            Use AI notes as the spine of monthly reviews: start with red or unexpected call-outs, then drill into charts only where needed. Each insight maps to an owner and next step.
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:center; gap:24px; margin-top:24px;">
+        <div style="height:3px; width:80px; border-radius:2px; background:var(--gold-500);"></div>
+        <div style="height:3px; width:80px; border-radius:2px; background:var(--red-500);"></div>
+        <div style="height:3px; width:80px; border-radius:2px; background:var(--green-500);"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    Generated by Stratavor · Figures sourced directly from Xero · Acme SaaS Ltd · May 2025 · Prepared for Board Review — Confidential
+  </div>
+</div>
+
+<!-- ASK STRATAVOR FAB -->
+<button type="button" class="copilot-fab disabled" title="Ask Stratavor">✦</button>
+
+<script src="assets/nav.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>

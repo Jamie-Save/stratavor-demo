@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratavor — Reporting Snapshots</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/nav.css">
+<style>
+:root {
+  --teal-950: #395460; --teal-900: #2e4550; --teal-800: #163d52; --teal-700: #1e526d;
+  --teal-600: #2a6f8f; --teal-500: #3a8fb2; --teal-400: #5aafd0; --teal-300: #8ccde5;
+  --teal-200: #b8e1f0; --teal-100: #e0f3f9; --teal-50: #f0f9fc;
+  --gold-500: #d4a853; --gold-400: #e4c17a; --gold-300: #f0d9a0;
+  --green-500: #38a169; --green-400: #48bb78;
+  --green-bg: rgba(56,161,105,0.08); --green-border: rgba(56,161,105,0.2);
+  --amber-500: #d97706; --amber-400: #f59e0b;
+  --amber-bg: rgba(217,119,6,0.08); --amber-border: rgba(217,119,6,0.2);
+  --red-500: #e53e3e; --red-400: #fc8181;
+  --red-bg: rgba(229,62,62,0.06); --red-border: rgba(229,62,62,0.18);
+  --surface-0: #ffffff; --surface-1: #f8fafb; --surface-2: #f0f4f6; --surface-3: #e4ebef;
+  --text-primary: #0f2d3d; --text-secondary: #4a6274; --text-tertiary: #7a9aae; --text-inverse: #ffffff;
+  --border-light: rgba(0,0,0,0.06); --border-medium: rgba(0,0,0,0.1);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04); --shadow-md: 0 4px 12px rgba(0,0,0,0.06); --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px; --radius-xl: 20px;
+  --font-display: 'Fraunces', serif; --font-body: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--surface-1); color: var(--text-primary); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* ═══ MAIN ═══ */
+.main { margin-left: 260px; min-height: 100vh; }
+.topbar { position: sticky; top: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); padding: 0 36px; height: 64px; display: flex; align-items: center; justify-content: space-between; z-index: 50; }
+.topbar-left { display: flex; align-items: center; gap: 20px; }
+.breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-tertiary); }
+.breadcrumb-current { color: var(--text-primary); font-weight: 500; }
+.breadcrumb-sep { opacity: 0.4; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-btn { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--border-medium); background: var(--surface-0); border-radius: var(--radius-sm); font-size: 0.82rem; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; font-family: var(--font-body); font-weight: 500; }
+.topbar-btn:hover { border-color: var(--teal-400); color: var(--teal-700); }
+.topbar-btn-primary { background: var(--teal-800); color: var(--surface-0); border-color: var(--teal-800); }
+.topbar-btn-primary:hover { background: var(--teal-700); border-color: var(--teal-700); color: var(--surface-0); }
+.content { padding: 32px 36px 80px; max-width: 1440px; }
+
+/* ═══ HERO ═══ */
+.hero { background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-xl); padding: 36px 40px 32px; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: var(--shadow-sm); animation: fadeSlideUp 0.6s ease-out; }
+.hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; position: relative; z-index: 1; }
+.hero-title { font-family: var(--font-display); font-size: 1.9rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.03em; line-height: 1.2; }
+.hero-subtitle { color: var(--text-tertiary); font-size: 0.88rem; margin-top: 6px; font-weight: 400; }
+.hero-summary { position: relative; z-index: 1; background: var(--surface-1); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+.ai-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--gold-500), var(--gold-300)); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; color: var(--teal-950); }
+.hero-summary p { color: var(--text-secondary); font-size: 0.86rem; line-height: 1.65; }
+.hero-summary strong { color: var(--text-primary); font-weight: 600; }
+.hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; position: relative; z-index: 1; margin-top: 20px; }
+.hero-stat { background: var(--surface-1); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 16px 18px; text-align: center; animation: fadeSlideUp 0.5s ease-out both; }
+.hero-stat:nth-child(1) { animation-delay: 0.05s; } .hero-stat:nth-child(2) { animation-delay: 0.1s; } .hero-stat:nth-child(3) { animation-delay: 0.15s; } .hero-stat:nth-child(4) { animation-delay: 0.2s; }
+.hero-stat-value { font-family: var(--font-display); font-size: 1.8rem; font-weight: 500; color: var(--text-primary); letter-spacing: -0.03em; line-height: 1.1; }
+.hero-stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); font-weight: 600; margin-top: 4px; }
+
+/* ═══ TABS ═══ */
+.tabs { display: flex; align-items: center; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid var(--surface-3); animation: fadeSlideUp 0.6s ease-out 0.1s both; }
+.tab { padding: 12px 20px; font-size: 0.86rem; font-weight: 500; color: var(--text-tertiary); cursor: pointer; border: none; background: none; font-family: var(--font-body); position: relative; transition: color 0.15s; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.tab:hover { color: var(--text-primary); }
+.tab.active { color: var(--teal-700); font-weight: 600; }
+.tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--teal-700); border-radius: 1px 1px 0 0; }
+.tab-badge { padding: 2px 7px; border-radius: 10px; font-size: 0.62rem; font-weight: 700; line-height: 1.4; }
+.tab-badge-count { background: var(--surface-2); color: var(--text-tertiary); }
+.tab-badge-green { background: var(--green-bg); color: var(--green-500); }
+.tab-panel { display: none; animation: fadeIn 0.3s ease; }
+.tab-panel.active { display: block; }
+
+/* ═══ REPORT TYPE HEADER ═══ */
+.report-type-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.report-type-info { flex: 1; }
+.report-type-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 500; letter-spacing: -0.02em; }
+.report-type-desc { font-size: 0.82rem; color: var(--text-tertiary); margin-top: 4px; max-width: 600px; }
+.btn-generate { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 600; cursor: pointer; border: none; font-family: var(--font-body); transition: all 0.15s; background: linear-gradient(135deg, var(--gold-500), #c99a3e); color: var(--teal-950); box-shadow: 0 2px 8px rgba(212,168,83,0.2); }
+.btn-generate:hover { box-shadow: 0 4px 16px rgba(212,168,83,0.35); transform: translateY(-1px); }
+.btn-generate svg { width: 16px; height: 16px; }
+
+/* ═══ LATEST REPORT CARD ═══ */
+.latest-report { background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px 28px; margin-bottom: 20px; display: flex; gap: 24px; align-items: center; box-shadow: var(--shadow-sm); border-left: 4px solid var(--green-500); animation: fadeSlideUp 0.5s ease-out; }
+.latest-thumb { width: 120px; height: 80px; border-radius: var(--radius-md); background: linear-gradient(135deg, var(--surface-2), var(--surface-3)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 32px; border: 1px solid var(--border-light); position: relative; overflow: hidden; }
+.latest-thumb::after { content: 'LATEST'; position: absolute; bottom: 0; left: 0; right: 0; background: var(--green-500); color: white; font-size: 0.55rem; font-weight: 800; letter-spacing: 0.1em; text-align: center; padding: 2px 0; }
+.latest-info { flex: 1; }
+.latest-title { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+.latest-meta { font-size: 0.78rem; color: var(--text-tertiary); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.latest-meta-item { display: flex; align-items: center; gap: 4px; }
+.latest-meta-item svg { width: 14px; height: 14px; color: var(--text-tertiary); }
+.latest-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.btn-sm { padding: 8px 16px; border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-medium); background: var(--surface-0); color: var(--text-secondary); font-family: var(--font-body); transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+.btn-sm:hover { border-color: var(--teal-400); color: var(--teal-700); }
+.btn-sm-primary { background: var(--teal-800); color: white; border-color: var(--teal-800); }
+.btn-sm-primary:hover { background: var(--teal-700); border-color: var(--teal-700); }
+.btn-sm svg { width: 14px; height: 14px; }
+
+/* ═══ REPORT LIST ═══ */
+.report-list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding: 0 4px; }
+.report-list-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); }
+.report-list { border: 1px solid var(--border-light); border-radius: var(--radius-lg); background: var(--surface-0); overflow: hidden; margin-bottom: 24px; }
+
+.report-row { display: flex; align-items: center; gap: 18px; padding: 16px 22px; border-bottom: 1px solid var(--border-light); transition: background 0.1s; }
+.report-row:last-child { border-bottom: none; }
+.report-row:hover { background: var(--surface-1); }
+
+.report-thumb { width: 52px; height: 38px; border-radius: 6px; background: linear-gradient(135deg, var(--surface-2), var(--surface-3)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; border: 1px solid var(--border-light); }
+
+.report-info { flex: 1; min-width: 0; }
+.report-name { font-size: 0.88rem; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.report-detail { font-size: 0.72rem; color: var(--text-tertiary); margin-top: 2px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+.report-status { flex-shrink: 0; }
+.pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 100px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; white-space: nowrap; }
+.pill-green { background: var(--green-bg); color: var(--green-500); }
+.pill-amber { background: var(--amber-bg); color: var(--amber-500); }
+.pill-grey { background: var(--surface-2); color: var(--text-tertiary); }
+
+.report-date { flex-shrink: 0; width: 100px; font-size: 0.78rem; color: var(--text-tertiary); font-variant-numeric: tabular-nums; text-align: right; }
+
+.report-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.btn-icon { width: 34px; height: 34px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); background: var(--surface-0); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; color: var(--text-tertiary); }
+.btn-icon:hover { border-color: var(--teal-400); color: var(--teal-700); background: var(--teal-50); }
+.btn-icon svg { width: 16px; height: 16px; }
+
+/* ═══ PAGINATION ═══ */
+.pagination { display: flex; align-items: center; justify-content: space-between; }
+.pagination-info { font-size: 0.78rem; color: var(--text-tertiary); }
+.pagination-btns { display: flex; gap: 4px; }
+.page-btn { width: 34px; height: 34px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); background: var(--surface-0); font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.12s; font-family: var(--font-body); }
+.page-btn:hover { border-color: var(--teal-400); color: var(--teal-700); }
+.page-btn.active { background: var(--teal-800); color: white; border-color: var(--teal-800); }
+.page-btn.disabled { opacity: 0.4; cursor: default; pointer-events: none; }
+
+/* ═══ EMPTY STATE ═══ */
+.empty-state { text-align: center; padding: 60px 40px; }
+.empty-icon { width: 64px; height: 64px; border-radius: 16px; background: var(--surface-2); display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 16px; }
+.empty-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; color: var(--text-primary); margin-bottom: 6px; }
+.empty-desc { font-size: 0.86rem; color: var(--text-tertiary); max-width: 400px; margin: 0 auto 20px; line-height: 1.6; }
+
+/* ═══ COPILOT FAB ═══ */
+.copilot-fab { position: fixed; bottom: 28px; right: 28px; z-index: 200; display: flex; align-items: center; gap: 10px; padding: 14px 22px; background: var(--teal-900); color: var(--surface-0); border-radius: 100px; cursor: pointer; box-shadow: 0 8px 32px rgba(10,30,42,0.3); font-size: 0.86rem; font-weight: 500; font-family: var(--font-body); border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; }
+.copilot-fab:hover { background: var(--teal-800); box-shadow: 0 12px 40px rgba(10,30,42,0.4); transform: translateY(-2px); }
+.copilot-fab-icon { width: 28px; height: 28px; background: linear-gradient(135deg, var(--gold-500), var(--gold-300)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--teal-950); }
+
+.page-footer { text-align: center; padding: 40px 36px 30px; font-size: 0.72rem; color: var(--text-tertiary); border-top: 1px solid var(--border-light); }
+
+@media (max-width: 1200px) {
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  .latest-report { flex-direction: column; align-items: flex-start; }
+  .latest-actions { width: 100%; }
+}
+@media (max-width: 768px) {
+  .main { margin-left: 0; }
+  .hero-stats { grid-template-columns: 1fr; }
+  .tabs { overflow-x: auto; }
+  .topbar { padding: 0 16px; }
+  .content { padding: 20px 16px 60px; }
+  .report-row { flex-wrap: wrap; }
+}
+</style>
+<link rel="stylesheet" href="assets/demo.css">
+<link rel="stylesheet" href="assets/disabled.css">
+</head>
+<body>
+
+<aside id="app-sidebar" class="sidebar"></aside>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="breadcrumb">
+        <span>🏠</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">Reporting Snapshots</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9m-4.27 13a2 2 0 01-3.46 0"/></svg>
+      </button>
+      <button class="topbar-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3m.08 4h.01"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="hero-title">Reporting Snapshots</div>
+          <div class="hero-subtitle">Board-ready reports generated from your connected data · View, download, or generate new reports</div>
+        </div>
+      </div>
+      <div class="hero-summary">
+        <div class="ai-icon">✦</div>
+        <p>
+          <strong>23 reports generated to date.</strong> Your most recent Financial Snapshot was generated 6 March 2026 covering January–February data. 3 reports are pending review. Your board pack cadence is monthly — next scheduled generation is 1 April 2026.
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">23</div>
+          <div class="hero-stat-label">Total Reports</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">5</div>
+          <div class="hero-stat-label">Report Types</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value" style="color:var(--green-500);">20</div>
+          <div class="hero-stat-label">Ready</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value" style="color:var(--amber-500);">3</div>
+          <div class="hero-stat-label">Pending Review</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('financial')">📊 Financial Snapshot <span class="tab-badge tab-badge-count">10</span></button>
+      <button class="tab" onclick="switchTab('management')">📋 Management Snapshot <span class="tab-badge tab-badge-count">6</span></button>
+      <button class="tab" onclick="switchTab('advanced-fin')">🔬 Advanced Financials <span class="tab-badge tab-badge-count">4</span></button>
+      <button class="tab" onclick="switchTab('advanced-mgmt')">🧠 Advanced Management <span class="tab-badge tab-badge-count">2</span></button>
+      <button class="tab" onclick="switchTab('strategy')">🎯 Strategy Review <span class="tab-badge tab-badge-count">1</span></button>
+    </div>
+
+    <!-- ═══ TAB: FINANCIAL SNAPSHOT ═══ -->
+    <div id="tab-financial" class="tab-panel active">
+      <div class="report-type-header">
+        <div class="report-type-info">
+          <div class="report-type-title">Financial Snapshot</div>
+          <div class="report-type-desc">Board-ready financial health overview — revenue, margin, cash, and working capital with AI-generated commentary and variance analysis.</div>
+        </div>
+        <button class="btn-generate" onclick="alert('Generating Financial Snapshot...')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg>
+          Generate Financial Snapshot
+        </button>
+      </div>
+
+      <!-- Latest Report -->
+      <div class="latest-report">
+        <div class="latest-thumb">📊</div>
+        <div class="latest-info">
+          <div class="latest-title">Financial Snapshot — January to February 2026</div>
+          <div class="latest-meta">
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generated 6 Mar 2026</span>
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zm20 0h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> 3 periods</span>
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 5-3 8-8 8s-8-3-8-8V7l8-4z"/></svg> Xero</span>
+            <span class="pill pill-green">Ready</span>
+          </div>
+        </div>
+        <div class="latest-actions">
+          <button class="btn-sm">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            View
+          </button>
+          <button class="btn-sm-primary btn-sm">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Download
+          </button>
+        </div>
+      </div>
+
+      <!-- Report History -->
+      <div class="report-list-header">
+        <div class="report-list-title">Report History (10 reports)</div>
+      </div>
+
+      <div class="report-list">
+        <div class="report-row">
+          <div class="report-thumb">📊</div>
+          <div class="report-info">
+            <div class="report-name">Financial Snapshot — January to February 2026</div>
+            <div class="report-detail"><span>3 periods</span><span>Xero</span><span>Financial Health</span></div>
+          </div>
+          <span class="pill pill-green">Ready</span>
+          <div class="report-date">6 Mar 2026</div>
+          <div class="report-actions">
+            <button class="btn-icon" title="View presentation"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="btn-icon" title="Download PDF"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+          </div>
+        </div>
+
+        <div class="report-row">
+          <div class="report-thumb">📊</div>
+          <div class="report-info">
+            <div class="report-name">Financial Snapshot — December 2025 to January 2026</div>
+            <div class="report-detail"><span>3 periods</span><span>Xero</span><span>Financial Health</span></div>
+          </div>
+          <span class="pill pill-green">Ready</span>
+          <div class="report-date">6 Feb 2026</div>
+          <div class="report-actions">
+            <button class="btn-icon" title="View presentation"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="btn-icon" title="Download PDF"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+          </div>
+        </div>
+
+        <div class="report-row">
+          <div class="report-thumb">📊</div>
+          <div class="report-info">
+            <div class="report-name">Financial Snapshot — November to December 2025</div>
+            <div class="report-detail"><span>3 periods</span><span>Xero</span><span>Financial Health</span></div>
+          </div>
+          <span class="pill pill-green">Ready</span>
+          <div class="report-date">5 Feb 2026</div>
+          <div class="report-actions">
+            <button class="btn-icon" title="View presentation"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="btn-icon" title="Download PDF"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+          </div>
+        </div>
+
+        <div class="report-row">
+          <div class="report-thumb">📊</div>
+          <div class="report-info">
+            <div class="report-name">Financial Snapshot — October to November 2025</div>
+            <div class="report-detail"><span>3 periods</span><span>Xero</span><span>Financial Health</span></div>
+          </div>
+          <span class="pill pill-green">Ready</span>
+          <div class="report-date">4 Feb 2026</div>
+          <div class="report-actions">
+            <button class="btn-icon" title="View presentation"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="btn-icon" title="Download PDF"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+          </div>
+        </div>
+
+        <div class="report-row">
+          <div class="report-thumb">📊</div>
+          <div class="report-info">
+            <div class="report-name">Financial Snapshot — September to October 2025</div>
+            <div class="report-detail"><span>3 periods</span><span>Xero</span><span>Financial Health</span></div>
+          </div>
+          <span class="pill pill-green">Ready</span>
+          <div class="report-date">4 Feb 2026</div>
+          <div class="report-actions">
+            <button class="btn-icon" title="View presentation"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="btn-icon" title="Download PDF"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+          </div>
+        </div>
+
+        <div class="report-row">
+          <div class="report-thumb">📊</div>
+          <div class="report-info">
+            <div class="report-name">Financial Snapshot — Q3 2025 Quarterly Review</div>
+            <div class="report-detail"><span>3 periods</span><span>Xero</span><span>Financial Health</span></div>
+          </div>
+          <span class="pill pill-green">Ready</span>
+          <div class="report-date">4 Feb 2026</div>
+          <div class="report-actions">
+            <button class="btn-icon" title="View presentation"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="btn-icon" title="Download PDF"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pagination">
+        <div class="pagination-info">Showing 1–6 of 10 reports</div>
+        <div class="pagination-btns">
+          <button class="page-btn disabled">←</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">→</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: MANAGEMENT SNAPSHOT ═══ -->
+    <div id="tab-management" class="tab-panel">
+      <div class="report-type-header">
+        <div class="report-type-info">
+          <div class="report-type-title">Management Snapshot</div>
+          <div class="report-type-desc">Executive-level operational performance — KPIs, customer metrics, headcount efficiency, and strategic alignment with AI narrative.</div>
+        </div>
+        <button class="btn-generate">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg>
+          Generate Management Snapshot
+        </button>
+      </div>
+
+      <div class="latest-report">
+        <div class="latest-thumb">📋</div>
+        <div class="latest-info">
+          <div class="latest-title">Management Snapshot — February 2026</div>
+          <div class="latest-meta">
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generated 4 Mar 2026</span>
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 5-3 8-8 8s-8-3-8-8V7l8-4z"/></svg> Xero</span>
+            <span class="pill pill-green">Ready</span>
+          </div>
+        </div>
+        <div class="latest-actions">
+          <button class="btn-sm"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View</button>
+          <button class="btn-sm-primary btn-sm"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Download</button>
+        </div>
+      </div>
+
+      <div class="report-list-header"><div class="report-list-title">Report History (6 reports)</div></div>
+      <div class="report-list">
+        <div class="report-row"><div class="report-thumb">📋</div><div class="report-info"><div class="report-name">Management Snapshot — February 2026</div><div class="report-detail"><span>Xero</span><span>Operational KPIs</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">4 Mar 2026</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+        <div class="report-row"><div class="report-thumb">📋</div><div class="report-info"><div class="report-name">Management Snapshot — January 2026</div><div class="report-detail"><span>Xero</span><span>Operational KPIs</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">3 Feb 2026</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+        <div class="report-row"><div class="report-thumb">📋</div><div class="report-info"><div class="report-name">Management Snapshot — December 2025</div><div class="report-detail"><span>Xero</span><span>Operational KPIs</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">5 Jan 2026</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+        <div class="report-row"><div class="report-thumb">📋</div><div class="report-info"><div class="report-name">Management Snapshot — November 2025</div><div class="report-detail"><span>Xero</span><span>Operational KPIs</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">4 Dec 2025</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+        <div class="report-row"><div class="report-thumb">📋</div><div class="report-info"><div class="report-name">Management Snapshot — October 2025</div><div class="report-detail"><span>Xero</span><span>Operational KPIs</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">5 Nov 2025</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+        <div class="report-row"><div class="report-thumb">📋</div><div class="report-info"><div class="report-name">Management Snapshot — Q3 2025 Board Pack</div><div class="report-detail"><span>Xero</span><span>Operational KPIs</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">4 Oct 2025</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: ADVANCED FINANCIALS ═══ -->
+    <div id="tab-advanced-fin" class="tab-panel">
+      <div class="report-type-header">
+        <div class="report-type-info">
+          <div class="report-type-title">Advanced Financials</div>
+          <div class="report-type-desc">Deep-dive financial analysis — waterfall bridges, cohort revenue, EBITDA build-up, sensitivity modelling, and multi-period trend analysis for investor and board scrutiny.</div>
+        </div>
+        <button class="btn-generate">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg>
+          Generate Advanced Financials
+        </button>
+      </div>
+
+      <div class="latest-report">
+        <div class="latest-thumb">🔬</div>
+        <div class="latest-info">
+          <div class="latest-title">Advanced Financials — Q4 2025 Deep Dive</div>
+          <div class="latest-meta">
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generated 28 Feb 2026</span>
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 5-3 8-8 8s-8-3-8-8V7l8-4z"/></svg> Xero</span>
+            <span class="pill pill-amber">Pending Review</span>
+          </div>
+        </div>
+        <div class="latest-actions">
+          <button class="btn-sm"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View</button>
+          <button class="btn-sm-primary btn-sm"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Download</button>
+        </div>
+      </div>
+
+      <div class="report-list-header"><div class="report-list-title">Report History (4 reports)</div></div>
+      <div class="report-list">
+        <div class="report-row"><div class="report-thumb">🔬</div><div class="report-info"><div class="report-name">Advanced Financials — Q4 2025 Deep Dive</div><div class="report-detail"><span>Quarterly</span><span>Xero</span><span>Revenue Bridge · EBITDA Build-up</span></div></div><span class="pill pill-amber">Pending</span><div class="report-date">28 Feb 2026</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+        <div class="report-row"><div class="report-thumb">🔬</div><div class="report-info"><div class="report-name">Advanced Financials — Q3 2025 Deep Dive</div><div class="report-detail"><span>Quarterly</span><span>Xero</span><span>Revenue Bridge · EBITDA Build-up</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">12 Jan 2026</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+        <div class="report-row"><div class="report-thumb">🔬</div><div class="report-info"><div class="report-name">Advanced Financials — H1 2025 Investor Pack</div><div class="report-detail"><span>Semi-annual</span><span>Xero</span><span>Cohort Revenue · Sensitivity</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">18 Oct 2025</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+        <div class="report-row"><div class="report-thumb">🔬</div><div class="report-info"><div class="report-name">Advanced Financials — Q2 2025 Deep Dive</div><div class="report-detail"><span>Quarterly</span><span>Xero</span><span>Revenue Bridge · EBITDA Build-up</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">22 Jul 2025</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: ADVANCED MANAGEMENT ═══ -->
+    <div id="tab-advanced-mgmt" class="tab-panel">
+      <div class="report-type-header">
+        <div class="report-type-info">
+          <div class="report-type-title">Advanced Management</div>
+          <div class="report-type-desc">Strategic operating intelligence — departmental P&Ls, resource utilisation, hiring impact modelling, and operational efficiency benchmarks with AI recommendations.</div>
+        </div>
+        <button class="btn-generate">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg>
+          Generate Advanced Management
+        </button>
+      </div>
+
+      <div class="latest-report">
+        <div class="latest-thumb">🧠</div>
+        <div class="latest-info">
+          <div class="latest-title">Advanced Management — February 2026 Operating Review</div>
+          <div class="latest-meta">
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generated 1 Mar 2026</span>
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 5-3 8-8 8s-8-3-8-8V7l8-4z"/></svg> Xero</span>
+            <span class="pill pill-amber">Pending Review</span>
+          </div>
+        </div>
+        <div class="latest-actions">
+          <button class="btn-sm"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View</button>
+          <button class="btn-sm-primary btn-sm"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Download</button>
+        </div>
+      </div>
+
+      <div class="report-list-header"><div class="report-list-title">Report History (2 reports)</div></div>
+      <div class="report-list">
+        <div class="report-row"><div class="report-thumb">🧠</div><div class="report-info"><div class="report-name">Advanced Management — February 2026 Operating Review</div><div class="report-detail"><span>Monthly</span><span>Xero</span><span>Dept P&L · Resource Utilisation</span></div></div><span class="pill pill-amber">Pending</span><div class="report-date">1 Mar 2026</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+        <div class="report-row"><div class="report-thumb">🧠</div><div class="report-info"><div class="report-name">Advanced Management — January 2026 Operating Review</div><div class="report-detail"><span>Monthly</span><span>Xero</span><span>Dept P&L · Resource Utilisation</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">4 Feb 2026</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: STRATEGY REVIEW ═══ -->
+    <div id="tab-strategy" class="tab-panel">
+      <div class="report-type-header">
+        <div class="report-type-info">
+          <div class="report-type-title">Strategy Review</div>
+          <div class="report-type-desc">Quarterly strategic assessment — progress against OKRs, competitive positioning, risk register updates, and forward-looking scenario planning with board-ready narrative.</div>
+        </div>
+        <button class="btn-generate">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg>
+          Generate Strategy Review
+        </button>
+      </div>
+
+      <div class="latest-report">
+        <div class="latest-thumb">🎯</div>
+        <div class="latest-info">
+          <div class="latest-title">Strategy Review — Q4 2025 / FY2025 Year-End</div>
+          <div class="latest-meta">
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generated 15 Jan 2026</span>
+            <span class="latest-meta-item"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 5-3 8-8 8s-8-3-8-8V7l8-4z"/></svg> Xero + Strategic Profile</span>
+            <span class="pill pill-green">Ready</span>
+          </div>
+        </div>
+        <div class="latest-actions">
+          <button class="btn-sm"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> View</button>
+          <button class="btn-sm-primary btn-sm"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Download</button>
+        </div>
+      </div>
+
+      <div class="report-list-header"><div class="report-list-title">Report History (1 report)</div></div>
+      <div class="report-list">
+        <div class="report-row"><div class="report-thumb">🎯</div><div class="report-info"><div class="report-name">Strategy Review — Q4 2025 / FY2025 Year-End</div><div class="report-detail"><span>Quarterly</span><span>Xero + Strategic Profile</span><span>OKR Progress · Risk Register · Scenarios</span></div></div><span class="pill pill-green">Ready</span><div class="report-date">15 Jan 2026</div><div class="report-actions"><button class="btn-icon" title="View"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn-icon" title="Download"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div></div>
+      </div>
+
+      <div style="margin-top: 20px; padding: 20px 24px; background: linear-gradient(135deg, rgba(212,168,83,0.04), rgba(90,175,208,0.04)); border: 1px solid rgba(212,168,83,0.15); border-radius: var(--radius-lg); display: flex; align-items: flex-start; gap: 14px;">
+        <div class="ai-icon">✦</div>
+        <div>
+          <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Next Strategy Review due: Q1 2026</div>
+          <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;">Your Q1 2026 review is scheduled for early April. Stratavor will automatically pull updated data from Xero and your Strategic Profile to generate a comprehensive strategic assessment. Make sure your OKRs and risk register are current in your Strategic Profile.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    Generated by Stratavor · Reporting Snapshots · Acme SaaS Ltd · March 2026 — Confidential
+  </div>
+</div>
+
+<!-- ASK STRATAVOR FAB -->
+<div class="copilot-fab disabled" role="button" aria-disabled="true"><div class="copilot-fab-icon">✦</div>Ask Stratavor</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+</script>
+<script src="assets/nav.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>

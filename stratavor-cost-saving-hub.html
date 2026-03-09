@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratavor — Cost Saving Intelligence Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/nav.css">
+<style>
+:root {
+  --teal-950: #0a1e2a; --teal-900: #0f2d3d; --teal-800: #163d52; --teal-700: #1e526d;
+  --teal-600: #2a6f8f; --teal-500: #3a8fb2; --teal-400: #5aafd0; --teal-300: #8ccde5;
+  --teal-200: #b8e1f0; --teal-100: #e0f3f9; --teal-50: #f0f9fc;
+  --gold-500: #d4a853; --gold-400: #e4c17a; --gold-300: #f0d9a0;
+  --green-600: #2f855a; --green-500: #38a169; --green-400: #48bb78;
+  --green-bg: rgba(56,161,105,0.08); --green-border: rgba(56,161,105,0.2);
+  --amber-600: #b45309; --amber-500: #d97706; --amber-400: #f59e0b;
+  --amber-bg: rgba(217,119,6,0.08); --amber-border: rgba(217,119,6,0.2);
+  --red-600: #c53030; --red-500: #e53e3e; --red-400: #fc8181;
+  --red-bg: rgba(229,62,62,0.06); --red-border: rgba(229,62,62,0.18);
+  --surface-0: #ffffff; --surface-1: #f8fafb; --surface-2: #f0f4f6; --surface-3: #e4ebef;
+  --text-primary: #0f2d3d; --text-secondary: #4a6274; --text-tertiary: #7a9aae; --text-inverse: #ffffff;
+  --border-light: rgba(0,0,0,0.06); --border-medium: rgba(0,0,0,0.1);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04); --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px; --radius-xl: 20px;
+  --font-display: 'Fraunces', serif; --font-body: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--surface-1); color: var(--text-primary); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ═══ MAIN ═══ */
+.main { margin-left: 260px; min-height: 100vh; }
+.topbar { position: sticky; top: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); padding: 0 36px; height: 64px; display: flex; align-items: center; justify-content: space-between; z-index: 50; }
+.topbar-left { display: flex; align-items: center; gap: 20px; }
+.breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-tertiary); }
+.breadcrumb-current { color: var(--text-primary); font-weight: 500; }
+.breadcrumb-sep { opacity: 0.4; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-btn { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--border-medium); background: var(--surface-0); border-radius: var(--radius-sm); font-size: 0.82rem; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; font-family: var(--font-body); font-weight: 500; }
+.topbar-btn:hover { border-color: var(--teal-400); color: var(--teal-700); }
+.topbar-btn-primary { background: var(--teal-800); color: var(--surface-0); border-color: var(--teal-800); }
+.topbar-btn-primary:hover { background: var(--teal-700); border-color: var(--teal-700); color: var(--surface-0); }
+.topbar-btn-gold { background: linear-gradient(135deg, var(--gold-500), #c99a3e); color: var(--teal-950); border: none; font-weight: 600; }
+.topbar-btn-gold:hover { background: linear-gradient(135deg, var(--gold-400), var(--gold-500)); box-shadow: 0 4px 16px rgba(212,168,83,0.3); }
+.content { padding: 32px 36px 80px; max-width: 1440px; }
+
+/* ═══ HERO ═══ */
+.hero { background: linear-gradient(135deg, var(--teal-950) 0%, var(--teal-800) 60%, var(--teal-700) 100%); border-radius: var(--radius-xl); padding: 36px 40px 32px; margin-bottom: 24px; position: relative; overflow: hidden; animation: fadeSlideUp 0.6s ease-out; }
+.hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(212,168,83,0.08) 0%, transparent 70%); pointer-events: none; }
+.hero::after { content: ''; position: absolute; bottom: -40%; left: 30%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(90,175,208,0.06) 0%, transparent 70%); pointer-events: none; }
+.hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; position: relative; z-index: 1; }
+.hero-title { font-family: var(--font-display); font-size: 1.9rem; font-weight: 500; color: var(--surface-0); letter-spacing: -0.03em; line-height: 1.2; }
+.hero-subtitle { color: var(--teal-300); font-size: 0.88rem; margin-top: 6px; font-weight: 400; }
+.status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 100px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.status-green { background: rgba(56,161,105,0.15); color: var(--green-400); border: 1px solid rgba(56,161,105,0.25); }
+.status-amber { background: rgba(217,119,6,0.15); color: var(--gold-400); border: 1px solid rgba(217,119,6,0.25); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse-dot 2s infinite; }
+.hero-summary { position: relative; z-index: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+.ai-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--gold-500), var(--gold-300)); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; color: var(--teal-950); }
+.hero-summary p { color: var(--teal-200); font-size: 0.86rem; line-height: 1.65; }
+.hero-summary strong { color: var(--surface-0); font-weight: 600; }
+.hero-kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; position: relative; z-index: 1; margin-top: 20px; }
+.hero-kpi { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); padding: 16px 18px; transition: background 0.15s; animation: fadeSlideUp 0.5s ease-out both; }
+.hero-kpi:nth-child(1) { animation-delay: 0.05s; } .hero-kpi:nth-child(2) { animation-delay: 0.1s; } .hero-kpi:nth-child(3) { animation-delay: 0.15s; } .hero-kpi:nth-child(4) { animation-delay: 0.2s; } .hero-kpi:nth-child(5) { animation-delay: 0.25s; }
+.hero-kpi:hover { background: rgba(255,255,255,0.1); }
+.hero-kpi-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--teal-400); font-weight: 600; margin-bottom: 6px; }
+.hero-kpi-value { font-family: var(--font-display); font-size: 1.7rem; font-weight: 500; color: var(--surface-0); letter-spacing: -0.03em; line-height: 1.1; }
+.hero-kpi-sub { font-size: 0.72rem; color: var(--teal-400); margin-top: 4px; }
+
+/* ═══ TABS ═══ */
+.tabs { display: flex; align-items: center; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid var(--surface-3); animation: fadeSlideUp 0.6s ease-out 0.1s both; }
+.tab { padding: 12px 20px; font-size: 0.86rem; font-weight: 500; color: var(--text-tertiary); cursor: pointer; border: none; background: none; font-family: var(--font-body); position: relative; transition: color 0.15s; display: flex; align-items: center; gap: 8px; }
+.tab:hover { color: var(--text-primary); }
+.tab.active { color: var(--teal-700); font-weight: 600; }
+.tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--teal-700); border-radius: 1px 1px 0 0; }
+.tab-badge { padding: 2px 7px; border-radius: 10px; font-size: 0.62rem; font-weight: 700; line-height: 1.4; }
+.tab-badge-red { background: var(--red-bg); color: var(--red-500); }
+.tab-badge-amber { background: var(--amber-bg); color: var(--amber-500); }
+.tab-badge-green { background: var(--green-bg); color: var(--green-500); }
+.tab-panel { display: none; animation: fadeIn 0.3s ease; }
+.tab-panel.active { display: block; }
+
+/* ═══ COMPONENTS ═══ */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 500; letter-spacing: -0.02em; }
+.section-subtitle { font-size: 0.82rem; color: var(--text-tertiary); margin-top: 2px; }
+.grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px; }
+.grid-1-1 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.grid-3-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; margin-bottom: 24px; }
+.card { background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px; transition: box-shadow 0.2s, transform 0.2s; }
+.card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
+.card-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); font-weight: 600; }
+.card-label { font-size: 0.68rem; padding: 3px 10px; border-radius: 100px; font-weight: 600; letter-spacing: 0.03em; }
+.label-green { background: var(--green-bg); color: var(--green-500); border: 1px solid var(--green-border); }
+.label-amber { background: var(--amber-bg); color: var(--amber-500); border: 1px solid var(--amber-border); }
+.label-red { background: var(--red-bg); color: var(--red-500); border: 1px solid var(--red-border); }
+.pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 100px; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; white-space: nowrap; }
+.pill-green { background: var(--green-bg); color: var(--green-500); }
+.pill-amber { background: var(--amber-bg); color: var(--amber-500); }
+.pill-red { background: var(--red-bg); color: var(--red-500); }
+.pill-grey { background: var(--surface-2); color: var(--text-tertiary); }
+.pill-teal { background: rgba(42,111,143,0.08); color: var(--teal-600); }
+.pill-gold { background: rgba(212,168,83,0.1); color: var(--gold-500); border: 1px solid rgba(212,168,83,0.2); }
+
+/* ═══ BENCHMARK BARS ═══ */
+.bench-row { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border-light); }
+.bench-row:last-child { border-bottom: none; }
+.bench-category { width: 140px; flex-shrink: 0; font-size: 0.82rem; font-weight: 600; color: var(--text-primary); }
+.bench-bar-area { flex: 1; position: relative; height: 32px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
+.bench-range { position: absolute; top: 0; bottom: 0; background: rgba(42,111,143,0.08); border-left: 2px dashed rgba(42,111,143,0.2); border-right: 2px dashed rgba(42,111,143,0.2); }
+.bench-p50-line { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--teal-600); z-index: 2; }
+.bench-entity-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; z-index: 3; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+.bench-value { width: 70px; flex-shrink: 0; text-align: right; font-size: 0.82rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bench-rag { width: 70px; flex-shrink: 0; text-align: center; }
+.bench-confidence { width: 80px; flex-shrink: 0; display: flex; align-items: center; gap: 4px; justify-content: center; }
+.conf-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--surface-3); }
+.conf-dot.filled { background: var(--teal-500); }
+
+/* ═══ OPPORTUNITY / INITIATIVE CARDS ═══ */
+.opp-card { border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 22px 24px; background: var(--surface-0); transition: all 0.2s; margin-bottom: 12px; }
+.opp-card:hover { border-color: var(--teal-400); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.opp-card.signal-high { border-left: 4px solid var(--green-500); }
+.opp-card.signal-medium { border-left: 4px solid var(--amber-500); }
+.opp-card.signal-low { border-left: 4px solid var(--teal-400); }
+.opp-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.opp-title { font-size: 0.92rem; font-weight: 600; color: var(--text-primary); }
+.opp-savings { font-family: var(--font-display); font-size: 1.3rem; font-weight: 500; letter-spacing: -0.02em; }
+.opp-desc { font-size: 0.78rem; color: var(--text-tertiary); line-height: 1.6; margin-bottom: 14px; }
+.opp-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.opp-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-light); }
+
+/* ═══ KANBAN ═══ */
+.kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.kanban-col { background: var(--surface-2); border-radius: var(--radius-lg); padding: 16px; min-height: 300px; }
+.kanban-col-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--surface-3); }
+.kanban-col-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); }
+.kanban-col-count { font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--surface-0); color: var(--text-tertiary); }
+.kanban-card { background: var(--surface-0); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; }
+.kanban-card:hover { box-shadow: var(--shadow-md); border-color: var(--teal-400); transform: translateY(-1px); }
+.kanban-card-title { font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
+.kanban-card-meta { font-size: 0.72rem; color: var(--text-tertiary); line-height: 1.5; }
+.kanban-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-light); }
+.kanban-card-savings { font-family: var(--font-display); font-size: 0.92rem; font-weight: 500; letter-spacing: -0.02em; }
+.avatar-sm { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.58rem; font-weight: 700; color: white; }
+
+/* ═══ SAVINGS CHART ═══ */
+.chart-area { position: relative; height: 220px; margin: 20px 0 10px; border-bottom: 2px solid var(--surface-3); border-left: 2px solid var(--surface-3); }
+.chart-grid-line { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--surface-3); }
+.chart-y-label { position: absolute; left: -48px; font-size: 0.65rem; color: var(--text-tertiary); transform: translateY(-50%); font-variant-numeric: tabular-nums; }
+.chart-bars { position: absolute; bottom: 0; left: 0; right: 0; display: flex; align-items: flex-end; justify-content: space-around; padding: 0 20px; height: 100%; }
+.chart-bar-group { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.chart-bar { width: 32px; border-radius: 4px 4px 0 0; transition: height 1s ease-out; position: relative; }
+.chart-bar-projected { background: linear-gradient(180deg, var(--teal-300), var(--teal-500)); opacity: 0.4; }
+.chart-bar-realised { background: linear-gradient(180deg, var(--green-400), var(--green-500)); }
+.chart-bar-pair { display: flex; align-items: flex-end; gap: 3px; }
+.chart-x-labels { display: flex; justify-content: space-around; padding: 8px 20px 0; }
+.chart-x-label { font-size: 0.65rem; color: var(--text-tertiary); text-align: center; flex: 1; }
+
+/* ═══ DONUT CHART ═══ */
+.donut-container { display: flex; align-items: center; gap: 24px; }
+.donut-svg { width: 160px; height: 160px; transform: rotate(-90deg); }
+.donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.donut-legend { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.donut-legend-item { display: flex; align-items: center; gap: 10px; font-size: 0.78rem; }
+.donut-legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.donut-legend-value { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ═══ TABLE ═══ */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.data-table thead th { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); font-weight: 600; padding: 10px 14px; border-bottom: 2px solid var(--surface-3); }
+.data-table thead th.right { text-align: right; }
+.data-table thead th.center { text-align: center; }
+.data-table tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border-light); color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.data-table tbody td.right { text-align: right; }
+.data-table tbody td.center { text-align: center; }
+.data-table tbody td.bold { font-weight: 600; }
+.data-table tbody tr:hover { background: var(--surface-1); }
+.data-table tbody tr.row-total { background: var(--surface-2); font-weight: 600; }
+
+/* ═══ SNAPSHOT CARDS ═══ */
+.snapshot-card { border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 20px 24px; background: var(--surface-0); transition: all 0.15s; margin-bottom: 12px; display: flex; align-items: center; gap: 20px; }
+.snapshot-card:hover { box-shadow: var(--shadow-md); border-color: var(--teal-400); }
+.snapshot-card.frozen { border-left: 4px solid var(--teal-600); }
+.snapshot-icon { width: 44px; height: 44px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.snapshot-icon-frozen { background: rgba(42,111,143,0.08); color: var(--teal-600); }
+.snapshot-info { flex: 1; }
+.snapshot-title { font-size: 0.92rem; font-weight: 600; }
+.snapshot-meta { font-size: 0.75rem; color: var(--text-tertiary); margin-top: 2px; }
+.snapshot-actions { display: flex; gap: 8px; }
+
+/* ═══ AI INSIGHT ═══ */
+.ai-insight { background: linear-gradient(135deg, rgba(212,168,83,0.04), rgba(90,175,208,0.04)); border: 1px solid rgba(212,168,83,0.15); border-radius: var(--radius-md); padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; }
+.ai-insight p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.65; }
+.ai-insight strong { color: var(--text-primary); font-weight: 600; }
+
+/* ═══ SCENARIO TOGGLE ═══ */
+.scenario-bar { display: flex; gap: 8px; background: var(--surface-2); padding: 4px; border-radius: var(--radius-sm); margin-bottom: 20px; }
+.scenario-opt { padding: 8px 18px; font-size: 0.82rem; border-radius: 4px; cursor: pointer; color: var(--text-secondary); font-weight: 500; transition: all 0.15s; border: none; background: none; font-family: var(--font-body); }
+.scenario-opt.active { background: var(--surface-0); color: var(--text-primary); box-shadow: var(--shadow-sm); font-weight: 600; }
+
+/* ═══ BUTTONS ═══ */
+.btn-sm { padding: 6px 14px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-medium); background: var(--surface-0); color: var(--text-secondary); font-family: var(--font-body); transition: all 0.15s; }
+.btn-sm:hover { border-color: var(--teal-400); color: var(--teal-700); }
+.btn-sm-primary { background: var(--teal-800); color: white; border-color: var(--teal-800); }
+.btn-sm-primary:hover { background: var(--teal-700); border-color: var(--teal-700); }
+.btn-sm-gold { background: linear-gradient(135deg, var(--gold-500), #c99a3e); color: var(--teal-950); border: none; font-weight: 700; }
+.btn-sm-gold:hover { box-shadow: 0 4px 12px rgba(212,168,83,0.3); }
+.btn-sm-danger { background: var(--red-bg); color: var(--red-500); border-color: var(--red-border); }
+
+/* ═══ COPILOT FAB ═══ */
+.copilot-fab { position: fixed; bottom: 28px; right: 28px; z-index: 200; display: flex; align-items: center; gap: 10px; padding: 14px 22px; background: var(--teal-900); color: var(--surface-0); border-radius: 100px; cursor: pointer; box-shadow: 0 8px 32px rgba(10,30,42,0.3); font-size: 0.86rem; font-weight: 500; font-family: var(--font-body); border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; }
+.copilot-fab:hover { background: var(--teal-800); box-shadow: 0 12px 40px rgba(10,30,42,0.4); transform: translateY(-2px); }
+.copilot-fab-icon { width: 28px; height: 28px; background: linear-gradient(135deg, var(--gold-500), var(--gold-300)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--teal-950); }
+
+/* ═══ FOOTER ═══ */
+.page-footer { text-align: center; padding: 40px 36px 30px; font-size: 0.72rem; color: var(--text-tertiary); border-top: 1px solid var(--border-light); }
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-bar { height: 6px; background: var(--surface-3); border-radius: 100px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 100px; animation: barGrow 1s ease-out; transform-origin: left; }
+
+/* ═══ EBITDA IMPACT CARD ═══ */
+.impact-card { background: linear-gradient(135deg, var(--teal-950) 0%, var(--teal-800) 100%); border-radius: var(--radius-lg); padding: 28px; border: none; color: white; }
+.impact-card:hover { transform: translateY(-1px); box-shadow: 0 12px 40px rgba(10,30,42,0.3); }
+.impact-value { font-family: var(--font-display); font-size: 2.4rem; font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; }
+.impact-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--teal-300); font-weight: 600; }
+.impact-sub { font-size: 0.82rem; color: var(--teal-300); margin-top: 8px; }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 1200px) {
+  .hero-kpis { grid-template-columns: repeat(3, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .kanban { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .main { margin-left: 0; }
+  .hero-kpis { grid-template-columns: repeat(2, 1fr); }
+  .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .kanban { grid-template-columns: 1fr; }
+  .grid-2-1, .grid-1-1, .grid-3-2 { grid-template-columns: 1fr; }
+  .topbar { padding: 0 16px; }
+  .content { padding: 20px 16px 60px; }
+}
+</style>
+<link rel="stylesheet" href="assets/demo.css">
+<link rel="stylesheet" href="assets/disabled.css">
+</head>
+<body>
+
+<aside id="app-sidebar" class="sidebar"></aside>
+
+<!-- ═══════════════════════════════════════ MAIN ═══════════════════════════════════════ -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="breadcrumb">
+        <span>Acme SaaS Ltd</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">Cost Saving Intelligence Hub</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button type="button" class="topbar-btn disabled">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Export PDF
+      </button>
+      <button type="button" class="topbar-btn topbar-btn-primary disabled">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
+        Take Snapshot
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ═══ HERO HEADER ═══ -->
+    <div class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="hero-title">Cost Saving Intelligence</div>
+          <div class="hero-subtitle">Acme SaaS Ltd · February 2026 · Connected to Xero</div>
+        </div>
+        <div class="status-badge status-green">
+          <span class="status-dot"></span>
+          €147k addressable
+        </div>
+      </div>
+      <div class="hero-summary">
+        <div class="ai-icon">✦</div>
+        <div>
+          <p><strong>Stratavor has identified €147,200 in addressable annual savings</strong> across 14 active initiatives. Your IT &amp; Software spend is <strong>32% above the industry median</strong> — the biggest opportunity. Three quick wins (unused SaaS, duplicate tools, annual billing switch) could save <strong>€38,400 within 30 days</strong>. Of €67,500 projected savings this year, <strong>€41,200 has been realised</strong> — a 61% capture rate, ahead of the 55% benchmark.</p>
+        </div>
+      </div>
+      <div class="hero-kpis">
+        <div class="hero-kpi">
+          <div class="hero-kpi-label">Total Annual Spend</div>
+          <div class="hero-kpi-value">€2.84m</div>
+          <div class="hero-kpi-sub">+4.2% vs LY</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-label">Addressable Savings</div>
+          <div class="hero-kpi-value" style="color:var(--green-400);">€147.2k</div>
+          <div class="hero-kpi-sub">5.2% of total spend</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-label">Realised YTD</div>
+          <div class="hero-kpi-value" style="color:var(--green-400);">€41.2k</div>
+          <div class="hero-kpi-sub">61% capture rate</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-label">Active Initiatives</div>
+          <div class="hero-kpi-value">14</div>
+          <div class="hero-kpi-sub">3 identified · 5 approved · 4 in progress · 2 implemented</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-label">Benchmark Position</div>
+          <div class="hero-kpi-value" style="color:var(--amber-400);">p68</div>
+          <div class="hero-kpi-sub">4 categories above median</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TABS ═══ -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('overview')">Overview</button>
+      <button class="tab" onclick="switchTab('benchmarks')">Benchmarks <span class="tab-badge tab-badge-red">4</span></button>
+      <button class="tab" onclick="switchTab('opportunities')">Opportunities <span class="tab-badge tab-badge-amber">6</span></button>
+      <button class="tab" onclick="switchTab('initiatives')">Initiatives <span class="tab-badge tab-badge-green">14</span></button>
+      <button class="tab" onclick="switchTab('realised')">Realised Savings</button>
+      <button class="tab" onclick="switchTab('snapshot')">Snapshots</button>
+    </div>
+
+    <!-- ═══════════════════ TAB 1: OVERVIEW ═══════════════════ -->
+    <div id="tab-overview" class="tab-panel active">
+
+      <!-- SPEND BY CATEGORY -->
+      <div class="grid-2-1">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Monthly Spend Trend</div>
+              <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">12-month rolling · all categories</div>
+            </div>
+            <span class="pill pill-amber">+4.2% YoY</span>
+          </div>
+          <div class="chart-area" style="height:180px;">
+            <div class="chart-grid-line" style="bottom:100%;"><span class="chart-y-label">€280k</span></div>
+            <div class="chart-grid-line" style="bottom:75%;"><span class="chart-y-label">€260k</span></div>
+            <div class="chart-grid-line" style="bottom:50%;"><span class="chart-y-label">€240k</span></div>
+            <div class="chart-grid-line" style="bottom:25%;"><span class="chart-y-label">€220k</span></div>
+            <div style="position:absolute; bottom:0; left:0; right:0; height:100%; display:flex; align-items:flex-end; padding:0 8px;">
+              <svg viewBox="0 0 480 180" preserveAspectRatio="none" style="width:100%; height:100%;">
+                <defs>
+                  <linearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--teal-400)" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="var(--teal-400)" stop-opacity="0.02"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,120 L40,110 L80,125 L120,105 L160,115 L200,100 L240,95 L280,108 L320,90 L360,85 L400,78 L440,72 L480,70" fill="none" stroke="var(--teal-500)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M0,120 L40,110 L80,125 L120,105 L160,115 L200,100 L240,95 L280,108 L320,90 L360,85 L400,78 L440,72 L480,70 L480,180 L0,180 Z" fill="url(#spendGrad)"/>
+                <!-- Savings line -->
+                <path d="M0,170 L40,168 L80,166 L120,165 L160,162 L200,158 L240,152 L280,148 L320,140 L360,132 L400,125 L440,120 L480,115" fill="none" stroke="var(--green-500)" stroke-width="2" stroke-dasharray="6,4" opacity="0.7"/>
+              </svg>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-around; padding:8px 8px 0; font-size:0.65rem; color:var(--text-tertiary);">
+            <span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span>
+          </div>
+          <div style="display:flex; gap:20px; margin-top:12px; font-size:0.72rem; color:var(--text-tertiary);">
+            <span><span style="display:inline-block;width:12px;height:3px;background:var(--teal-500);border-radius:2px;margin-right:6px;vertical-align:middle;"></span>Total spend</span>
+            <span><span style="display:inline-block;width:12px;height:3px;background:var(--green-500);border-radius:2px;margin-right:6px;vertical-align:middle;border-top:1px dashed var(--green-500);"></span>Cumulative savings</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Spend by Category</div>
+          </div>
+          <div style="position:relative; display:flex; justify-content:center; margin:8px 0 16px;">
+            <svg viewBox="0 0 200 200" width="160" height="160" style="transform:rotate(-90deg);">
+              <!-- IT & Software 28% -->
+              <circle cx="100" cy="100" r="80" fill="none" stroke="var(--teal-600)" stroke-width="24" stroke-dasharray="140.8 362" stroke-dashoffset="0" opacity="0.9"/>
+              <!-- Marketing 19% -->
+              <circle cx="100" cy="100" r="80" fill="none" stroke="var(--teal-400)" stroke-width="24" stroke-dasharray="95.5 407.3" stroke-dashoffset="-140.8" opacity="0.85"/>
+              <!-- Operations 22% -->
+              <circle cx="100" cy="100" r="80" fill="none" stroke="var(--amber-500)" stroke-width="24" stroke-dasharray="110.6 392.2" stroke-dashoffset="-236.3" opacity="0.85"/>
+              <!-- HR & Admin 14% -->
+              <circle cx="100" cy="100" r="80" fill="none" stroke="var(--green-500)" stroke-width="24" stroke-dasharray="70.4 432.4" stroke-dashoffset="-346.9" opacity="0.85"/>
+              <!-- Finance/Other 17% -->
+              <circle cx="100" cy="100" r="80" fill="none" stroke="var(--gold-500)" stroke-width="24" stroke-dasharray="85.4 417.4" stroke-dashoffset="-417.3" opacity="0.85"/>
+            </svg>
+            <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center;">
+              <div style="font-family:var(--font-display); font-size:1.4rem; font-weight:500; letter-spacing:-0.03em;">€2.84m</div>
+              <div style="font-size:0.68rem; color:var(--text-tertiary);">Annual</div>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--teal-600);"></div>IT &amp; Software<span class="donut-legend-value">€795k</span></div>
+            <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--amber-500);"></div>Operations<span class="donut-legend-value">€625k</span></div>
+            <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--teal-400);"></div>Marketing<span class="donut-legend-value">€540k</span></div>
+            <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--gold-500);"></div>Finance &amp; Insurance<span class="donut-legend-value">€483k</span></div>
+            <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--green-500);"></div>HR &amp; Admin<span class="donut-legend-value">€397k</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOP 5 OPPORTUNITIES -->
+      <div class="section-header"><div><div class="section-title">Top 5 Savings Opportunities</div><div class="section-subtitle">Ranked by priority score (savings × 1/effort × 1/risk)</div></div><button class="btn-sm btn-sm-primary" style="font-size:0.75rem;">View All Opportunities →</button></div>
+      <div class="card" style="padding:0; overflow:hidden; margin-bottom:24px;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="padding-left:24px;">Initiative</th>
+              <th>Category</th>
+              <th class="right">Est. Annual Savings</th>
+              <th class="center">Effort</th>
+              <th class="center">Risk</th>
+              <th class="center">Priority</th>
+              <th class="center">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding-left:24px;" class="bold">Cancel unused SaaS licences</td>
+              <td>IT &amp; Software</td>
+              <td class="right" style="font-weight:600; color:var(--green-500);">€18,400</td>
+              <td class="center"><span class="pill pill-green">Low</span></td>
+              <td class="center"><span class="pill pill-green">Low</span></td>
+              <td class="center"><span style="font-family:var(--font-display); font-weight:600; font-size:1rem;">97</span></td>
+              <td class="center"><span class="pill pill-teal">Identified</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px;" class="bold">Switch to annual billing (8 tools)</td>
+              <td>IT &amp; Software</td>
+              <td class="right" style="font-weight:600; color:var(--green-500);">€12,600</td>
+              <td class="center"><span class="pill pill-green">Low</span></td>
+              <td class="center"><span class="pill pill-green">Low</span></td>
+              <td class="center"><span style="font-family:var(--font-display); font-weight:600; font-size:1rem;">94</span></td>
+              <td class="center"><span class="pill pill-amber">Approved</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px;" class="bold">Consolidate duplicate comms tools</td>
+              <td>IT &amp; Software</td>
+              <td class="right" style="font-weight:600; color:var(--green-500);">€24,750</td>
+              <td class="center"><span class="pill pill-amber">Medium</span></td>
+              <td class="center"><span class="pill pill-green">Low</span></td>
+              <td class="center"><span style="font-family:var(--font-display); font-weight:600; font-size:1rem;">88</span></td>
+              <td class="center"><span class="pill pill-teal">In Progress</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px;" class="bold">Negotiate SaaS renewals (Q2 batch)</td>
+              <td>IT &amp; Software</td>
+              <td class="right" style="font-weight:600; color:var(--green-500);">€31,200</td>
+              <td class="center"><span class="pill pill-amber">Medium</span></td>
+              <td class="center"><span class="pill pill-amber">Medium</span></td>
+              <td class="center"><span style="font-family:var(--font-display); font-weight:600; font-size:1rem;">76</span></td>
+              <td class="center"><span class="pill pill-amber">Approved</span></td>
+            </tr>
+            <tr>
+              <td style="padding-left:24px;" class="bold">Renegotiate energy supplier</td>
+              <td>Operations</td>
+              <td class="right" style="font-weight:600; color:var(--green-500);">€22,800</td>
+              <td class="center"><span class="pill pill-amber">Medium</span></td>
+              <td class="center"><span class="pill pill-green">Low</span></td>
+              <td class="center"><span style="font-family:var(--font-display); font-weight:600; font-size:1rem;">74</span></td>
+              <td class="center"><span class="pill pill-teal">Identified</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- AI RECOMMENDATIONS -->
+      <div class="section-header"><div><div class="section-title">AI Recommendations</div><div class="section-subtitle">Pattern-based suggestions from your transaction data</div></div><span class="pill pill-gold">✦ AI-Generated</span></div>
+      <div class="grid-3" style="margin-bottom:0;">
+        <div class="card" style="border-top:3px solid var(--gold-500);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+            <div class="ai-icon" style="width:28px; height:28px; font-size:13px;">✦</div>
+            <div class="card-title" style="margin:0;">Quick Win Detected</div>
+          </div>
+          <div style="font-weight:600; font-size:0.88rem; margin-bottom:6px;">Eliminate duplicate project management tools</div>
+          <div style="font-size:0.78rem; color:var(--text-tertiary); line-height:1.6; margin-bottom:14px;">We detected active subscriptions to both Asana (€4,200/yr) and Monday.com (€3,600/yr). Usage data suggests 82% of activity is on Asana. Consolidating could save <strong style="color:var(--green-500);">€3,600/yr</strong>.</div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-sm btn-sm-primary">Accept as Initiative</button>
+            <button class="btn-sm">Dismiss</button>
+          </div>
+        </div>
+        <div class="card" style="border-top:3px solid var(--gold-500);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+            <div class="ai-icon" style="width:28px; height:28px; font-size:13px;">✦</div>
+            <div class="card-title" style="margin:0;">Vendor Anomaly</div>
+          </div>
+          <div style="font-weight:600; font-size:0.88rem; margin-bottom:6px;">AWS spend +34% MoM with no headcount change</div>
+          <div style="font-size:0.78rem; color:var(--text-tertiary); line-height:1.6; margin-bottom:14px;">Cloud infrastructure costs jumped from €8,200 to €10,980 in January. No corresponding growth in customers or team size. Possible orphaned resources or missed reserved instance opportunities.</div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-sm btn-sm-primary">Investigate</button>
+            <button class="btn-sm">Dismiss</button>
+          </div>
+        </div>
+        <div class="card" style="border-top:3px solid var(--gold-500);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+            <div class="ai-icon" style="width:28px; height:28px; font-size:13px;">✦</div>
+            <div class="card-title" style="margin:0;">Renewal Opportunity</div>
+          </div>
+          <div style="font-weight:600; font-size:0.88rem; margin-bottom:6px;">HubSpot renewal in 45 days — negotiate now</div>
+          <div style="font-size:0.78rem; color:var(--text-tertiary); line-height:1.6; margin-bottom:14px;">Your HubSpot contract (€28,800/yr) renews on 15 April. Based on Stratavor benchmarks, similar companies pay 15–20% less. Starting negotiation now maximises leverage.</div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-sm btn-sm-gold">Get Negotiation Tips</button>
+            <button class="btn-sm">Dismiss</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ TAB 2: BENCHMARKS ═══════════════════ -->
+    <div id="tab-benchmarks" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Spend vs Market Benchmarks</div>
+          <div class="section-subtitle">Benchmarked against: Irish Technology · €1m–€5m revenue · 20–50 employees</div>
+        </div>
+        <div style="display:flex; gap:14px; font-size:0.72rem; color:var(--text-tertiary); align-items:center;">
+          <span><span style="display:inline-block; width:10px; height:10px; background:rgba(42,111,143,0.12); border:1px dashed rgba(42,111,143,0.3); margin-right:5px; border-radius:2px;"></span>p25–p75 range</span>
+          <span><span style="display:inline-block; width:10px; height:2px; background:var(--teal-600); margin-right:5px; vertical-align:middle;"></span>Median (p50)</span>
+          <span><span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--red-500); border:2px solid white; box-shadow:0 1px 3px rgba(0,0,0,0.2); margin-right:5px; vertical-align:middle;"></span>Your position</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px;">
+        <div style="display:grid; grid-template-columns: 140px 1fr 70px 70px 80px; gap:16px; align-items:center; padding:10px 0; border-bottom:2px solid var(--surface-3); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-tertiary); font-weight:600;">
+          <div>Category</div><div>% of Revenue</div><div style="text-align:right;">Your %</div><div style="text-align:center;">Status</div><div style="text-align:center;">Confidence</div>
+        </div>
+
+        <!-- IT & Software — RED -->
+        <div class="bench-row">
+          <div class="bench-category">IT &amp; Software</div>
+          <div class="bench-bar-area">
+            <div class="bench-range" style="left:25%; width:30%;"></div>
+            <div class="bench-p50-line" style="left:40%;"></div>
+            <div class="bench-entity-dot" style="left:72%; background:var(--red-500);"></div>
+          </div>
+          <div class="bench-value" style="color:var(--red-500);">9.8%</div>
+          <div class="bench-rag"><span class="pill pill-red">Above</span></div>
+          <div class="bench-confidence"><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot"></div></div>
+        </div>
+
+        <!-- Marketing — AMBER -->
+        <div class="bench-row">
+          <div class="bench-category">Marketing</div>
+          <div class="bench-bar-area">
+            <div class="bench-range" style="left:22%; width:32%;"></div>
+            <div class="bench-p50-line" style="left:38%;"></div>
+            <div class="bench-entity-dot" style="left:58%; background:var(--amber-500);"></div>
+          </div>
+          <div class="bench-value" style="color:var(--amber-500);">6.7%</div>
+          <div class="bench-rag"><span class="pill pill-amber">Watch</span></div>
+          <div class="bench-confidence"><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot"></div></div>
+        </div>
+
+        <!-- Operations — RED -->
+        <div class="bench-row">
+          <div class="bench-category">Operations</div>
+          <div class="bench-bar-area">
+            <div class="bench-range" style="left:20%; width:35%;"></div>
+            <div class="bench-p50-line" style="left:36%;"></div>
+            <div class="bench-entity-dot" style="left:65%; background:var(--red-500);"></div>
+          </div>
+          <div class="bench-value" style="color:var(--red-500);">7.7%</div>
+          <div class="bench-rag"><span class="pill pill-red">Above</span></div>
+          <div class="bench-confidence"><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot"></div><div class="conf-dot"></div></div>
+        </div>
+
+        <!-- Finance — AMBER -->
+        <div class="bench-row">
+          <div class="bench-category">Finance &amp; Insurance</div>
+          <div class="bench-bar-area">
+            <div class="bench-range" style="left:18%; width:30%;"></div>
+            <div class="bench-p50-line" style="left:33%;"></div>
+            <div class="bench-entity-dot" style="left:52%; background:var(--amber-500);"></div>
+          </div>
+          <div class="bench-value" style="color:var(--amber-500);">6.0%</div>
+          <div class="bench-rag"><span class="pill pill-amber">Watch</span></div>
+          <div class="bench-confidence"><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot"></div><div class="conf-dot"></div></div>
+        </div>
+
+        <!-- HR & Admin — GREEN -->
+        <div class="bench-row">
+          <div class="bench-category">HR &amp; Admin</div>
+          <div class="bench-bar-area">
+            <div class="bench-range" style="left:22%; width:28%;"></div>
+            <div class="bench-p50-line" style="left:36%;"></div>
+            <div class="bench-entity-dot" style="left:34%; background:var(--green-500);"></div>
+          </div>
+          <div class="bench-value" style="color:var(--green-500);">4.9%</div>
+          <div class="bench-rag"><span class="pill pill-green">Efficient</span></div>
+          <div class="bench-confidence"><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot filled"></div></div>
+        </div>
+
+        <!-- Energy — GREEN -->
+        <div class="bench-row">
+          <div class="bench-category">Energy &amp; Utilities</div>
+          <div class="bench-bar-area">
+            <div class="bench-range" style="left:15%; width:35%;"></div>
+            <div class="bench-p50-line" style="left:32%;"></div>
+            <div class="bench-entity-dot" style="left:30%; background:var(--green-500);"></div>
+          </div>
+          <div class="bench-value" style="color:var(--green-500);">2.1%</div>
+          <div class="bench-rag"><span class="pill pill-green">Efficient</span></div>
+          <div class="bench-confidence"><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot"></div><div class="conf-dot"></div><div class="conf-dot"></div></div>
+        </div>
+
+        <!-- Telecom — RED -->
+        <div class="bench-row">
+          <div class="bench-category">Telecom</div>
+          <div class="bench-bar-area">
+            <div class="bench-range" style="left:18%; width:25%;"></div>
+            <div class="bench-p50-line" style="left:30%;"></div>
+            <div class="bench-entity-dot" style="left:62%; background:var(--red-500);"></div>
+          </div>
+          <div class="bench-value" style="color:var(--red-500);">3.2%</div>
+          <div class="bench-rag"><span class="pill pill-red">Above</span></div>
+          <div class="bench-confidence"><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot"></div><div class="conf-dot"></div></div>
+        </div>
+
+        <!-- Professional Services — AMBER -->
+        <div class="bench-row" style="border-bottom:none;">
+          <div class="bench-category">Professional Services</div>
+          <div class="bench-bar-area">
+            <div class="bench-range" style="left:20%; width:30%;"></div>
+            <div class="bench-p50-line" style="left:35%;"></div>
+            <div class="bench-entity-dot" style="left:48%; background:var(--amber-500);"></div>
+          </div>
+          <div class="bench-value" style="color:var(--amber-500);">4.4%</div>
+          <div class="bench-rag"><span class="pill pill-amber">Watch</span></div>
+          <div class="bench-confidence"><div class="conf-dot filled"></div><div class="conf-dot filled"></div><div class="conf-dot"></div><div class="conf-dot"></div><div class="conf-dot"></div></div>
+        </div>
+      </div>
+
+      <!-- AI Insight for benchmarks -->
+      <div class="ai-insight">
+        <div class="ai-icon" style="width:28px; height:28px; font-size:13px;">✦</div>
+        <p><strong>IT &amp; Software is your biggest outlier</strong> — spending 9.8% of revenue vs the 6.5% industry median. This is driven by 14 active SaaS subscriptions, 3 of which show under 20% seat utilisation. Consolidating duplicate tools and cancelling unused licences could bring this category within the 75th percentile. <strong>Telecom spending has also risen 18% YoY</strong> despite a shift to remote work — consider a VoIP migration and plan consolidation.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ TAB 3: OPPORTUNITIES ═══════════════════ -->
+    <div id="tab-opportunities" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Cost Saving Opportunities</div>
+          <div class="section-subtitle">6 open signals detected from your accounting data</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-sm">Filter by Category</button>
+          <button class="btn-sm">Sort: Priority ↓</button>
+        </div>
+      </div>
+
+      <div class="opp-card signal-high">
+        <div class="opp-top">
+          <div>
+            <div class="opp-title">Cancel unused SaaS licences (7 identified)</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">IT &amp; Software · Signal: unused_subscription · Detected 3 Feb 2026</div>
+          </div>
+          <div class="opp-savings" style="color:var(--green-500);">€18,400<span style="font-size:0.72rem; font-weight:400; color:var(--text-tertiary);"> /yr</span></div>
+        </div>
+        <div class="opp-desc">Seven SaaS tools have below 20% seat utilisation over the past 90 days: Loom (€2,400/yr), Miro (€3,200/yr), Notion (€4,800/yr), Calendly Premium (€1,200/yr), Grammarly Business (€2,400/yr), Lucidchart (€1,600/yr), and Typeform (€2,800/yr). Recommend immediate audit with team leads followed by cancellation or downgrade.</div>
+        <div class="opp-meta">
+          <span class="pill pill-green">Low Effort</span>
+          <span class="pill pill-green">Low Risk</span>
+          <span class="pill pill-grey">IT-02</span>
+          <span class="pill pill-gold">✦ System Detected</span>
+        </div>
+        <div class="opp-actions">
+          <button class="btn-sm btn-sm-primary">Convert to Initiative</button>
+          <button class="btn-sm">Get Details</button>
+          <button class="btn-sm" style="margin-left:auto;">Dismiss</button>
+        </div>
+      </div>
+
+      <div class="opp-card signal-high">
+        <div class="opp-top">
+          <div>
+            <div class="opp-title">Consolidate duplicate communication tools</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">IT &amp; Software · Signal: duplicate_vendor · Detected 15 Jan 2026</div>
+          </div>
+          <div class="opp-savings" style="color:var(--green-500);">€24,750<span style="font-size:0.72rem; font-weight:400; color:var(--text-tertiary);"> /yr</span></div>
+        </div>
+        <div class="opp-desc">Active subscriptions to both Slack Business+ (€14,400/yr) and Microsoft Teams (included in M365 at €10,350/yr). Teams is already provisioned through your Microsoft 365 licence. Migrating to a single platform eliminates the Slack cost entirely while bundling with existing infrastructure.</div>
+        <div class="opp-meta">
+          <span class="pill pill-amber">Medium Effort</span>
+          <span class="pill pill-green">Low Risk</span>
+          <span class="pill pill-grey">IT-01</span>
+          <span class="pill pill-gold">✦ System Detected</span>
+        </div>
+        <div class="opp-actions">
+          <button class="btn-sm btn-sm-primary">Convert to Initiative</button>
+          <button class="btn-sm">Get Details</button>
+          <button class="btn-sm" style="margin-left:auto;">Dismiss</button>
+        </div>
+      </div>
+
+      <div class="opp-card signal-medium">
+        <div class="opp-top">
+          <div>
+            <div class="opp-title">Switch energy supplier (contract expires April 2026)</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">Operations · Signal: renewal_upcoming · Detected 20 Feb 2026</div>
+          </div>
+          <div class="opp-savings" style="color:var(--green-500);">€22,800<span style="font-size:0.72rem; font-weight:400; color:var(--text-tertiary);"> /yr</span></div>
+        </div>
+        <div class="opp-desc">Current Electric Ireland contract expires 30 April 2026. Benchmark data shows competitors offering 20–35% lower rates for comparable usage. Switching to SSE Airtricity or Energia could save €19k–€23k annually based on your consumption profile (145,000 kWh/yr).</div>
+        <div class="opp-meta">
+          <span class="pill pill-amber">Medium Effort</span>
+          <span class="pill pill-green">Low Risk</span>
+          <span class="pill pill-grey">OPS-05</span>
+          <span class="pill pill-gold">✦ System Detected</span>
+        </div>
+        <div class="opp-actions">
+          <button class="btn-sm btn-sm-primary">Convert to Initiative</button>
+          <button class="btn-sm btn-sm-gold">Get Negotiation Tips</button>
+          <button class="btn-sm" style="margin-left:auto;">Dismiss</button>
+        </div>
+      </div>
+
+      <div class="opp-card signal-medium">
+        <div class="opp-top">
+          <div>
+            <div class="opp-title">Optimise cloud costs with reserved instances</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">IT &amp; Software · Signal: above_benchmark · Detected 1 Feb 2026</div>
+          </div>
+          <div class="opp-savings" style="color:var(--green-500);">€28,400<span style="font-size:0.72rem; font-weight:400; color:var(--text-tertiary);"> /yr</span></div>
+        </div>
+        <div class="opp-desc">AWS spend of €94,800/yr is 100% on-demand pricing. Moving stable workloads to 1-year reserved instances could save 30% on compute costs. Analysis of 12-month usage patterns suggests 60% of EC2 spend qualifies for reservations.</div>
+        <div class="opp-meta">
+          <span class="pill pill-amber">Medium Effort</span>
+          <span class="pill pill-amber">Medium Risk</span>
+          <span class="pill pill-grey">IT-10</span>
+          <span class="pill pill-gold">✦ AI Suggested</span>
+        </div>
+        <div class="opp-actions">
+          <button class="btn-sm btn-sm-primary">Convert to Initiative</button>
+          <button class="btn-sm">Get Details</button>
+          <button class="btn-sm" style="margin-left:auto;">Dismiss</button>
+        </div>
+      </div>
+
+      <div class="opp-card signal-low">
+        <div class="opp-top">
+          <div>
+            <div class="opp-title">Bundle insurance policies at renewal</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">Finance &amp; Insurance · Signal: pattern_match · Detected 12 Feb 2026</div>
+          </div>
+          <div class="opp-savings" style="color:var(--green-500);">€8,200<span style="font-size:0.72rem; font-weight:400; color:var(--text-tertiary);"> /yr</span></div>
+        </div>
+        <div class="opp-desc">You carry four separate insurance policies across three providers (Zurich, Aviva, Allianz). Bundling under a single provider with a higher excess typically saves 10–20% on combined premiums. Two policies renew in Q2.</div>
+        <div class="opp-meta">
+          <span class="pill pill-amber">Medium Effort</span>
+          <span class="pill pill-green">Low Risk</span>
+          <span class="pill pill-grey">FIN-11</span>
+          <span class="pill pill-gold">✦ System Detected</span>
+        </div>
+        <div class="opp-actions">
+          <button class="btn-sm btn-sm-primary">Convert to Initiative</button>
+          <button class="btn-sm" style="margin-left:auto;">Dismiss</button>
+        </div>
+      </div>
+
+      <div class="opp-card signal-low">
+        <div class="opp-top">
+          <div>
+            <div class="opp-title">Implement print management and go paperless</div>
+            <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">HR &amp; Admin · Signal: pattern_match · Detected 5 Feb 2026</div>
+          </div>
+          <div class="opp-savings" style="color:var(--green-500);">€4,800<span style="font-size:0.72rem; font-weight:400; color:var(--text-tertiary);"> /yr</span></div>
+        </div>
+        <div class="opp-desc">Print &amp; stationery spend is €16,200/yr — 41% above the median for your size and industry. Implementing managed print and digitising invoice/contract workflows could reduce this by 30%.</div>
+        <div class="opp-meta">
+          <span class="pill pill-green">Low Effort</span>
+          <span class="pill pill-green">Low Risk</span>
+          <span class="pill pill-grey">HR-10</span>
+          <span class="pill pill-gold">✦ System Detected</span>
+        </div>
+        <div class="opp-actions">
+          <button class="btn-sm btn-sm-primary">Convert to Initiative</button>
+          <button class="btn-sm" style="margin-left:auto;">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ TAB 4: INITIATIVES ═══════════════════ -->
+    <div id="tab-initiatives" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Initiative Pipeline</div>
+          <div class="section-subtitle">14 active initiatives · €147,200 total addressable savings</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-sm">Filter</button>
+          <button class="btn-sm btn-sm-primary">+ New Initiative</button>
+        </div>
+      </div>
+
+      <div class="scenario-bar">
+        <button class="scenario-opt active" onclick="this.parentElement.querySelectorAll('.scenario-opt').forEach(b=>b.classList.remove('active')); this.classList.add('active');">All (14)</button>
+        <button class="scenario-opt" onclick="this.parentElement.querySelectorAll('.scenario-opt').forEach(b=>b.classList.remove('active')); this.classList.add('active');">Conservative</button>
+        <button class="scenario-opt" onclick="this.parentElement.querySelectorAll('.scenario-opt').forEach(b=>b.classList.remove('active')); this.classList.add('active');">Balanced</button>
+        <button class="scenario-opt" onclick="this.parentElement.querySelectorAll('.scenario-opt').forEach(b=>b.classList.remove('active')); this.classList.add('active');">Aggressive</button>
+      </div>
+
+      <div class="kanban">
+        <!-- IDENTIFIED -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">Identified</div>
+            <div class="kanban-col-count">3</div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Cancel unused SaaS licences</div>
+            <div class="kanban-card-meta">IT &amp; Software · 7 tools flagged</div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€18.4k</span>
+              <span class="pill pill-green" style="font-size:0.6rem;">Low Effort</span>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Renegotiate energy supplier</div>
+            <div class="kanban-card-meta">Operations · Contract expires Apr</div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€22.8k</span>
+              <span class="pill pill-amber" style="font-size:0.6rem;">Medium</span>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Bundle insurance policies</div>
+            <div class="kanban-card-meta">Finance · Q2 renewal window</div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€8.2k</span>
+              <span class="pill pill-amber" style="font-size:0.6rem;">Medium</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- APPROVED -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">Approved</div>
+            <div class="kanban-col-count">5</div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Switch to annual billing</div>
+            <div class="kanban-card-meta">IT &amp; Software · 8 tools · Target: 15 Mar</div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€12.6k</span>
+              <div class="avatar-sm" style="background:var(--teal-500);">SC</div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Negotiate SaaS renewals (Q2)</div>
+            <div class="kanban-card-meta">IT &amp; Software · HubSpot, Salesforce · Apr</div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€31.2k</span>
+              <div class="avatar-sm" style="background:var(--amber-500);">JW</div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Optimise ad spend ROI</div>
+            <div class="kanban-card-meta">Marketing · Recapture wasted 26%</div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€14.0k</span>
+              <div class="avatar-sm" style="background:var(--green-500);">RM</div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Implement travel policy</div>
+            <div class="kanban-card-meta">Operations · Save 20–30% on T&amp;E</div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€9.6k</span>
+              <div class="avatar-sm" style="background:var(--teal-600);">KL</div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Use open-source alternatives</div>
+            <div class="kanban-card-meta">IT &amp; Software · 3 tools identified</div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€6.8k</span>
+              <div class="avatar-sm" style="background:var(--amber-500);">PD</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- IN PROGRESS -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">In Progress</div>
+            <div class="kanban-col-count">4</div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Consolidate comms tools</div>
+            <div class="kanban-card-meta">IT &amp; Software · Slack → Teams migration<br><span style="color:var(--amber-500);">65% complete · Due 30 Mar</span></div>
+            <div style="margin-top:8px;">
+              <div class="progress-bar"><div class="progress-fill" style="width:65%; background:var(--amber-500);"></div></div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€24.8k</span>
+              <div class="avatar-sm" style="background:var(--teal-500);">SC</div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Reserved instances (AWS)</div>
+            <div class="kanban-card-meta">IT &amp; Software · Cloud optimisation<br><span style="color:var(--teal-500);">40% complete · Due 15 Apr</span></div>
+            <div style="margin-top:8px;">
+              <div class="progress-bar"><div class="progress-fill" style="width:40%; background:var(--teal-500);"></div></div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€28.4k</span>
+              <div class="avatar-sm" style="background:var(--amber-500);">PD</div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Go paperless admin</div>
+            <div class="kanban-card-meta">HR &amp; Admin · Digital workflows<br><span style="color:var(--green-500);">80% complete · Due 10 Mar</span></div>
+            <div style="margin-top:8px;">
+              <div class="progress-bar"><div class="progress-fill" style="width:80%; background:var(--green-500);"></div></div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€4.8k</span>
+              <div class="avatar-sm" style="background:var(--green-500);">KL</div>
+            </div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Negotiate merchant rates</div>
+            <div class="kanban-card-meta">Finance · Stripe renegotiation<br><span style="color:var(--teal-500);">30% complete · Due 20 Apr</span></div>
+            <div style="margin-top:8px;">
+              <div class="progress-bar"><div class="progress-fill" style="width:30%; background:var(--teal-500);"></div></div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€7.2k</span>
+              <div class="avatar-sm" style="background:var(--teal-500);">SC</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- IMPLEMENTED -->
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">Implemented</div>
+            <div class="kanban-col-count">2</div>
+          </div>
+          <div class="kanban-card" style="border-left: 3px solid var(--green-500);">
+            <div class="kanban-card-title">Downgrade overkill tiers</div>
+            <div class="kanban-card-meta">IT &amp; Software · 4 tools downgraded<br><span style="color:var(--green-500);">✓ Completed 15 Jan 2026</span></div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€8.4k</span>
+              <span class="pill pill-green" style="font-size:0.6rem;">Tracking</span>
+            </div>
+          </div>
+          <div class="kanban-card" style="border-left: 3px solid var(--green-500);">
+            <div class="kanban-card-title">Early payment discounts</div>
+            <div class="kanban-card-meta">Finance · 3 key vendors enrolled<br><span style="color:var(--green-500);">✓ Completed 1 Dec 2025</span></div>
+            <div class="kanban-card-footer">
+              <span class="kanban-card-savings" style="color:var(--green-500);">€5.6k</span>
+              <span class="pill pill-green" style="font-size:0.6rem;">Tracking</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ TAB 5: REALISED SAVINGS ═══════════════════ -->
+    <div id="tab-realised" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Realised Savings</div>
+          <div class="section-subtitle">Projected vs actual savings tracked from accounting data</div>
+        </div>
+      </div>
+
+      <!-- EBITDA IMPACT ROW -->
+      <div class="grid-4" style="margin-bottom:24px;">
+        <div class="impact-card">
+          <div class="impact-label">Realised Savings YTD</div>
+          <div class="impact-value" style="color:var(--green-400); margin:8px 0;">€41,200</div>
+          <div class="impact-sub">61% of projected · 2 months</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">Projected Full Year</div>
+          <div style="font-family:var(--font-display); font-size:2rem; font-weight:500; letter-spacing:-0.03em; color:var(--teal-700);">€67,500</div>
+          <div style="font-size:0.75rem; color:var(--text-tertiary); margin-top:4px;">From implemented + in-progress</div>
+          <div style="margin-top:8px;"><span class="pill pill-green">On Track</span></div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">EBITDA Impact</div>
+          <div style="font-family:var(--font-display); font-size:2rem; font-weight:500; letter-spacing:-0.03em; color:var(--green-500);">+€41.2k</div>
+          <div style="font-size:0.75rem; color:var(--text-tertiary); margin-top:4px;">Direct bottom-line improvement</div>
+          <div style="margin-top:8px;"><span class="pill pill-green">+1.5% margin</span></div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title" style="margin-bottom:12px;">Cash Runway Impact</div>
+          <div style="font-family:var(--font-display); font-size:2rem; font-weight:500; letter-spacing:-0.03em; color:var(--teal-700);">+1.2 mo</div>
+          <div style="font-size:0.75rem; color:var(--text-tertiary); margin-top:4px;">Extended runway from savings</div>
+          <div style="margin-top:8px;"><span class="pill pill-teal">14.2 mo total</span></div>
+        </div>
+      </div>
+
+      <!-- PROJECTED vs REALISED CHART -->
+      <div class="grid-1-1">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Cumulative Savings: Projected vs Realised</div>
+              <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:2px;">Monthly cumulative · Jan–Dec 2026</div>
+            </div>
+          </div>
+          <div style="position:relative; height:200px; margin:8px 0; border-bottom:2px solid var(--surface-3); border-left:2px solid var(--surface-3);">
+            <div style="position:absolute; left:-44px; top:0; font-size:0.65rem; color:var(--text-tertiary);">€70k</div>
+            <div style="position:absolute; left:-44px; top:33%; font-size:0.65rem; color:var(--text-tertiary);">€50k</div>
+            <div style="position:absolute; left:-44px; top:66%; font-size:0.65rem; color:var(--text-tertiary);">€25k</div>
+            <div style="position:absolute; left:-44px; bottom:0; font-size:0.65rem; color:var(--text-tertiary);">€0</div>
+            <svg viewBox="0 0 480 200" preserveAspectRatio="none" style="width:100%; height:100%;">
+              <defs>
+                <linearGradient id="projGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--teal-400)" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="var(--teal-400)" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="realGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--green-500)" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="var(--green-500)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Projected line (full year) -->
+              <path d="M0,186 L40,172 L80,158 L120,143 L160,126 L200,108 L240,92 L280,76 L320,60 L360,46 L400,32 L440,20 L480,8" fill="none" stroke="var(--teal-400)" stroke-width="2" stroke-dasharray="8,4" opacity="0.7"/>
+              <path d="M0,186 L40,172 L80,158 L120,143 L160,126 L200,108 L240,92 L280,76 L320,60 L360,46 L400,32 L440,20 L480,8 L480,200 L0,200 Z" fill="url(#projGrad)"/>
+              <!-- Realised line (2 months) -->
+              <path d="M0,186 L40,162 L80,138" fill="none" stroke="var(--green-500)" stroke-width="3" stroke-linecap="round"/>
+              <path d="M0,186 L40,162 L80,138 L80,200 L0,200 Z" fill="url(#realGrad)"/>
+              <circle cx="80" cy="138" r="5" fill="var(--green-500)" stroke="white" stroke-width="2"/>
+            </svg>
+          </div>
+          <div style="display:flex; justify-content:space-around; font-size:0.65rem; color:var(--text-tertiary);">
+            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+          </div>
+          <div style="display:flex; gap:20px; margin-top:12px; font-size:0.72rem; color:var(--text-tertiary);">
+            <span><span style="display:inline-block;width:16px;height:2px;background:var(--teal-400);border-top:1px dashed var(--teal-400);margin-right:6px;vertical-align:middle;"></span>Projected</span>
+            <span><span style="display:inline-block;width:16px;height:3px;background:var(--green-500);border-radius:2px;margin-right:6px;vertical-align:middle;"></span>Realised</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Savings by Initiative</div>
+          </div>
+          <table class="data-table" style="font-size:0.78rem;">
+            <thead>
+              <tr>
+                <th style="padding-left:16px;">Initiative</th>
+                <th class="right">Projected</th>
+                <th class="right">Realised</th>
+                <th class="center">Capture</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding-left:16px;" class="bold">Downgrade overkill tiers</td>
+                <td class="right">€8,400</td>
+                <td class="right" style="color:var(--green-500); font-weight:600;">€8,200</td>
+                <td class="center"><span class="pill pill-green">98%</span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;" class="bold">Early payment discounts</td>
+                <td class="right">€5,600</td>
+                <td class="right" style="color:var(--green-500); font-weight:600;">€5,100</td>
+                <td class="center"><span class="pill pill-green">91%</span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;" class="bold">Consolidate comms tools</td>
+                <td class="right">€24,750</td>
+                <td class="right" style="color:var(--amber-500); font-weight:600;">€14,400</td>
+                <td class="center"><span class="pill pill-amber">58%</span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;" class="bold">Go paperless admin</td>
+                <td class="right">€4,800</td>
+                <td class="right" style="color:var(--green-500); font-weight:600;">€3,800</td>
+                <td class="center"><span class="pill pill-green">79%</span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;" class="bold">Reserved instances (AWS)</td>
+                <td class="right">€28,400</td>
+                <td class="right" style="color:var(--text-tertiary); font-weight:600;">€9,700</td>
+                <td class="center"><span class="pill pill-grey">In Progress</span></td>
+              </tr>
+              <tr class="row-total">
+                <td style="padding-left:16px;">Total</td>
+                <td class="right">€71,950</td>
+                <td class="right" style="color:var(--green-500);">€41,200</td>
+                <td class="center"><span class="pill pill-green">61%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- AI insight -->
+      <div class="ai-insight" style="margin-top:4px;">
+        <div class="ai-icon" style="width:28px; height:28px; font-size:13px;">✦</div>
+        <p><strong>Savings capture is ahead of schedule at 61%</strong> — the benchmark for month 2 of the financial year is 55%. The tier downgrade initiative is tracking almost perfectly to projection. The comms tools consolidation shows partial savings (Slack cancellation effective, but Teams migration still in progress). <strong>If the top 5 in-progress initiatives complete on time, projected EBITDA impact rises to +€67.5k</strong>, equivalent to a 2.4% margin improvement.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════ TAB 6: SNAPSHOTS ═══════════════════ -->
+    <div id="tab-snapshot" class="tab-panel">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Cost Saving Snapshots</div>
+          <div class="section-subtitle">Frozen point-in-time records for board reporting</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-sm btn-sm-primary">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle; margin-right:4px;"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
+            Take Snapshot
+          </button>
+          <button class="btn-sm">Compare</button>
+        </div>
+      </div>
+
+      <div class="snapshot-card frozen">
+        <div class="snapshot-icon snapshot-icon-frozen">📋</div>
+        <div class="snapshot-info">
+          <div class="snapshot-title">February 2026 — Monthly Cost Review</div>
+          <div class="snapshot-meta">Frozen 28 Feb 2026 · Created by Sarah Chen · €41.2k realised YTD · 14 active initiatives</div>
+        </div>
+        <div class="snapshot-actions">
+          <button class="btn-sm">View</button>
+          <button class="btn-sm">Compare</button>
+          <button class="btn-sm btn-sm-primary">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle; margin-right:2px;"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="snapshot-card frozen">
+        <div class="snapshot-icon snapshot-icon-frozen">📋</div>
+        <div class="snapshot-info">
+          <div class="snapshot-title">January 2026 — Monthly Cost Review</div>
+          <div class="snapshot-meta">Frozen 31 Jan 2026 · Created by Sarah Chen · €18.6k realised YTD · 11 active initiatives</div>
+        </div>
+        <div class="snapshot-actions">
+          <button class="btn-sm">View</button>
+          <button class="btn-sm">Compare</button>
+          <button class="btn-sm btn-sm-primary">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle; margin-right:2px;"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="snapshot-card frozen">
+        <div class="snapshot-icon snapshot-icon-frozen">📋</div>
+        <div class="snapshot-info">
+          <div class="snapshot-title">Q4 2025 — Quarterly Board Pack</div>
+          <div class="snapshot-meta">Frozen 31 Dec 2025 · Created by Sarah Chen · Initial baseline snapshot · 8 initiatives identified</div>
+        </div>
+        <div class="snapshot-actions">
+          <button class="btn-sm">View</button>
+          <button class="btn-sm">Compare</button>
+          <button class="btn-sm btn-sm-primary">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:middle; margin-right:2px;"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Snapshot comparison preview -->
+      <div style="margin-top:24px;">
+        <div class="section-header"><div><div class="section-title">Snapshot Comparison</div><div class="section-subtitle">January 2026 vs February 2026</div></div></div>
+        <div class="grid-4">
+          <div class="card" style="text-align:center;">
+            <div class="card-title" style="margin-bottom:12px;">Total Spend</div>
+            <div style="font-family:var(--font-display); font-size:1.4rem; font-weight:500; letter-spacing:-0.03em;">€237.4k</div>
+            <div style="margin-top:6px;"><span class="pill pill-green">-€8.2k vs Jan</span></div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div class="card-title" style="margin-bottom:12px;">New Initiatives</div>
+            <div style="font-family:var(--font-display); font-size:1.4rem; font-weight:500; letter-spacing:-0.03em;">+3</div>
+            <div style="margin-top:6px;"><span class="pill pill-teal">11 → 14</span></div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div class="card-title" style="margin-bottom:12px;">Realised Savings</div>
+            <div style="font-family:var(--font-display); font-size:1.4rem; font-weight:500; letter-spacing:-0.03em; color:var(--green-500);">+€22.6k</div>
+            <div style="margin-top:6px;"><span class="pill pill-green">€18.6k → €41.2k</span></div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div class="card-title" style="margin-bottom:12px;">Benchmark Position</div>
+            <div style="font-family:var(--font-display); font-size:1.4rem; font-weight:500; letter-spacing:-0.03em;">p68 → p65</div>
+            <div style="margin-top:6px;"><span class="pill pill-green">Improving ↓</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    Generated by Stratavor · Figures sourced from Xero · Acme SaaS Ltd · February 2026 · Cost Saving Intelligence Hub — Confidential
+  </div>
+</div>
+
+<!-- ASK STRATAVOR FAB -->
+<div class="copilot-fab disabled" role="button" aria-disabled="true"><div class="copilot-fab-icon">✦</div>Ask Stratavor</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  // Smooth scroll to top of content
+  document.querySelector('.content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+<script src="assets/nav.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>

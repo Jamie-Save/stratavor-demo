@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stratavor — Strategic Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/nav.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --navy: #1A2332; --dark-teal: #0D4F4F; --teal: #14B8A6; --bg: #F8FAFB;
+    --white: #FFFFFF; --text-primary: #1A2332; --text-secondary: #64748B;
+    --text-muted: #94A3B8; --border: #E2E8F0; --success: #10B981;
+    --warning: #F59E0B; --danger: #EF4444;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-elevated: 0 4px 12px rgba(0,0,0,0.10);
+    --radius-card: 12px; --radius-btn: 8px; --radius-input: 6px;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-primary); display: flex; min-height: 100vh; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+  /* Main */
+  .main { margin-left: 260px; flex: 1; min-height: 100vh; }
+  .topbar { height: 56px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+  .breadcrumb { font-size: 13px; color: var(--text-muted); }
+  .breadcrumb span { color: var(--text-primary); font-weight: 500; }
+  .topbar-actions { display: flex; align-items: center; gap: 16px; }
+  .topbar-actions .notif-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; color: var(--text-secondary); }
+  .topbar-actions .user-circle { width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; font-family: 'DM Sans'; }
+
+  .content { max-width: 900px; margin: 0 auto; padding: 32px; }
+
+  /* Page Header */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+
+  .page-header-left h1 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  .page-header-left p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: 4px;
+    max-width: 480px;
+  }
+
+  .quality-ring {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .ring-container {
+    position: relative;
+    width: 56px;
+    height: 56px;
+  }
+
+  .ring-container svg { transform: rotate(-90deg); }
+
+  .ring-bg { fill: none; stroke: var(--border); stroke-width: 4; }
+  .ring-fill { fill: none; stroke: var(--warning); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 150.8; stroke-dashoffset: 42.22; }
+
+  .ring-label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .quality-text .quality-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--warning);
+  }
+
+  .quality-text .quality-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .card-subtitle {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  /* Form Fields */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-grid .full-width {
+    grid-column: 1 / -1;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .field-label .required-badge {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: rgba(20,184,166,0.1);
+    color: var(--dark-teal);
+  }
+
+  .field-label .missing-badge {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: rgba(239,68,68,0.1);
+    color: var(--danger);
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    color: var(--text-primary);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--teal);
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394A3B8' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  .field.error input,
+  .field.error select,
+  .field.error textarea {
+    border-color: var(--danger);
+    background: rgba(239,68,68,0.02);
+  }
+
+  .field .field-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .field.error .field-hint {
+    color: var(--danger);
+  }
+
+  /* Required field indicator - red left border */
+  .card.has-missing {
+    border-left: 3px solid var(--danger);
+  }
+
+  /* Priorities */
+  .priorities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .priority-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .priority-number {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .priority-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    color: var(--text-primary);
+    outline: none;
+  }
+
+  .priority-row input:focus { border-color: var(--teal); }
+
+  /* Document Upload */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-card);
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 16px;
+  }
+
+  .upload-zone:hover {
+    border-color: var(--teal);
+    background: rgba(20,184,166,0.02);
+  }
+
+  .upload-zone .upload-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+  }
+
+  .upload-zone .upload-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .upload-zone .upload-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .uploaded-files {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .uploaded-file {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-input);
+  }
+
+  .file-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(239,68,68,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--danger);
+    flex-shrink: 0;
+  }
+
+  .file-info { flex: 1; }
+
+  .file-info .file-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .file-info .file-status {
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .file-status .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .file-status .status-dot.pending { background: var(--warning); }
+  .file-status .status-dot.processed { background: var(--success); }
+
+  .file-status .status-text { color: var(--text-muted); }
+
+  .file-remove {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .file-remove:hover { background: rgba(239,68,68,0.08); color: var(--danger); }
+
+  /* Save Button */
+  .save-row {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 8px;
+  }
+
+  .save-btn {
+    padding: 11px 28px;
+    border-radius: var(--radius-btn);
+    border: none;
+    background: var(--dark-teal);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .save-btn:hover { background: #0B4242; }
+</style>
+<link rel="stylesheet" href="assets/demo.css">
+<link rel="stylesheet" href="assets/disabled.css">
+</head>
+<body>
+
+<aside id="app-sidebar" class="sidebar"></aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="breadcrumb">Portal › <span>Strategic Profile</span></div>
+    <div class="topbar-actions">
+      <button type="button" class="notif-btn disabled">🔔</button>
+      <div class="user-circle">JG</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Page Header with Quality Ring -->
+    <div class="page-header">
+      <div class="page-header-left">
+        <h1>Strategic Profile</h1>
+        <p>Your strategic context powers the AI. The more complete this is, the better your answers.</p>
+      </div>
+      <div class="quality-ring">
+        <div class="ring-container">
+          <svg width="56" height="56" viewBox="0 0 56 56">
+            <circle class="ring-bg" cx="28" cy="28" r="24" />
+            <circle class="ring-fill" cx="28" cy="28" r="24" />
+          </svg>
+          <span class="ring-label">72%</span>
+        </div>
+        <div class="quality-text">
+          <div class="quality-title">AI Quality: 72%</div>
+          <div class="quality-sub">4 of 5 required fields complete</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Required Fields Card -->
+    <div class="card has-missing">
+      <div class="card-title">Required Information</div>
+      <div class="card-subtitle">These fields are essential for AI-powered analysis</div>
+
+      <div class="form-grid">
+        <div class="field full-width">
+          <div class="field-label">Company Description <span class="required-badge">Required for AI</span></div>
+          <textarea>Stratavor is a financial intelligence platform that delivers AI-powered board-ready reports and strategic analysis for mid-market CFOs and founders. We automate the transformation of raw accounting data into executive narratives, benchmarks, and actionable insights.</textarea>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Industry <span class="required-badge">Required for AI</span></div>
+          <select>
+            <option selected>Technology / SaaS</option>
+            <option>Financial Services</option>
+            <option>Healthcare</option>
+            <option>Manufacturing</option>
+            <option>Professional Services</option>
+            <option>Retail / E-commerce</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Business Model <span class="required-badge">Required for AI</span></div>
+          <select>
+            <option selected>B2B Subscription</option>
+            <option>B2B Services</option>
+            <option>B2C Subscription</option>
+            <option>Marketplace</option>
+            <option>Hybrid</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Overall Risk Appetite <span class="required-badge">Required for AI</span></div>
+          <select>
+            <option>Conservative</option>
+            <option selected>Moderate</option>
+            <option>Aggressive</option>
+          </select>
+        </div>
+
+        <div class="field error">
+          <div class="field-label">Fiscal Year End <span class="missing-badge">Required — Missing</span></div>
+          <select style="color: var(--text-muted);">
+            <option value="" selected>Select fiscal year end...</option>
+            <option>January</option>
+            <option>March</option>
+            <option>June</option>
+            <option>September</option>
+            <option>December</option>
+          </select>
+          <div class="field-hint">Required to align AI analysis with your reporting periods</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Strategic Context Card -->
+    <div class="card">
+      <div class="card-title">Strategic Context</div>
+      <div class="card-subtitle">Optional — improves AI relevance and personalisation</div>
+
+      <div class="form-grid">
+        <div class="field">
+          <div class="field-label">Strategic Posture</div>
+          <select>
+            <option selected>Growth</option>
+            <option>Stability</option>
+            <option>Turnaround</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Funding Stage</div>
+          <select>
+            <option selected>Pre-Seed / Bootstrapped</option>
+            <option>Seed</option>
+            <option>Series A</option>
+            <option>Series B+</option>
+            <option>Profitable / Self-funding</option>
+          </select>
+        </div>
+
+        <div class="field full-width">
+          <div class="field-label">Top 3 Strategic Priorities</div>
+          <div class="priorities-list">
+            <div class="priority-row">
+              <span class="priority-number">1</span>
+              <input type="text" value="Achieve product-market fit with mid-market CFOs" />
+            </div>
+            <div class="priority-row">
+              <span class="priority-number">2</span>
+              <input type="text" value="Reach €50K MRR by Q4 2026" />
+            </div>
+            <div class="priority-row">
+              <span class="priority-number">3</span>
+              <input type="text" placeholder="Enter priority..." />
+            </div>
+          </div>
+        </div>
+
+        <div class="field full-width">
+          <div class="field-label">Key Constraints</div>
+          <textarea placeholder="e.g. Limited engineering resources, regulatory requirements, cash constraints...">Operating with a lean distributed team — 2 offshore contractors plus founder. Budget-conscious but quality-focused. Need to demonstrate enterprise-grade output with startup-scale resources.</textarea>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Current Headcount</div>
+          <input type="number" value="3" />
+        </div>
+
+        <div class="field">
+          <div class="field-label">Revenue Target (Annual)</div>
+          <input type="text" value="€600,000" />
+        </div>
+
+        <div class="field">
+          <div class="field-label">Board Reporting Frequency</div>
+          <select>
+            <option selected>Quarterly</option>
+            <option>Monthly</option>
+            <option>Bi-annually</option>
+            <option>Annually</option>
+            <option>Ad hoc</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Target Market</div>
+          <input type="text" value="Mid-market companies (€2M–€50M revenue)" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Document Upload Card -->
+    <div class="card">
+      <div class="card-title">Supporting Documents</div>
+      <div class="card-subtitle">Upload board packs, strategy documents, or investor decks to enrich AI context</div>
+
+      <div class="upload-zone">
+        <div class="upload-icon">📄</div>
+        <div class="upload-text">Drop files here or click to upload</div>
+        <div class="upload-hint">PDF, DOCX, or PPTX · Max 25MB per file</div>
+      </div>
+
+      <div class="uploaded-files">
+        <div class="uploaded-file">
+          <div class="file-icon">PDF</div>
+          <div class="file-info">
+            <div class="file-name">Q3_Board_Pack.pdf</div>
+            <div class="file-status">
+              <span class="status-dot pending"></span>
+              <span class="status-text">Pending AI processing</span>
+            </div>
+          </div>
+          <button type="button" class="file-remove disabled">✕</button>
+        </div>
+        <div class="uploaded-file">
+          <div class="file-icon">PDF</div>
+          <div class="file-info">
+            <div class="file-name">Growth_Strategy_2026.pdf</div>
+            <div class="file-status">
+              <span class="status-dot pending"></span>
+              <span class="status-text">Pending AI processing</span>
+            </div>
+          </div>
+          <button type="button" class="file-remove disabled">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save -->
+    <div class="save-row">
+      <button type="button" class="save-btn disabled">Save Profile</button>
+    </div>
+
+  </div>
+</main>
+
+<script src="assets/nav.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>
