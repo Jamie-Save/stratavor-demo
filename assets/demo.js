@@ -86,14 +86,24 @@
     requestAnimationFrame(function () { overlay.classList.add('demo-modal-visible'); });
   }
 
+  var DEMO_UNAVAILABLE_MSG = 'This function is not available in the demo environment.';
+
   function interceptActions() {
     document.addEventListener('submit', function (e) {
       e.preventDefault();
-      showToast('Demo — no data is saved.');
+      showToast(DEMO_UNAVAILABLE_MSG);
       return false;
     }, true);
 
     document.addEventListener('click', function (e) {
+      var demoOnly = e.target.closest('.send-btn, .topbar-btn, .btn-generate, .page-btn');
+      if (!demoOnly && e.target.closest('.btn-icon') && e.target.closest('.report-list')) demoOnly = e.target.closest('.btn-icon');
+      if (demoOnly) {
+        e.preventDefault();
+        e.stopPropagation();
+        showToast(DEMO_UNAVAILABLE_MSG);
+        return;
+      }
       var t = e.target.closest('button, [role="button"], .topbar-btn-primary, .btn-sm-primary, .upload-btn');
       if (!t) return;
       var text = (t.textContent || '').toLowerCase();
@@ -101,7 +111,7 @@
         e.preventDefault();
         e.stopPropagation();
         if (/connect|reconnect/.test(text)) showConnectModal();
-        else showToast('Demo — no data is saved.');
+        else showToast(DEMO_UNAVAILABLE_MSG);
       }
     }, true);
   }

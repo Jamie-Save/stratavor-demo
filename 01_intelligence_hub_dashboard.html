@@ -706,6 +706,7 @@
   }
 </style>
 <link rel="stylesheet" href="assets/demo.css">
+<link rel="stylesheet" href="assets/disabled.css">
 </head>
 <body>
 
@@ -722,7 +723,7 @@
       </div>
     </div>
     <div class="topbar-right">
-      <button class="topbar-btn">🔔</button>
+      <button type="button" class="topbar-btn disabled">🔔</button>
       <div class="user-circle">JG</div>
     </div>
   </div>
@@ -733,7 +734,7 @@
     <div class="hero-header">
       <div class="hero-title">Good morning, Jon</div>
       <div class="hero-subtitle">Here's your business at a glance</div>
-      <div class="hero-meta">Saturday, 1 March 2026</div>
+      <div class="hero-meta" id="hero-date">Saturday, 1 March 2026</div>
     </div>
 
     <!-- Activation Banner -->
@@ -780,11 +781,11 @@
         <div class="signal-change positive">▲ from 14.2% YoY</div>
         <div class="signal-refresh">Refreshed 2 hours ago</div>
       </div>
-      <div class="signal-tile loading">
+      <div class="signal-tile">
         <div class="signal-label">Runway</div>
-        <div class="signal-value">—</div>
-        <div class="signal-change neutral">—</div>
-        <div class="signal-refresh">Activating...</div>
+        <div class="signal-value">6.7 mo</div>
+        <div class="signal-change positive">▲ 0.8 mo vs last month</div>
+        <div class="signal-refresh">Refreshed 2 hours ago</div>
       </div>
     </div>
 
@@ -818,13 +819,13 @@
         <div class="feature-icon chat">💬</div>
         <h3>Ask Your Advisor</h3>
         <p>Get AI-powered answers grounded in your financial data and strategic profile.</p>
-        <button class="feature-cta primary">Open Chat →</button>
+        <a href="02_intelligence_hub_chat.html" class="feature-cta primary">Open Chat →</a>
       </div>
       <div class="feature-card">
         <div class="feature-icon report">📊</div>
         <h3>Latest Report</h3>
         <p>View your most recent Financial Snapshot with executive narrative and analysis.</p>
-        <button class="feature-cta secondary">View Report →</button>
+        <a href="stratavor-reporting-snapshots.html" class="feature-cta secondary">View Report →</a>
       </div>
       <div class="feature-card">
         <div class="feature-icon profile">◈</div>
@@ -840,21 +841,13 @@
           </div>
           <span class="progress-text">4 of 5 required fields</span>
         </div>
-        <button class="feature-cta secondary">Complete Profile →</button>
+        <a href="04_strategic_profile.html" class="feature-cta secondary">Complete Profile →</a>
       </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="section-label">Quick Actions</div>
     <div class="quick-actions">
-      <button class="quick-action">
+      <button type="button" class="quick-action disabled">
         <span class="qa-icon">↻</span> Refresh Data
-      </button>
-      <button class="quick-action">
-        <span class="qa-icon">◧</span> View Latest Report
-      </button>
-      <button class="quick-action">
-        <span class="qa-icon">◈</span> Update Strategic Profile
       </button>
     </div>
 
@@ -863,5 +856,11 @@
 
 <script src="assets/nav.js"></script>
 <script src="assets/demo.js"></script>
+<script>
+(function(){
+  var el = document.getElementById('hero-date');
+  if (el) el.textContent = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+})();
+</script>
 </body>
 </html>
