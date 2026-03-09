@@ -24,7 +24,7 @@
       dropdown: true,
       items: [
         { label: 'Risk Intelligence', href: 'stratavor-risk-intelligence.html' },
-        { label: 'Risk Snapshot', href: 'stratavor-risk-snapshot.html' }
+        { label: 'Risk Snapshot', href: '#' }
       ]
     },
     {

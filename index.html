@@ -13,9 +13,12 @@
 <body>
   <p>Redirecting to dashboard… <a href="stratavor-dashboardv2.html" id="dashboard-link">Go to Dashboard</a></p>
   <script>
-    if (window.location.search.indexOf('demo=1') !== -1) {
-      window.location.replace('stratavor-dashboardv2.html?demo=1');
-    }
+    (function(){
+      var h=window.location.hostname,p=window.location.pathname;
+      var isHostedDemo=h==='jamie-save.github.io'&&p.indexOf('stratavor-demo')!==-1;
+      if(isHostedDemo||window.location.search.indexOf('demo=1')!==-1)
+        window.location.replace('stratavor-dashboardv2.html?demo=1');
+    })();
   </script>
 </body>
 </html>
