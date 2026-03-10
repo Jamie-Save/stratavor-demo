@@ -95,8 +95,10 @@ body { font-family: var(--font-body); background: var(--surface-1); color: var(-
 .latest-actions { display: flex; gap: 8px; flex-shrink: 0; }
 .btn-sm { padding: 8px 16px; border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-medium); background: var(--surface-0); color: var(--text-secondary); font-family: var(--font-body); transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
 .btn-sm:hover { border-color: var(--teal-400); color: var(--teal-700); }
+a.btn-sm { text-decoration: none; }
 .btn-sm-primary { background: var(--teal-800); color: white; border-color: var(--teal-800); }
 .btn-sm-primary:hover { background: var(--teal-700); border-color: var(--teal-700); }
+a.btn-sm-primary { text-decoration: none; }
 .btn-sm svg { width: 14px; height: 14px; }
 
 /* ═══ REPORT LIST ═══ */
@@ -261,14 +263,14 @@ body { font-family: var(--font-body); background: var(--surface-1); color: var(-
           </div>
         </div>
         <div class="latest-actions">
-          <button class="btn-sm">
+          <a href="assets/financial-snapshot.pdf" class="btn-sm" target="_blank" rel="noopener noreferrer">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             View
-          </button>
-          <button class="btn-sm-primary btn-sm">
+          </a>
+          <a href="assets/financial-snapshot.pdf" class="btn-sm-primary btn-sm" download="Financial Snapshot.pdf">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             Download
-          </button>
+          </a>
         </div>
       </div>
 
